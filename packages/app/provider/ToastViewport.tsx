@@ -1,0 +1,12 @@
+// packages/app/provider/ToastViewport.tsx
+import { ToastViewport as ToastViewportOg } from '@my/ui'
+
+export const ToastViewport = () => {
+  return (
+    <ToastViewportOg
+      top="$8"
+      left={0}
+      right={0}
+    />
+  )
+}
