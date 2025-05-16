@@ -11,6 +11,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.19.4",
     "@tamagui/config": "^1.126.12",
     "@tamagui/next-theme": "^1.126.12",
     "app": "0.0.0",
