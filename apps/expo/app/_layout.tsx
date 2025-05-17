@@ -6,6 +6,13 @@ import { useFonts } from 'expo-font'
 import { SplashScreen, Stack } from 'expo-router'
 import { Provider } from 'app/provider'
 import { NativeToast } from '@my/ui/src/NativeToast'
+import { ClerkProvider, useAuth } from '@clerk/clerk-expo'
+import { ConvexProviderWithClerk } from 'convex/react-clerk'
+import { ConvexReactClient } from 'convex/react'
+import { tokenCache } from '@clerk/clerk-expo/token-cache'
+
+const convex = new ConvexReactClient(process.env.EXPO_PUBLIC_CONVEX_URL as string)
+const clerkPublishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY
 
 export const unstable_settings = {
   // Ensure that reloading on `/user` keeps a back button present.
@@ -39,11 +46,15 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme()
 
   return (
-    <Provider>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack />
-        <NativeToast />
-      </ThemeProvider>
-    </Provider>
+    <ClerkProvider publishableKey={clerkPublishableKey} tokenCache={tokenCache}>
+      <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
+        <Provider>
+          <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+            <Stack />
+            <NativeToast />
+          </ThemeProvider>
+        </Provider>
+      </ConvexProviderWithClerk>
+    </ClerkProvider>
   )
 }
