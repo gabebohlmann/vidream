@@ -18,6 +18,8 @@
   },
   "dependencies": {
     "@my/config": "0.0.1",
+    "@tamagui/animations-moti": "^1.126.13",
+    "@tamagui/animations-react-native": "^1.126.13",
     "@tamagui/toast": "^1.126.12",
     "tamagui": "^1.126.12"
   },
