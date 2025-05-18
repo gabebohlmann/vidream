@@ -1,5 +1,4 @@
 // packages/config/src/tamagui.config.ts
-// packages/ui/src/tamagui.config.ts
 import { defaultConfig } from '@tamagui/config/v4'
 import { shorthands } from '@tamagui/shorthands'
 import { createTokens, createTamagui, setupDev } from 'tamagui'
@@ -62,17 +61,3 @@ export const config = createTamagui({
 })
 
 export default config
-
-// import { defaultConfig } from '@tamagui/config/v4'
-// import { createTamagui } from 'tamagui'
-// import { bodyFont, headingFont } from './fonts'
-// import { animations } from './animations'
-
-// export const config = createTamagui({
-//   ...defaultConfig,
-//   animations,
-//   fonts: {
-//     body: bodyFont,
-//     heading: headingFont,
-//   },
-// })

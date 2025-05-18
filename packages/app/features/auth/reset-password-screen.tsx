@@ -64,48 +64,46 @@ export const ResetPasswordScreen = () => {
   return (
     // Added Theme wrapper for web visibility, similar to other screens.
     // Ensure your global theme in styles-provider.tsx is the primary solution.
-    <Theme name="dark">
-      <FormProvider {...form}>
-        {form.formState.isSubmitSuccessful ? (
-          <CheckYourEmail />
-        ) : (
-          <SchemaForm
-            form={form}
-            schema={ResetPasswordSchema}
-            defaultValues={{
-              email: emailFromQuery || '', // Use email from useSearchParams
-            }}
-            onSubmit={resetPassword}
-            renderAfter={({ submit }) => {
-              return (
-                <>
-                  <Theme inverse>
-                    <SubmitButton onPress={() => submit()} br="$10">
-                      Send Link
-                    </SubmitButton>
-                  </Theme>
-                  <ResetPasswordScreenSignInLink /> {/* Renamed for clarity */}
-                </>
-              )
-            }}
-          >
-            {(fields) => (
-              <YStack p="$4" space="$4" backgroundColor="$background">
-                <YStack gap="$3" mb="$4">
-                  <H2 $sm={{ size: '$8' }} color="$color">
-                    Reset your password
-                  </H2>
-                  <Paragraph theme="alt1" color="$colorFocus">
-                    Type in your email and we&apos;ll send you a link to reset your password
-                  </Paragraph>
-                </YStack>
-                {Object.values(fields)}
+    <FormProvider {...form}>
+      {form.formState.isSubmitSuccessful ? (
+        <CheckYourEmail />
+      ) : (
+        <SchemaForm
+          form={form}
+          schema={ResetPasswordSchema}
+          defaultValues={{
+            email: emailFromQuery || '', // Use email from useSearchParams
+          }}
+          onSubmit={resetPassword}
+          renderAfter={({ submit }) => {
+            return (
+              <>
+                <Theme inverse>
+                  <SubmitButton onPress={() => submit()} br="$10">
+                    Send Link
+                  </SubmitButton>
+                </Theme>
+                <ResetPasswordScreenSignInLink /> {/* Renamed for clarity */}
+              </>
+            )
+          }}
+        >
+          {(fields) => (
+            <YStack p="$4" space="$4" backgroundColor="$background">
+              <YStack gap="$3" mb="$4">
+                <H2 $sm={{ size: '$8' }} color="$color">
+                  Reset your password
+                </H2>
+                <Paragraph theme="alt1" color="$colorFocus">
+                  Type in your email and we&apos;ll send you a link to reset your password
+                </Paragraph>
               </YStack>
-            )}
-          </SchemaForm>
-        )}
-      </FormProvider>
-    </Theme>
+              {Object.values(fields)}
+            </YStack>
+          )}
+        </SchemaForm>
+      )}
+    </FormProvider>
   )
 }
 

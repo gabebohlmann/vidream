@@ -8,11 +8,12 @@
   ],
   "dependencies": {
     "@my/ui": "0.0.1",
+    "@react-native-async-storage/async-storage": "^2.1.2",
     "@react-navigation/native": "^6.1.17",
     "@tamagui/animations-react-native": "^1.126.13",
     "@tamagui/colors": "^1.126.12",
     "@tamagui/font-inter": "^1.126.12",
-    "@tamagui/lucide-icons": "^1.126.12",
+    "@tamagui/lucide-icons": "^1.126.13",
     "@tamagui/shorthands": "^1.126.12",
     "@tamagui/themes": "^1.126.12",
     "burnt": "^0.12.2",

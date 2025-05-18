@@ -10,6 +10,7 @@ import { ClerkProvider, useAuth } from '@clerk/clerk-expo'
 import { ConvexProviderWithClerk } from 'convex/react-clerk'
 import { ConvexReactClient } from 'convex/react'
 import { tokenCache } from '@clerk/clerk-expo/token-cache'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const convex = new ConvexReactClient(process.env.EXPO_PUBLIC_CONVEX_URL as string)
 const clerkPublishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY
@@ -44,13 +45,27 @@ export default function App() {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme()
-
+  const insets = useSafeAreaInsets()
   return (
     <ClerkProvider publishableKey={clerkPublishableKey} tokenCache={tokenCache}>
       <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
         <Provider>
           <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-            <Stack />
+            <Stack
+              screenOptions={{
+                headerTransparent: true,
+                headerTintColor: colorScheme === 'dark' ? '#FFFFFF' : '#000000',
+                headerTitleContainerStyle: {
+                  paddingTop: insets.top,
+                  // You might need to adjust alignItems or justifyContent if the title looks off-center vertically
+                  // alignItems: 'center', // Default is usually center
+                  // justifyContent: 'center', // Default is usually center
+                },
+                headerRightContainerStyle: {
+                  paddingTop: insets.top,
+                },
+              }}
+            />
             <NativeToast />
           </ThemeProvider>
         </Provider>

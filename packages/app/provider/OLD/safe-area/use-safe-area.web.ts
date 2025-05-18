@@ -1,4 +1,4 @@
-// packages/app/provider/safe-area/use-safe-area.web.ts
+// packages/app/provider/OLD/safe-area/use-safe-area.web.ts
 // 1) the SafeAreaProvider forces you to render null on Web until it measures
 // 2) you might not need to support it, unless you're doing landscape stuff
 // 3) react-native-safe-area-context has a massive import on Web
