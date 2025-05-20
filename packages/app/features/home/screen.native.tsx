@@ -36,17 +36,17 @@ export default function HomeScreen() {
   const router = useRouter() // Get the router instance here
 
   // Log detailed auth states (keep this)
-  useEffect(() => {
-    console.log('--- HomeScreen Auth State Update ---')
-    console.log('Clerk isLoaded:', isClerkLoaded)
-    console.log('Clerk isSignedIn:', isClerkSignedIn)
-    if (isClerkLoaded && isClerkSignedIn) {
-      console.log('Clerk User ID:', user?.id)
-    }
-    console.log('Convex Auth isLoading:', isConvexAuthLoading)
-    console.log('Convex isAuthenticated:', isConvexAuthenticated)
-    console.log('-----------------------------------')
-  }, [isClerkLoaded, isClerkSignedIn, user, isConvexAuthLoading, isConvexAuthenticated])
+  // useEffect(() => {
+  //   console.log('--- HomeScreen Auth State Update ---')
+  //   console.log('Clerk isLoaded:', isClerkLoaded)
+  //   console.log('Clerk isSignedIn:', isClerkSignedIn)
+  //   if (isClerkLoaded && isClerkSignedIn) {
+  //     console.log('Clerk User ID:', user?.id)
+  //   }
+  //   console.log('Convex Auth isLoading:', isConvexAuthLoading)
+  //   console.log('Convex isAuthenticated:', isConvexAuthenticated)
+  //   console.log('-----------------------------------')
+  // }, [isClerkLoaded, isClerkSignedIn, user, isConvexAuthLoading, isConvexAuthenticated])
 
   if (!isClerkLoaded) {
     return (

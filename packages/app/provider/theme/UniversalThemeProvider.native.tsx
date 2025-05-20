@@ -98,15 +98,10 @@ export const UniversalThemeProvider = ({
   // Don't render children until the theme preference is loaded from AsyncStorage
   // to prevent theme flash or rendering with a wrong initial theme.
   if (userPreferredTheme === null && !persistencePromiseResolved) {
-    console.log('[UniversalThemeProvider.native] Waiting for persisted theme from AsyncStorage...');
     return null; // Or a loading spinner if preferred
   }
   
-  // Log the config to ensure it's loaded
-  if (Platform.OS !== 'web') { // Only log this detailed object on native to avoid web console clutter
-      console.log('[UniversalThemeProvider.native] Tamagui Config:', config ? 'Loaded' : 'UNDEFINED!!!');
-  }
-  console.log(`[UniversalThemeProvider.native] Applying CoreTamaguiProvider with theme: ${actualTheme}`);
+
 
   return (
     <ThemeContext.Provider value={themeContextValue}>
