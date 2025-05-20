@@ -1,5 +1,4 @@
 // packages/app/features/home/screen.native.tsx
-// packages/app/features/home/screen.native.tsx
 'use client'
 
 import { Authenticated, Unauthenticated, AuthLoading, useConvexAuth } from 'convex/react'
