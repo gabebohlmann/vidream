@@ -1,8 +1,8 @@
-// packages/app/features/auth/sign-in-screen.web.tsx
+// packages/app/features/auth/sign-in/screen.web.tsx
 'use client' // If using Next.js App Router
 import React, { useMemo, useEffect } from 'react'
 import { useSignIn as useClerkSignInWeb } from '@clerk/nextjs' // Or @clerk/clerk-react
-import { SignInForm, ClerkSignInProps } from './sign-in-form' // Adjust path
+import { SignInForm, ClerkSignInProps } from './form' // Adjust path
 import { useSearchParams, useUpdateSearchParams } from 'solito/navigation'
 
 export default function SignInScreen() {

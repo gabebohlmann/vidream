@@ -1,4 +1,4 @@
-// packages/app/features/auth/sign-in-form.tsx
+// packages/app/features/auth/sign-in/form.tsx
 import React, { useState } from 'react';
 import { FormWrapper, H2, Paragraph, SubmitButton, Text, Theme, YStack, Button } from '@my/ui';
 import { SchemaForm, formFields } from 'app/utils/SchemaForm';
