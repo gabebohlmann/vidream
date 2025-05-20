@@ -20,7 +20,7 @@ function CustomSignOutButton() {
           console.log('Attempting to sign out...')
           await signOut()
           console.log('Sign out successful, navigating to sign-in...')
-          router.replace('/(auth)/sign-in')
+          router.replace('/sign-in')
         } catch (e) {
           console.error('Sign out error:', e)
         }
@@ -34,7 +34,7 @@ function CustomSignOutButton() {
 export default function HomeScreen() {
   const { isSignedIn: isClerkSignedIn, isLoaded: isClerkLoaded, user } = useUser()
   const { isLoading: isConvexAuthLoading, isAuthenticated: isConvexAuthenticated } = useConvexAuth()
-  const router = useRouter(); // Get the router instance here
+  const router = useRouter() // Get the router instance here
 
   // Log detailed auth states (keep this)
   useEffect(() => {
@@ -71,8 +71,8 @@ export default function HomeScreen() {
         {/* MODIFIED "Go to Sign In" Button: */}
         <Button
           onPress={() => {
-            console.log("HomeScreen: 'Go to Sign In' button pressed. Navigating to /(auth)/sign-in");
-            router.push('/(auth)/sign-in'); 
+            console.log("HomeScreen: 'Go to Sign In' button pressed. Navigating to /sign-in")
+            router.push('/sign-in')
           }}
           mt="$2" // Example margin
         >

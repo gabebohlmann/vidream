@@ -76,7 +76,7 @@ function RootLayoutNav() {
             <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
               <Stack
                 screenOptions={{
-                  headerShown: false,
+                  headerShown: true,
                 }}
               >
                 <Stack.Screen name="index" options={{ title: 'Home' }} />
