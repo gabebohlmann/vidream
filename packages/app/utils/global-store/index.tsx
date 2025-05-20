@@ -1,3 +1,4 @@
+// packages/app/utils/global-store/index.tsx
 import React, { createContext, useContext, useState, ReactNode } from 'react'
 
 interface GlobalStoreState {

@@ -5,13 +5,13 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function Screen() {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <Stack.Screen
+    <>
+      {/* <Stack.Screen
         options={{
           title: 'Sign Up',
         }}
-      />
+      /> */}
       <SignUpScreen />
-    </SafeAreaView>
+    </>
   )
 }

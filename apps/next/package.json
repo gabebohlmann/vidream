@@ -12,8 +12,9 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.19.4",
-    "@tamagui/config": "^1.126.12",
-    "@tamagui/next-theme": "^1.126.12",
+    "@rehookify/datepicker": "^6.6.8",
+    "@tamagui/config": "^1.126.13",
+    "@tamagui/next-theme": "^1.126.13",
     "app": "0.0.0",
     "next": "14.2.14",
     "raf": "^3.4.1",
@@ -21,11 +22,11 @@
     "react-dom": "19.0.0",
     "react-native": "0.79.2",
     "react-native-web": "^0.20.0",
-    "tamagui": "^1.126.12",
+    "tamagui": "^1.126.13",
     "vercel": "latest"
   },
   "devDependencies": {
-    "@tamagui/next-plugin": "^1.126.12",
+    "@tamagui/next-plugin": "^1.126.13",
     "@types/node": "^20.14.1",
     "eslint-config-next": "^14.2.3",
     "next-compose-plugins": "^2.2.1",

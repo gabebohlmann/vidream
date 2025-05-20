@@ -1,40 +1,15 @@
-// packages/app/features/auth/sign-up-screen.tsx
+// packages/app/features/auth/sign-up-screen.web.tsx
 'use client'
 
-import {
-  Button,
-  FormWrapper,
-  H2,
-  Paragraph,
-  SubmitButton,
-  Text,
-  Theme,
-  YStack,
-  Input, // Assuming you have an Input component in @my/ui
-  Label, // Assuming you have a Label component
-} from '@my/ui'
+import { Button, FormWrapper, H2, Paragraph, SubmitButton, Text, Theme, YStack } from '@my/ui'
 import { ChevronLeft } from '@tamagui/lucide-icons'
 import { SchemaForm, formFields } from 'app/utils/SchemaForm'
-import { useEffect, useMemo, useState } from 'react' // Added useState
+import { useState } from 'react'
 import { FormProvider, useForm, useFormContext, useWatch } from 'react-hook-form'
 import { Link } from 'solito/link'
 import { z } from 'zod'
-import { useRouter } from 'solito/navigation' // Keep Solito's router for navigation
-import { Platform } from 'react-native' // To conditionally import Clerk hooks
-
-// Conditional Clerk imports
-let useSignUpClerk
-if (Platform.OS === 'web') {
-  // Ensure you have @clerk/clerk-react installed for web
-  // Or if your web setup uses @clerk/nextjs for hooks, adjust accordingly
-  import('@clerk/clerk-react').then((clerk) => {
-    useSignUpClerk = clerk.useSignUp
-  })
-} else {
-  import('@clerk/clerk-expo').then((clerk) => {
-    useSignUpClerk = clerk.useSignUp
-  })
-}
+import { useRouter } from 'solito/navigation'
+import { useSignUp } from '@clerk/nextjs'
 
 // Define your Zod schema for the initial sign-up form
 const SignUpSchema = z.object({
@@ -51,8 +26,8 @@ export const SignUpScreen = () => {
   const router = useRouter() // For navigation after sign-up
 
   // Clerk's useSignUp hook
-  const clerkSignUp = useSignUpClerk ? useSignUpClerk() : null
-  const { isLoaded, signUp, setActive } = clerkSignUp || {}
+  // const clerkSignUp = useSignUpClerk ? useSignUpClerk() : null
+  const { isLoaded, signUp, setActive } = useSignUp() || {}
 
   // State for Clerk's multi-step flow
   const [pendingVerification, setPendingVerification] = useState(false)
@@ -125,7 +100,7 @@ export const SignUpScreen = () => {
     }
   }
 
-  if (!useSignUpClerk) {
+  if (!useSignUp) {
     return (
       // Attempting to disable animation on this YStack
       <YStack fullscreen jc="center" ai="center" p="$4" animation={null}>
