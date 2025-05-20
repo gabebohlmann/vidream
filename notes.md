@@ -1,6 +1,3 @@
-### Notes
+TODO
 
-
-### Possible PRs to Takeout repo
-
-1. Add translucent={false} to <StatusBar/> to fix
+1. Clean up usage of nextjs vs. expo vs. react instances of clerk import
