@@ -1,52 +1,56 @@
 // packages/app/provider/index.tsx
-import { DatePickerProvider } from '@rehookify/datepicker'
-// import { Session } from '@supabase/supabase-js'
-import { GlobalStoreProvider } from 'app/utils/global-store'
-import React from 'react'
+import { DatePickerProvider } from '@rehookify/datepicker';
+import { GlobalStoreProvider } from 'app/utils/global-store';
+import React from 'react';
+import { Platform } from 'react-native';
+import { SafeAreaProvider } from './safe-area';
+// import { TamaguiProvider as CustomTamaguiProviderWrapper } from './tamagui'; // See note below
+import { UniversalThemeProvider } from './theme'; // Your MODIFIED UniversalThemeProvider
+import { ToastProvider } from './toast';
 
-// import { AuthProvider } from './auth'
-// import { QueryClientProvider } from './react-query'
-import { SafeAreaProvider } from './safe-area'
-import { TamaguiProvider } from './tamagui'
-import { UniversalThemeProvider } from './theme'
-import { ToastProvider } from './toast'
+export { loadThemePromise } from './theme/UniversalThemeProvider';
 
-export { loadThemePromise } from './theme/UniversalThemeProvider'
+// Helper to compose providers that go *inside* UniversalThemeProvider
+const composeInnerProviders = (providers: React.FC<{ children: React.ReactNode }>[]) =>
+  providers.reduce((Prev, Curr) => ({ children }) => {
+    // Corrected variable name for the composed component
+    const ComposedComponent = Prev ? <Prev><Curr>{children}</Curr></Prev> : <Curr>{children}</Curr>;
+    return ComposedComponent;
+  });
+
+// List of providers that should be nested within the themed Tamagui context
+// established by UniversalThemeProvider.
+const InnerProviders = composeInnerProviders([
+  SafeAreaProvider,
+  // CustomTamaguiProviderWrapper, // << LIKELY REMOVE THIS.
+                                  // If UniversalThemeProvider now renders the CoreTamaguiProvider,
+                                  // another TamaguiProvider here is usually incorrect.
+                                  // Verify what 'app/provider/tamagui/index.tsx' does.
+                                  // If it's just `export { TamaguiProvider } from 'tamagui'`, remove this line.
+  ToastProvider,
+  GlobalStoreProvider,
+  // QueryClientProvider, // If you re-add React Query
+]);
 
 export function Provider({
-  // initialSession,
   children,
+  defaultTheme, // This comes from NextTamaguiProvider on web, or could be undefined for native
+  disableRootThemeClass,
 }: {
-  // initialSession?: Session | null
-  children: React.ReactNode
+  children: React.ReactNode;
+  defaultTheme?: string;
+  disableRootThemeClass?: boolean;
 }) {
+  console.log('[packages/app/provider/index.tsx -> Provider] Received defaultTheme prop:', defaultTheme);
+
   return (
-    // Note: DatePickerProvider Conflicted with Popover so this is just a temporary solution
     <DatePickerProvider config={{ selectedDates: [], onDatesChange: () => {} }}>
-      {/* <AuthProvider initialSession={initialSession}> */}
-      <Providers>{children}</Providers>
-      {/* </AuthProvider> */}
+      <UniversalThemeProvider
+        passedTheme={defaultTheme} // Pass the theme determined by web-specific logic (or native)
+        disableRootThemeClass={disableRootThemeClass}
+      >
+        <InnerProviders>{children}</InnerProviders>
+      </UniversalThemeProvider>
     </DatePickerProvider>
-  )
+  );
 }
-
-const compose = (providers: React.FC<{ children: React.ReactNode }>[]) =>
-  providers.reduce((Prev, Curr) => ({ children }) => {
-    const Provider = Prev ? (
-      <Prev>
-        <Curr>{children}</Curr>
-      </Prev>
-    ) : (
-      <Curr>{children}</Curr>
-    )
-    return Provider
-  })
-
-const Providers = compose([
-  UniversalThemeProvider,
-  SafeAreaProvider,
-  TamaguiProvider,
-  ToastProvider,
-  // QueryClientProvider,
-  GlobalStoreProvider,
-])
