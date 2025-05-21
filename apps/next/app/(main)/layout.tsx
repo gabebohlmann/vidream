@@ -2,6 +2,7 @@
 'use client'
 import type { Metadata } from 'next'
 import NavBarDrawer from '@my/ui/src/components/NavBarDrawer'
+import { useUser } from '@clerk/nextjs'
 
 if (!process.env.NEXT_PUBLIC_CONVEX_URL) {
   throw new Error('Missing NEXT_PUBLIC_CONVEX_URL in your .env file')
@@ -14,9 +15,10 @@ if (!process.env.NEXT_PUBLIC_CONVEX_URL) {
 // }
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
+  const { isSignedIn } = useUser()
   return (
     <>
-      <NavBarDrawer />
+      <NavBarDrawer isSignedIn={isSignedIn} />
       {children}
     </>
   )

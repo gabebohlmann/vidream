@@ -154,15 +154,28 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
                     {uiError}
                   </Paragraph>
                 )}
-                <Theme inverse>
-                  <SubmitButton
-                    onPress={() => submit()}
-                    br="$10"
-                    disabled={!isLoaded || emailForm.formState.isSubmitting}
-                  >
-                    {emailForm.formState.isSubmitting ? 'Sending...' : 'Send Verification Code'}
-                  </SubmitButton>
-                </Theme>
+                <Button
+                  onPress={() => router.push('/')}
+                  br="$10" // Consistent border radius with SubmitButton
+                  mt="$2" // Add some margin top for spacing
+                  // You might want to use a different theme or style for a cancel button
+                  // For example, an outline button or a less prominent style:
+                  variant="outlined" // Assuming your Button component supports variants
+                  // or apply direct styles:
+                  // boc="$borderColor" // border color
+                  // bg="$background"
+                >
+                  <Text>Cancel</Text>
+                </Button>
+                <SubmitButton
+                  onPress={() => submit()}
+                  br="$10"
+                  disabled={!isLoaded || emailForm.formState.isSubmitting}
+                  themeInverse
+                >
+                  {emailForm.formState.isSubmitting ? 'Sending...' : 'Send Verification Code'}
+                  
+                </SubmitButton>
               </>
             )}
           >
@@ -212,6 +225,19 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
                   {uiError}
                 </Paragraph>
               )}
+              <Button
+                onPress={() => router.push('/')}
+                br="$10" // Consistent border radius with SubmitButton
+                mt="$2" // Add some margin top for spacing
+                // You might want to use a different theme or style for a cancel button
+                // For example, an outline button or a less prominent style:
+                variant="outlined" // Assuming your Button component supports variants
+                // or apply direct styles:
+                // boc="$borderColor" // border color
+                // bg="$background"
+              >
+                <Text>Cancel</Text>
+              </Button>
               <Theme inverse>
                 <SubmitButton
                   onPress={() => submit()}
