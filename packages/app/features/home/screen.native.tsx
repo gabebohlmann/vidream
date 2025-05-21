@@ -14,7 +14,7 @@ const NativeCustomSignOutButton = () => {
       onPress={async () => {
         try {
           await signOut()
-          router.replace('/(auth)/sign-in') // Path to your sign-in screen
+          router.replace('/sign-in') // Path to your sign-in screen
         } catch (e) {
           console.error('Native Sign out error:', e)
         }

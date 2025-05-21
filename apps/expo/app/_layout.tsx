@@ -74,21 +74,8 @@ function RootLayoutNav() {
         <ClerkLoaded>
           <Provider>
             <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-              <Stack
-                screenOptions={{
-                  headerShown: true,
-                }}
-              >
-                <Stack.Screen name="index" options={{ title: 'Home' }} />
-
-                {/* Refer to the (auth) group; its layout will handle individual auth screens */}
-                <Stack.Screen
-                  name="(auth)"
-                  options={{
-                    presentation: 'modal', // If all auth screens should be modals
-                    headerShown: false, // Or specific options for the group
-                  }}
-                />
+              <Stack screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
               </Stack>
               <NativeToast />
             </ThemeProvider>
