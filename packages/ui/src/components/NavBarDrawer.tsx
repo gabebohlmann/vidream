@@ -222,7 +222,7 @@ export default function NavBarDrawer() {
           </Tabs>
         )}
         <View flexDirection="row" alignItems="center" gap="$3">
-          <Button themeInverse circular chromeless padding="$0" size="$3">
+          <Button circular chromeless padding="$0" size="$3">
             <Button.Icon>
               <Bell size="$1" />
             </Button.Icon>
