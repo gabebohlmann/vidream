@@ -47,11 +47,6 @@ export function Provider({
   defaultTheme?: string
   disableRootThemeClass?: boolean
 }) {
-  console.log(
-    '[packages/app/provider/index.tsx -> Provider] Received defaultTheme prop:',
-    defaultTheme
-  )
-
   return (
     <DatePickerProvider config={{ selectedDates: [], onDatesChange: () => {} }}>
       <UniversalThemeProvider

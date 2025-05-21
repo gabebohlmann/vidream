@@ -16,9 +16,7 @@ function CustomSignOutButton() {
     <Button
       onPress={async () => {
         try {
-          console.log('Attempting to sign out...')
           await signOut()
-          console.log('Sign out successful, navigating to sign-in...')
           router.replace('/sign-in')
         } catch (e) {
           console.error('Sign out error:', e)
@@ -70,7 +68,6 @@ export default function HomeScreen() {
         {/* MODIFIED "Go to Sign In" Button: */}
         <Button
           onPress={() => {
-            console.log("HomeScreen: 'Go to Sign In' button pressed. Navigating to /sign-in")
             router.push('/sign-in')
           }}
           mt="$2" // Example margin

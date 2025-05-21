@@ -85,7 +85,7 @@ function RootLayoutNav() {
                 <Stack.Screen
                   name="(auth)"
                   options={{
-                    // presentation: 'modal', // If all auth screens should be modals
+                    presentation: 'modal', // If all auth screens should be modals
                     headerShown: false, // Or specific options for the group
                   }}
                 />
