@@ -1,15 +1,15 @@
-// apps/next/app/page.tsx
+// apps/next/app/(main)/page.tsx
 'use client'
 import HomeScreen from 'app/features/home/screen'
 import NavBarDrawer from '@my/ui/src/components/NavBarDrawer'
-import { View } from '@my/ui'
+import { View, Text } from '@my/ui'
 
 // export default HomeScreen
-export default function HomePage() {
+export default function MainHomePage() {
   return (
     <View>
-      <NavBarDrawer />
-      <HomeScreen />
+      {/* <HomeScreen /> */}
+      <Text>Home</Text>
     </View>
   )
 }

@@ -4,7 +4,7 @@ import { NextTamaguiProvider } from 'app/provider/NextTamaguiProvider'
 import { ConvexReactClient } from 'convex/react'
 import { ClerkProvider } from '@clerk/nextjs'
 import ConvexClientProviderWithClerk from '../components/ConvexProviderWithClerk'
-
+import NavBarDrawer from '@my/ui/src/components/NavBarDrawer'
 if (!process.env.NEXT_PUBLIC_CONVEX_URL) {
   throw new Error('Missing NEXT_PUBLIC_CONVEX_URL in your .env file')
 }
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     // You can use `suppressHydrationWarning` to avoid the warning about mismatched content during hydration in dev mode
-    
+
     // <html lang="en">
     <html lang="en" suppressHydrationWarning>
       <body>

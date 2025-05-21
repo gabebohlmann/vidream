@@ -1,5 +1,6 @@
 // packages/ui/src/components/NavBarDrawer.tsx
 // Top Navbar with Swippable Drawer on Smaller Screens from Tamagui Bento
+'use client'
 import { Bell, Menu } from '@tamagui/lucide-icons'
 import type { StackProps, TabLayout, TabsTabProps } from 'tamagui'
 
@@ -24,7 +25,8 @@ import { useMedia } from 'tamagui'
 
 import { useWindowDimensions } from 'tamagui'
 import { Drawer } from './common/Drawer'
-import { ProfileButton } from './ProfileButton' // <-- Import the new component
+import { ProfileButton } from './ProfileButton'
+import { User } from '@tamagui/lucide-icons'
 
 // how to use with URL params:
 // import { createParam } from 'solito'

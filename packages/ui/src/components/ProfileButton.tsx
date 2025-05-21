@@ -4,6 +4,7 @@ import { useUser, useClerk } from '@clerk/nextjs' // Or your specific Clerk impo
 import { Authenticated, Unauthenticated, useConvexAuth } from 'convex/react'
 import { useState } from 'react'
 import { Link } from 'solito/link'
+import { CircleUserRound } from '@tamagui/lucide-icons'
 
 export function ProfileButton() {
   const { isLoading: isConvexAuthLoading, isAuthenticated } = useConvexAuth()
@@ -31,12 +32,9 @@ export function ProfileButton() {
   return (
     <>
       <Unauthenticated>
-        {/* <Button onPress={() => openSignIn()} themeInverse>
-          Sign In
-        </Button> */}
-        <Button themeInverse>
+        <Button themeInverse icon={<CircleUserRound size="$1.5" />}>
           <Link href="/sign-in">
-            <Text>Go to Sign In</Text>
+            <Text> Sign In</Text>
           </Link>
         </Button>
       </Unauthenticated>
@@ -87,7 +85,7 @@ export function ProfileButton() {
                   closeTrigger()
                 }}
               >
-                <DropDownText>Accounts</DropDownText>
+                <DropDownText>Account</DropDownText>
               </DropDownItem>
               <DropDownItem
                 onPress={() => {

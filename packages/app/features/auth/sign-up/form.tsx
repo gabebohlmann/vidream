@@ -39,11 +39,11 @@ interface SignUpFormProps {
 
 // Link to Sign In page (Consistent with SignInForm's link structure)
 const SignUpScreenSignInLink = () => {
-  const href = `/(auth)/sign-in`;
+  const href = `/sign-in`;
   return (
     <Link href={href}>
       <Paragraph ta="center" theme="alt1" mt="$2" color="$colorFocus" accessibilityRole="link">
-        Already signed up?{' '}
+        Already signed up?
         <Text textDecorationLine="underline" color="$colorPress">
           Sign in
         </Text>

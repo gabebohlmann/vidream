@@ -17,7 +17,7 @@ const WebSignInAction = () => {
     <>
       <Button themeInverse>
         <Link href="/sign-in">
-          <Text>Go to Sign In</Text>
+          <Text>Sign In</Text>
         </Link>
       </Button>
     </>

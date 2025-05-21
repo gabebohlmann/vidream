@@ -1,8 +1,8 @@
 // packages/app/features/auth/sign-in/form.tsx
 import React, { useState } from 'react';
-import { FormWrapper, H2, Paragraph, SubmitButton, Text, Theme, YStack, Button } from '@my/ui';
+import { FormWrapper, H2, Paragraph, SubmitButton, Text, Theme, YStack, Button } from '@my/ui'; // Button is already imported
 import { SchemaForm, formFields } from 'app/utils/SchemaForm';
-import { FormProvider, useForm, useFormContext, Controller } from 'react-hook-form'; // Added Controller
+import { FormProvider, useForm, useFormContext, Controller } from 'react-hook-form';
 import { Link } from 'solito/link';
 import { useRouter } from 'solito/navigation';
 import { z } from 'zod';
@@ -14,28 +14,20 @@ const SignInSchema = z.object({
 });
 type SignInFormData = z.infer<typeof SignInSchema>;
 
-// Define an interface for the props expected from the Clerk useSignIn hook
-// This acts as a contract. Ensure the core functionalities you use are covered.
-// You might need to import actual types from @clerk/types if they are compatible enough
-// or define a simplified interface like this:
 export interface ClerkSignInProps {
   isLoaded: boolean;
   signIn: {
-    create: (params: { identifier: string; password?: string; [key: string]: any }) => Promise<any>; // Adjust 'any' to actual Clerk result type
-    [key: string]: any; // For other signIn methods if needed
+    create: (params: { identifier: string; password?: string; [key: string]: any }) => Promise<any>;
+    [key: string]: any;
   } | undefined;
   setActive: (params: { session: string | null; [key: string]: any }) => Promise<void>;
 }
 
 interface SignInViewProps {
-  clerkSignIn: ClerkSignInProps; // The object containing Clerk's useSignIn output
+  clerkSignIn: ClerkSignInProps;
   initialEmail?: string | null;
-  // You could also pass down platform-specific links/components if truly needed
-  // signUpLinkComponent?: React.ReactNode;
-  // forgotPasswordLinkComponent?: React.ReactNode;
 }
 
-// Shared ForgotPasswordLink (can be part of SignInView or imported)
 const ForgotPasswordLink = () => {
   const { watch } = useFormContext<SignInFormData>();
   const email = watch('email');
@@ -84,7 +76,7 @@ export const SignInForm: React.FC<SignInViewProps> = ({ clerkSignIn, initialEmai
 
       if (result.status === 'complete') {
         await setActive({ session: result.createdSessionId });
-        router.replace('/');
+        router.replace('/'); // Or router.push('/') depending on desired backstack behavior
       } else {
         console.error('[SignInView] Clerk Sign In status not complete:', JSON.stringify(result, null, 2));
         setUiError('Sign-in requires additional steps or has failed. Status: ' + result.status);
@@ -94,9 +86,12 @@ export const SignInForm: React.FC<SignInViewProps> = ({ clerkSignIn, initialEmai
       const defaultMessage = 'An error occurred during sign in. Please try again.';
       const clerkErrorMessage = err.errors?.[0]?.longMessage || err.errors?.[0]?.message || defaultMessage;
       setUiError(clerkErrorMessage);
-      // You might want to set form-specific errors here too using form.setError()
     }
   }
+
+  const handleCancel = () => {
+    router.push('/'); // Navigate to the homepage
+  };
 
   return (
     <FormWrapper>
@@ -134,14 +129,28 @@ export const SignInForm: React.FC<SignInViewProps> = ({ clerkSignIn, initialEmai
                     }
                     submit();
                   }}
-                  br="$10"
+                  br="$10" // You can also use theme tokens like $radius.lg
                   disabled={!isLoaded || form.formState.isSubmitting}
                 >
                   <Text>{isLoaded ? (form.formState.isSubmitting ? 'Signing In...' : 'Sign In') : 'Loading...'}</Text>
                 </SubmitButton>
               </Theme>
+              {/* Cancel Button */}
+              <Button
+                onPress={handleCancel}
+                br="$10" // Consistent border radius with SubmitButton
+                mt="$2" // Add some margin top for spacing
+                // You might want to use a different theme or style for a cancel button
+                // For example, an outline button or a less prominent style:
+                variant="outlined" // Assuming your Button component supports variants
+                // or apply direct styles:
+                // boc="$borderColor" // border color
+                // bg="$background"
+              >
+                <Text>Cancel</Text>
+              </Button>
               <Link href="/sign-up" passHref>
-                <Paragraph ta="center" mt="$2" theme="alt1" textDecorationLine="underline" accessibilityRole="link">
+                <Paragraph ta="center" mt="$4" theme="alt1" textDecorationLine="underline" accessibilityRole="link">
                   Don&apos;t have an account? <Text>Sign up</Text>
                 </Paragraph>
               </Link>

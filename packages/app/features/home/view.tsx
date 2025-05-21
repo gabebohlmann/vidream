@@ -57,7 +57,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
               <Text ta="center" fos="$2" color="$red8">
                 (Clerk signed in, Convex not authenticated)
               </Text>
-              <UserActionsComponent /> 
+              <UserActionsComponent />
             </YStack>
           )}
         </YStack>
@@ -69,8 +69,6 @@ export const HomeView: React.FC<HomeViewProps> = ({
           <Text>Welcome, {userDisplayName || 'User'}!</Text>
           <Text>You are successfully signed in.</Text>
           <View mt="$2">
-            {' '}
-            {/* Added View for consistent spacing of the button */}
             <UserActionsComponent />
           </View>
         </YStack>

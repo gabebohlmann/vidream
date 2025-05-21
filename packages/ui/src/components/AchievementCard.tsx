@@ -1,3 +1,4 @@
+// packages/ui/src/components/AchievementCard.tsx
 import { IconProps } from '@tamagui/helpers-icon'
 import { LinearGradient } from '@tamagui/linear-gradient'
 import { ChevronRight } from '@tamagui/lucide-icons'
