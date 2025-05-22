@@ -8,3 +8,4 @@
 1. Standardize $ vs {} usage for tgui comp props
 1. Add logo fill on tab focus
 1. Replace an stylesheets with Tamagui
+1. Make top nav bar more componentized between mobile and native
