@@ -1185,6 +1185,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@clerk/backend@npm:^1.32.3":
+  version: 1.32.3
+  resolution: "@clerk/backend@npm:1.32.3"
+  dependencies:
+    "@clerk/shared": "npm:^3.9.2"
+    "@clerk/types": "npm:^4.59.1"
+    cookie: "npm:1.0.2"
+    snakecase-keys: "npm:8.0.1"
+    tslib: "npm:2.8.1"
+  peerDependencies:
+    svix: ^1.62.0
+  peerDependenciesMeta:
+    svix:
+      optional: true
+  checksum: 10/bdb2d524615dba4c1348a23a63c7c066791c7181954b8969d690c9f0bb471d0e0031e24278e8c290b8dfae175046284a6c8f9291c4ba079ffe489c465ae05912
+  languageName: node
+  linkType: hard
+
 "@clerk/clerk-expo@npm:^2.11.7":
   version: 2.11.7
   resolution: "@clerk/clerk-expo@npm:2.11.7"
@@ -1269,6 +1287,24 @@ __metadata:
   dependencies:
     "@clerk/types": "npm:^4.59.1"
   checksum: 10/a4ffd52ee89aafbf411c2ece19b9f83d9e4deebe6d19de4a00e2584efd71218b495ae338569177252432ce5a56b4f419ff0dd1f214547032b7548c0acfc70cee
+  languageName: node
+  linkType: hard
+
+"@clerk/nextjs@npm:^6.19.5":
+  version: 6.19.5
+  resolution: "@clerk/nextjs@npm:6.19.5"
+  dependencies:
+    "@clerk/backend": "npm:^1.32.3"
+    "@clerk/clerk-react": "npm:^5.31.5"
+    "@clerk/shared": "npm:^3.9.2"
+    "@clerk/types": "npm:^4.59.1"
+    server-only: "npm:0.0.1"
+    tslib: "npm:2.8.1"
+  peerDependencies:
+    next: ^13.5.7 || ^14.2.25 || ^15.2.3
+    react: ^18.0.0 || ^19.0.0 || ^19.0.0-0
+    react-dom: ^18.0.0 || ^19.0.0 || ^19.0.0-0
+  checksum: 10/35fefa471edafa40650e7a11e59a16ac316a0346e4d22d1a4f46cf6b1694745bfca8b590377e432b41b2b28307d7572a3dacbfe3bdd3bca55deb60b45b0feb42
   languageName: node
   linkType: hard
 
@@ -8308,6 +8344,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cookie@npm:1.0.2":
+  version: 1.0.2
+  resolution: "cookie@npm:1.0.2"
+  checksum: 10/f5817cdc84d8977761b12549eba29435e675e65c7fef172bc31737788cd8adc83796bf8abe6d950554e7987325ad2d9ac2971c5bd8ff0c4f81c145f82e4ab1be
+  languageName: node
+  linkType: hard
+
 "copy-to-clipboard@npm:3.3.3":
   version: 3.3.3
   resolution: "copy-to-clipboard@npm:3.3.3"
@@ -13014,6 +13057,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"map-obj@npm:^4.1.0":
+  version: 4.3.0
+  resolution: "map-obj@npm:4.3.0"
+  checksum: 10/fbc554934d1a27a1910e842bc87b177b1a556609dd803747c85ece420692380827c6ae94a95cce4407c054fa0964be3bf8226f7f2cb2e9eeee432c7c1985684e
+  languageName: node
+  linkType: hard
+
 "marked-terminal@npm:^5.2.0":
   version: 5.2.0
   resolution: "marked-terminal@npm:5.2.0"
@@ -13704,6 +13754,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "next-app@workspace:apps/next"
   dependencies:
+    "@clerk/nextjs": "npm:^6.19.5"
     "@react-navigation/bottom-tabs": "npm:^7.3.13"
     "@react-navigation/native": "npm:^7.1.9"
     "@rehookify/datepicker": "npm:^6.6.8"
@@ -15999,7 +16050,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"server-only@npm:^0.0.1":
+"server-only@npm:0.0.1, server-only@npm:^0.0.1":
   version: 0.0.1
   resolution: "server-only@npm:0.0.1"
   checksum: 10/c432348956641ea3f460af8dc3765f3a1bdbcf7a1e0205b0756d868e6e6fe8934cdee6bff68401a1dd49ba4a831c75916517a877446d54b334f7de36fa273e53
@@ -16274,6 +16325,17 @@ __metadata:
     dot-case: "npm:^3.0.4"
     tslib: "npm:^2.0.3"
   checksum: 10/0a7a79900bbb36f8aaa922cf111702a3647ac6165736d5dc96d3ef367efc50465cac70c53cd172c382b022dac72ec91710608e5393de71f76d7142e6fd80e8a3
+  languageName: node
+  linkType: hard
+
+"snakecase-keys@npm:8.0.1":
+  version: 8.0.1
+  resolution: "snakecase-keys@npm:8.0.1"
+  dependencies:
+    map-obj: "npm:^4.1.0"
+    snake-case: "npm:^3.0.4"
+    type-fest: "npm:^4.15.0"
+  checksum: 10/d8062a06ec95fbacea2f5c4a3f02cdbff113e1fa6c4a25a90840186d9d0b428ddee245d4af34019267d93447632b90d8852a962de60f0d8d5871c1abaac3e29b
   languageName: node
   linkType: hard
 
@@ -17310,7 +17372,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-fest@npm:^4.30.0":
+"type-fest@npm:^4.15.0, type-fest@npm:^4.30.0":
   version: 4.41.0
   resolution: "type-fest@npm:4.41.0"
   checksum: 10/617ace794ac0893c2986912d28b3065ad1afb484cad59297835a0807dc63286c39e8675d65f7de08fafa339afcb8fe06a36e9a188b9857756ae1e92ee8bda212
