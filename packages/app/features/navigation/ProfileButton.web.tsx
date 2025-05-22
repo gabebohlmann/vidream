@@ -32,9 +32,9 @@ export function ProfileButton() {
   return (
     <>
       <Unauthenticated>
-        <Button icon={<CircleUserRound size="$1.5" />}>
+        <Button icon={<CircleUserRound size="$1.5" />} size="$3" paddingHorizontal="$2">
           <Link href="/sign-in">
-            <Text> Sign In</Text>
+            <Text fontSize={14}> Sign In</Text>
           </Link>
         </Button>
       </Unauthenticated>

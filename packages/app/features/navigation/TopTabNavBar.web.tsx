@@ -1,456 +1,480 @@
 // packages/app/features/navigation/TopTabNavBar.web.tsx
-// Top Navbar with Swippable Drawer on Smaller Screens from Tamagui Bento
+// packages/app/features/navigation/TopTabNavBar.web.tsx
 'use client'
-import { Bell, Menu, Plus } from '@tamagui/lucide-icons'
-import type { StackProps, TabLayout, TabsTabProps } from '@my/ui'
-import { useEffect, useState } from 'react'
+import { Bell, Menu, Plus, Search, ArrowLeft } from '@tamagui/lucide-icons' // Added Search, ArrowLeft
+import type { GetProps } from 'tamagui'
+import React, { useEffect, useState, useRef } from 'react' // Added useRef
 import {
-  Anchor,
-  AnimatePresence,
-  // Avatar, // Removed
   Button,
-  Image,
-  // Popover, // Removed
-  // PopoverTrigger, // Removed
   Separator,
-  Tabs,
   Text,
   View,
   isWeb,
   styled,
   useEvent,
+  Input, // Import Tamagui Input
+  AnimatePresence, // For smoother transitions
 } from 'tamagui'
 import { useMedia } from '@my/ui'
-import { useWindowDimensions } from 'tamagui'
 import { Drawer } from './Drawer'
 import { ProfileButton } from './ProfileButton.web'
-import { SquarePlay } from '@tamagui/lucide-icons'
 import VidreamIcon from '@my/ui/src/components/VidreamIcon'
 import { Link } from 'solito/link'
 import { useConvexAuth } from 'convex/react'
 import { useUser } from '@clerk/nextjs'
-// how to use with URL params:
-// import { createParam } from 'solito'
-// const { useParam, useParams } = createParam()
+import { allNavigationLinks } from './commonLinks'
+import type { NavLinkInfo } from './commonLinks'
 
-const links = [
-  {
-    title: 'Home',
-    slug: 'home',
-  },
-  {
-    title: 'Flashes',
-    slug: 'flashes',
-  },
-  {
-    title: 'Subscriptions',
-    slug: 'subscriptions',
-  },
-]
+/////////////////////////////////////////////////////////////////
 
-const useTabs = () => {
-  const [tabState, setTabState] = useState<{
-    currentTab: string
-    intentAt: TabLayout | null
-    activeAt: TabLayout | null
-    prevActiveAt: TabLayout | null
-  }>({
-    activeAt: null,
-    currentTab: 'tab1', // Consider initializing from URL or a default
-    intentAt: null,
-    prevActiveAt: null,
-  })
-  const setCurrentTab = (currentTab: string) => setTabState((prev) => ({ ...prev, currentTab }))
-  const setIntentIndicator = (intentAt: TabLayout | null) =>
-    setTabState((prev) => ({ ...prev, intentAt }))
-  const setActiveIndicator = (activeAt: TabLayout | null) =>
-    setTabState((prev) => ({ ...prev, prevActiveAt: prev.activeAt, activeAt }))
-  const { activeAt, intentAt, currentTab, prevActiveAt } = tabState // Added prevActiveAt to destructuring
-
-  const handleOnInteraction: TabsTabProps['onInteraction'] = (type, layout) => {
-    if (type === 'select') {
-      setActiveIndicator(layout)
-    } else {
-      setIntentIndicator(layout)
-    }
-  }
-  // Example: Sync with URL (if using solito or similar)
-  // const { params, setParams } = useParams()
-  // useEffect(() => {
-  //   if (params.tab && params.tab !== currentTab) {
-  //     setCurrentTab(params.tab)
-  //   }
-  // }, [params.tab, currentTab])
-  // useEffect(() => {
-  //  // To set the tab in URL if it changes internally
-  //  if (currentTab && currentTab !== params.tab) {
-  //    setParams({ tab: currentTab }, { replace: true })
-  //  }
-  // }, [currentTab, params.tab, setParams])
-
-  return {
-    currentTab,
-    setCurrentTab,
-    activeAt,
-    intentAt,
-    prevActiveAt, // Added
-    handleOnInteraction,
-  }
+// Props for TopTabNavBar
+interface TopTabNavBarProps {
+  isScreenSm: boolean
+  // Props to control SM search mode from parent
+  isSearchActiveSm: boolean
+  onSetSearchActiveSm: (active: boolean) => void
+  onSearchSubmit?: (query: string) => void // Optional: if search is submitted from here
 }
 
-interface NavBarDrawerProps {
-  isSignedIn?: boolean
-}
-
-export function TopTabNavBar() {
-  const { isAuthenticated: isConvexAuthenticated } = useConvexAuth()
-  const { user, isSignedIn } = useUser() //
-  const isAuthenticated = isConvexAuthenticated && isSignedIn && user
-  const { currentTab, setCurrentTab, activeAt, intentAt, handleOnInteraction } = useTabs()
-  // Removed triggerOpen, setTriggerOpen, closeTrigger state as it's now in ProfileButton
-  const { sm } = useMedia()
-  const handleCreatePress = () => {
-    // TODO: Implement your create action
-    console.log('Create button pressed')
-    // Example: navigation.navigate('/create') or open a modal
-  }
-  return (
-    <View
-      flexDirection="column"
-      width="100%"
-      // Consider making height more dynamic or theme-based if 610/800 is too rigid
-      // height={610}
-      // $gtXs={{ height: 800 }}
-      $sm={{ pb: '$4' }} // Add some padding at the bottom for smaller screens if content gets cut
-    >
-      <View
-        flexDirection="row"
-        paddingHorizontal="$3" // Consistent padding
-        paddingVertical="$2"
-        minWidth="100%"
-        tag="nav"
-        alignItems="center"
-        justifyContent="space-between"
-        backgroundColor="$background"
-        borderBottomWidth={1} // Optional: add a subtle border
-        borderBottomColor="$borderColor" // Optional
-      >
-        <View flexDirection="row" alignItems="center">
-          {/* <SquarePlay size={32} color="#FFFFFF" strokeWidth={2.25} fill="#1b9e0a" /> */}
-          <VidreamIcon />
-          <Text paddingLeft="$2" fontSize="$7" fontWeight="bold">
-            Vidream
-          </Text>
-        </View>
-        {!sm && (
-          <Tabs
-            value={currentTab}
-            onValueChange={setCurrentTab}
-            orientation="horizontal"
-            flex={1} // Allow tabs to take available space if needed
-            justifyContent="center" // Center the tabs list
-          >
-            <View flexDirection="column">
-              <AnimatePresence>
-                {intentAt && (
-                  <TabsRovingIndicator
-                    borderRadius="$4"
-                    width={intentAt.width}
-                    height={intentAt.height}
-                    x={intentAt.x}
-                    y={intentAt.y}
-                  />
-                )}
-              </AnimatePresence>
-              <AnimatePresence>
-                {activeAt && (
-                  <TabsRovingIndicator
-                    borderRadius="$4"
-                    theme="active" // This should apply active styles from your theme
-                    width={activeAt.width}
-                    height={activeAt.height}
-                    x={activeAt.x}
-                    y={activeAt.y}
-                  />
-                )}
-              </AnimatePresence>
-              <Tabs.List
-                disablePassBorderRadius
-                loop={false}
-                aria-label="Main navigation"
-                gap="$3"
-                backgroundColor="transparent"
-                paddingVertical="$1" // Add some vertical padding for the indicators
-              >
-                {links.map(
-                  (
-                    link // Index not needed if title is unique for key
-                  ) => (
-                    <Tabs.Tab
-                      key={link.slug} // Use slug for key as it's likely more stable
-                      unstyled
-                      value={link.slug}
-                      onInteraction={handleOnInteraction}
-                      paddingHorizontal="$3" // Reduced padding a bit for a tighter look
-                      paddingVertical="$2"
-                    >
-                      <Link
-                        // href={`/bento/shells/navbars/${link.slug}`} // Correct href
-                        href={`/${link.slug}`} // Placeholder
-                      >
-                        <Text>{link.title}</Text>
-                      </Link>
-                    </Tabs.Tab>
-                  )
-                )}
-              </Tabs.List>
-            </View>
-          </Tabs>
-        )}
-        {/* Right corner buttons */}
-        <View flexDirection="row" alignItems="center" gap="$3">
-          {/* Conditionally rendered Create Button */}
-          <Button size="$3" onPress={handleCreatePress} icon={<Plus size="$1" />}></Button>
-          {isAuthenticated && (
-            <Button circular chromeless padding="$0" size="$3">
-              <Button.Icon>
-                <Bell size="$1" strokeWidth={2} />
-              </Button.Icon>
-            </Button>
-          )}
-          {!sm && <ProfileButton />}
-        </View>
-      </View>
-    </View>
-  )
-}
-
-// No changes below this line in NavBarDrawer.tsx for this refactor,
-// but ensure DropDownItem and DropDownText are removed if they were here.
-// NavLink, SideBar, SideBarContent, TabsRovingIndicator remain.
-
-interface NavLinkProps extends GetProps<typeof View> {
-  href: string
-  children: React.ReactNode
-}
-
-const NavLink = View.styleable<NavLinkProps>(({ children, href = '#', ...rest }, ref) => {
-  return (
-    <View
-      ref={ref}
-      // borderRadius={5} // The parent Tabs.Tab or TabsRovingIndicator handles visuals primarily
-      paddingVertical="$1" // Adjusted padding
-      alignItems="center"
-      justifyContent="center"
-      {...rest}
-    >
-      <Link href={href}>
-        <Text
-          // opacity={0.9} // Handled by theme or direct color
-          fontSize="$4" // Consider using slightly smaller for nav items unless it's a design choice
-          fontWeight="$5"
-          // lineHeight="$5" // Usually inherited or set on Text directly
-          color="$color" // Use themed color, $color12 is very strong
-          hoverStyle={{
-            // opacity: 1, // Use color change for hover if preferred
-            color: '$colorHover',
-          }}
-          // Example for active state (would need to pass currentTab and compare)
-          // {...(isActive && { color: '$colorFocus', fontWeight: '700' })}
-        >
-          {children}
-        </Text>
-      </Link>
-    </View>
-  )
+// Simplified SidebarItem for the SM Drawer (or use a shared one)
+const DrawerSidebarItem = styled(View, {
+  // Similar to SidebarButton in PersistentSidebar but might have different styling/props for drawer context
+  paddingVertical: '$3',
+  paddingHorizontal: '$4',
+  flexDirection: 'row',
+  gap: '$3',
+  alignItems: 'center',
+  borderRadius: '$2',
+  hoverStyle: { backgroundColor: '$backgroundHover' },
+  pressStyle: { backgroundColor: '$backgroundPress' },
 })
 
-/** SIDEBAR */
-function SideBar() {
-  const [open, setOpen] = useState(false)
-  const toggle = useEvent(() => setOpen(!open))
-  // console.log(Menu); // Optional: You can log Menu here to inspect its type during development
+// ... (SmallScreenDrawerContent and DrawerSidebarItem remain the same)
+function SmallScreenDrawerContent({
+  open,
+  onOpenChange,
+}: {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}) {
+  // const { currentTab, setCurrentTab, activeAt, intentAt, handleOnInteraction } = useTabs() // If using Tabs in drawer
+
+  return (
+    <Drawer open={open} onOpenChange={onOpenChange}>
+      <Drawer.Portal>
+        <Drawer.Overlay animation="lazy" enterStyle={{ opacity: 0 }} exitStyle={{ opacity: 0 }} />
+        <Drawer.Content
+          paddingVertical="$4"
+          width={280} // Slightly wider for SM drawer
+          alignItems="flex-start"
+          backgroundColor="$background"
+          borderRightWidth={isWeb ? 0 : 1} // No border if it's an overlay drawer on web
+          borderRightColor="$borderColor"
+          gap="$2"
+          animation="medium"
+          enterStyle={{ x: -280 }}
+          exitStyle={{ x: -280 }}
+          elevate
+          shadowColor="$shadowColor"
+          shadowOpacity={0.2}
+          shadowRadius={10}
+        >
+          <View paddingHorizontal="$4" paddingBottom="$2" paddingTop="$2">
+            <Text fontSize="$6" fontWeight="bold">
+              Menu
+            </Text>
+          </View>
+          <Separator />
+          <View tag="nav" width="100%" gap="$1" paddingHorizontal="$3" paddingTop="$2">
+            {allNavigationLinks.map((link) => (
+              <Link key={link.slug} href={link.href} onPress={() => onOpenChange(false)} asChild>
+                <DrawerSidebarItem tag="a">
+                  {link.icon && <link.icon size={20} color="$color" />}
+                  <Text fontSize="$4" color="$color">
+                    {link.title}
+                  </Text>
+                </DrawerSidebarItem>
+              </Link>
+            ))}
+          </View>
+          <Separator marginVertical="$3" />
+          <View paddingHorizontal="$4">
+            <ProfileButton />
+          </View>
+        </Drawer.Content>
+      </Drawer.Portal>
+    </Drawer>
+  )
+}
+
+export function TopTabNavBar({
+  isScreenSm,
+  isSearchActiveSm,
+  onSetSearchActiveSm,
+  onSearchSubmit,
+}: TopTabNavBarProps) {
+  const { isAuthenticated: isConvexAuthenticated } = useConvexAuth()
+  const { user, isSignedIn } = useUser()
+  const isAuthenticated = isConvexAuthenticated && isSignedIn && user
+
+  const [smDrawerOpen, setSmDrawerOpen] = useState(false)
+  const toggleSmDrawer = useEvent(() => setSmDrawerOpen(!smDrawerOpen))
+
+  const [searchQuerySm, setSearchQuerySm] = useState('')
+  const searchInputRef = useRef<HTMLInputElement>(null) // Tamagui Input ref type might differ
+
+  const handleCreatePress = () => {
+    console.log('Create button pressed')
+  }
+
+  
+  // Effect to focus input when SM search becomes active
+  useEffect(() => {
+    if (isScreenSm && isSearchActiveSm) {
+      setTimeout(() => {
+        // Timeout helps ensure element is rendered and ready for focus
+        searchInputRef.current?.focus()
+      }, 50)
+    }
+  }, [isScreenSm, isSearchActiveSm])
+
+  const handleSmSearchSubmit = () => {
+    if (onSearchSubmit) {
+      onSearchSubmit(searchQuerySm)
+    }
+    // Potentially close search and clear query, or navigate to results
+    // onSetSearchActiveSm(false);
+  }
+
+  // SM Screen Search Active UI
+  if (isScreenSm && isSearchActiveSm) {
+    return (
+      <View
+        flexDirection="row"
+        paddingHorizontal="$2" // Reduced padding for search mode
+        paddingVertical="$2" // Reduced padding
+        width="100%"
+        alignItems="center"
+        backgroundColor="$background"
+        borderBottomWidth={1}
+        borderBottomColor="$borderColor"
+        minHeight={70}
+      >
+        <Button
+          icon={<ArrowLeft size="$1.5" />} // Standard back icon size
+          onPress={() => {
+            onSetSearchActiveSm(false)
+            setSearchQuerySm('') // Clear search query on back
+          }}
+          chromeless
+          circular
+          size="$3" // Consistent button sizing
+          marginRight="$2"
+        />
+        <Input
+          ref={searchInputRef as any} // Cast if specific Tamagui input ref type is needed
+          flex={1}
+          size="$3.5" // Match common input sizes
+          placeholder="Search Vidream..."
+          value={searchQuerySm}
+          onChangeText={setSearchQuerySm}
+          onSubmitEditing={handleSmSearchSubmit}
+          // autoFocus // Handled by useEffect for more reliability
+          borderRadius="$3"
+        />
+        {searchQuerySm.length > 0 && (
+          <Button
+            icon={<Plus size="$1" style={{ transform: [{ rotate: '45deg' }] }} />} // "X" icon
+            onPress={() => setSearchQuerySm('')}
+            chromeless
+            circular
+            size="$3"
+            marginLeft="$2"
+          />
+        )}
+      </View>
+    )
+  }
+
+  // Default UI (SM screen, search not active OR Not SM screen)
   return (
     <View
       flexDirection="row"
-      {...(isWeb && {
-        onKeyDown: (e: KeyboardEvent) => {
-          if (e.key === 'Escape') {
-            setOpen(false)
-          }
-        },
-      })}
+      paddingHorizontal="$3"
+      paddingVertical="$2.5"
+      width="100%"
+      tag="nav"
+      alignItems="center"
+      backgroundColor="$background"
+      borderBottomWidth={1}
+      borderBottomColor="$borderColor"
+      minHeight={60}
     >
-      <Button
-        circular
-        chromeless
-        onPress={toggle}
-        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-        // Pass the icon as a JSX element to the 'icon' prop directly.
-        // This approach is generally more stable and less prone to issues
-        // compared to nesting Button.Icon for simple icon buttons.
-        icon={<Menu size="$1.5" />}
-      >
-        {/* No Button.Icon or children needed here if it's just an icon button */}
-      </Button>
-      <SideBarContent open={open} onOpenChange={() => setOpen(false)} />
-    </View>
-  )
-}
-
-function SideBarContent({ onOpenChange, open }: { onOpenChange: () => void; open: boolean }) {
-  const { activeAt, currentTab, handleOnInteraction, intentAt, setCurrentTab } = useTabs()
-  const { height, width } = useWindowDimensions()
-
-  return (
-    <View
-      flexDirection="column"
-      position="absolute"
-      // These negative margins might need adjustment based on parent padding
-      marginHorizontal={-12}
-      marginVertical="$-2"
-      zIndex={1000} // Ensure sidebar content is above other elements
-    >
-      <Drawer open={open} onOpenChange={onOpenChange}>
-        <Drawer.Portal>
-          <Drawer.Overlay
-            // height={height} // Drawer.Overlay usually fills its portal
-            // width={width + 100} // This might be too specific
-            animation="lazy"
-            enterStyle={{ opacity: 0 }}
-            exitStyle={{ opacity: 0 }}
+      {/* Left Section: Hamburger (SM only, if not search active) & Logo */}
+      <View flexDirection="row" alignItems="center" gap={isScreenSm ? '$2' : '$2.5'}>
+        {isScreenSm && ( // Hamburger for SM drawer
+          <Button
+            circular
+            chromeless
+            onPress={toggleSmDrawer}
+            icon={<Menu size="$1.5" />}
+            size="$3.5"
           />
-          {/* Removed Drawer.Swipeable, Drawer.Content seems to handle swipe by default if native */}
-          {/* If custom swipeable behavior is needed, you might need to reconsider how it's structured */}
-          {/* For web, it's more about the visual presentation of the drawer */}
-          <Drawer.Content
-            paddingVertical="$4" // Increased padding
-            // height={height} // Let content define height, or use fractions like '80%'
-            width={260} // Slightly wider for better readability
-            alignItems="flex-start"
-            justifyContent="flex-start"
-            backgroundColor="$background"
-            borderRightWidth={1}
-            borderRightColor="$borderColor"
-            // x={-30} // These x positions and paddingLeft might be fighting each other
-            // paddingLeft={30}
-            gap="$4"
-            elevate // Add elevation
-            animation="medium" // Use a standard animation token
-            enterStyle={{ x: isWeb ? -260 : '-100%' }} // Adjust for web vs native if needed
-            exitStyle={{ x: isWeb ? -260 : '-100%' }}
+        )}
+        {/* Logo - adjusted visibility slightly */}
+        {(!isScreenSm || (isScreenSm && !isSearchActiveSm)) && (
+          <Link
+            href="/"
+            style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '$2' }}
           >
-            <View
-              flexDirection="row"
-              padding="$2"
-              marginTop="$2"
-              alignItems="center"
-              backgroundColor="$backgroundFocus" // Themed
-              borderRadius="$10" // Themed
-              marginLeft="$4" // Consistent margin
-            >
-              <Image
-                resizeMode="contain"
-                width={30}
-                height={30}
-                // $sm styles are not needed if this sidebar is only for sm screens
-                // source={{ uri: '/bento/tamagui-icon.png' }}
-                alt="Bento logo"
-              />
+            <View flexDirection="row" alignItems="center" gap="$0">
+              <VidreamIcon />
+              <Text fontSize="$6" fontWeight="bold" color="$color">
+                Vidream
+              </Text>
             </View>
-            <Separator width="90%" alignSelf="center" />
-            <View flexDirection="column" width="100%" tag="ul" gap="$1" paddingHorizontal="$2">
-              <Tabs
-                value={currentTab}
-                onValueChange={setCurrentTab}
-                orientation="vertical"
-                width="100%" // Ensure Tabs takes full width
-                // add flexShrink={0} if it's inside a flex container that might shrink it
-              >
-                <View flexDirection="column" width="100%">
-                  <AnimatePresence>
-                    {intentAt && (
-                      <TabsRovingIndicator
-                        width={intentAt.width}
-                        height={intentAt.height}
-                        x={intentAt.x}
-                        y={intentAt.y}
-                        borderRadius="$2" // Slightly less border radius for vertical tabs
-                      />
-                    )}
-                  </AnimatePresence>
-                  <AnimatePresence>
-                    {activeAt && (
-                      <TabsRovingIndicator
-                        theme="active"
-                        width={activeAt.width}
-                        height={activeAt.height}
-                        x={activeAt.x}
-                        y={activeAt.y}
-                        borderRadius="$2"
-                      />
-                    )}
-                  </AnimatePresence>
-                  <Tabs.List
-                    disablePassBorderRadius
-                    loop={false}
-                    aria-label="Sidebar navigation"
-                    gap="$1" // Keep small gap for vertical items
-                    width="100%"
-                    backgroundColor="transparent"
-                  >
-                    {links.map((link) => (
-                      <Tabs.Tab
-                        key={link.slug}
-                        unstyled
-                        width="100%"
-                        value={link.slug}
-                        onInteraction={handleOnInteraction}
-                        paddingVertical="$2" // Ensure enough tappable area
-                        paddingHorizontal="$3"
-                        // alignItems="flex-start" // Handled by NavLink
-                        // justifyContent="flex-start" // Handled by NavLink
-                      >
-                        <NavLink
-                          href={`#`} // Placeholder
-                          // href={`/bento/shells/navbars/${link.slug}`} // Correct href
-                          // paddingHorizontal="$5" // NavLink can handle its own padding or inherit
-                          // marginRight="auto" // NavLink will take full width due to Tabs.Tab width="100%"
-                          justifyContent="flex-start" // Align text to the start
-                          width="100%" // Ensure NavLink fills the Tab
-                        >
-                          <Text>{link.title}</Text>
-                        </NavLink>
-                      </Tabs.Tab>
-                    ))}
-                  </Tabs.List>
-                </View>
-              </Tabs>
-            </View>
-          </Drawer.Content>
-          {/* </Drawer.Swipeable> */}
-        </Drawer.Portal>
-      </Drawer>
+          </Link>
+        )}
+      </View>
+
+      {/* Center Section: Search Bar (Not SM only) */}
+      {!isScreenSm && (
+        <View flex={1} alignItems="center" justifyContent="center" paddingHorizontal="$4">
+          <Button theme="alt1" icon={<Search />} chromeless width="60%" $maxWidth={500}>
+            Search...
+          </Button>
+        </View>
+      )}
+
+      {/* On SM screens, this space is now dynamic based on isSearchActiveSm */}
+      {isScreenSm && <View flex={1} /> /* Spacer to push right items */}
+
+      {/* Right Section: Action Buttons */}
+      <View
+        flexDirection="row"
+        alignItems="center"
+        gap="$2.5"
+        marginLeft={!isScreenSm ? 'auto' : '$0'} // 'auto' only if not SM to push right
+      >
+        <Button
+          size="$3"
+          onPress={handleCreatePress}
+          icon={<Plus size="$2" />}
+          tooltip="Create"
+          padding="$1.5"
+        />
+        {isAuthenticated && (
+          <Button
+            circular
+            chromeless
+            padding="$0"
+            size="$3"
+            icon={<Bell size="$1" strokeWidth={2} />}
+            tooltip="Notifications"
+          />
+        )}
+        <ProfileButton />
+      </View>
+
+      {/* Drawer for SM screens (only if not in search mode) */}
+      {isScreenSm && (
+        <SmallScreenDrawerContent open={smDrawerOpen} onOpenChange={setSmDrawerOpen} />
+      )}
     </View>
   )
 }
+// 'use client'
+// import { Bell, Menu, Plus, Search } from '@tamagui/lucide-icons' // Added Search
+// import type { GetProps } from 'tamagui' // For NavLinkProps if you keep it
+// import React, { useEffect, useState } from 'react' // Added React
+// import {
+//   // Anchor, // Keep if used by NavLink
+//   // AnimatePresence, // Keep if used by SM drawer tabs
+//   Button,
+//   // Image, // Keep if used by SM drawer
+//   Separator, // Keep if used by SM drawer
+//   // Tabs, // Keep if used by SM drawer
+//   Text,
+//   View,
+//   isWeb,
+//   styled,
+//   useEvent,
+//   // XStack, YStack // if needed
+// } from 'tamagui'
+// import { useMedia } from '@my/ui'
+// // import { useWindowDimensions } from 'tamagui' // Keep if used by SM drawer
+// import { Drawer } from './Drawer'
+// import { ProfileButton } from './ProfileButton.web'
+// import VidreamIcon from '@my/ui/src/components/VidreamIcon'
+// import { Link } from 'solito/link'
+// import { useConvexAuth } from 'convex/react'
+// import { useUser } from '@clerk/nextjs'
+// import { allNavigationLinks } from './commonLinks' // For the SM drawer
+// import type { NavLinkInfo } from './commonLinks' // For the SM drawer
 
-const TabsRovingIndicator = ({ active, ...props }: { active?: boolean } & StackProps) => {
-  return (
-    <View
-      // flexDirection="column" // Not needed, it's an indicator
-      position="absolute"
-      backgroundColor={active ? '$colorFocus' : '$color'} // More thematic
-      opacity={active ? 0.7 : 0.4} // Adjust opacity based on active state
-      animation="100ms"
-      enterStyle={{
-        opacity: 0,
-      }}
-      exitStyle={{
-        opacity: 0,
-      }}
-      // Removed duplicate active handling as it's now in backgroundColor/opacity
-      {...props}
-    />
-  )
-}
+// // Props for TopTabNavBar
+// interface TopTabNavBarProps {
+//   isScreenSm: boolean
+//   // onMenuPress?: () => void; // If hamburger in TopNav should control PersistentSidebar (alternative to hamburger in PersistentSidebar)
+// }
+
+// // Simplified SidebarItem for the SM Drawer (or use a shared one)
+// const DrawerSidebarItem = styled(View, {
+//   // Similar to SidebarButton in PersistentSidebar but might have different styling/props for drawer context
+//   paddingVertical: '$3',
+//   paddingHorizontal: '$4',
+//   flexDirection: 'row',
+//   gap: '$3',
+//   alignItems: 'center',
+//   borderRadius: '$2',
+//   hoverStyle: { backgroundColor: '$backgroundHover' },
+//   pressStyle: { backgroundColor: '$backgroundPress' },
+// })
+
+// // Drawer content for Small Screens
+// function SmallScreenDrawerContent({
+//   open,
+//   onOpenChange,
+// }: {
+//   open: boolean
+//   onOpenChange: (open: boolean) => void
+// }) {
+//   // const { currentTab, setCurrentTab, activeAt, intentAt, handleOnInteraction } = useTabs() // If using Tabs in drawer
+
+//   return (
+//     <Drawer open={open} onOpenChange={onOpenChange}>
+//       <Drawer.Portal>
+//         <Drawer.Overlay animation="lazy" enterStyle={{ opacity: 0 }} exitStyle={{ opacity: 0 }} />
+//         <Drawer.Content
+//           paddingVertical="$4"
+//           width={280} // Slightly wider for SM drawer
+//           alignItems="flex-start"
+//           backgroundColor="$background"
+//           borderRightWidth={isWeb ? 0 : 1} // No border if it's an overlay drawer on web
+//           borderRightColor="$borderColor"
+//           gap="$2"
+//           animation="medium"
+//           enterStyle={{ x: -280 }}
+//           exitStyle={{ x: -280 }}
+//           elevate
+//           shadowColor="$shadowColor"
+//           shadowOpacity={0.2}
+//           shadowRadius={10}
+//         >
+//           <View paddingHorizontal="$4" paddingBottom="$2" paddingTop="$2">
+//             <Text fontSize="$6" fontWeight="bold">
+//               Menu
+//             </Text>
+//           </View>
+//           <Separator />
+//           <View tag="nav" width="100%" gap="$1" paddingHorizontal="$3" paddingTop="$2">
+//             {allNavigationLinks.map((link) => (
+//               <Link key={link.slug} href={link.href} onPress={() => onOpenChange(false)} asChild>
+//                 <DrawerSidebarItem tag="a">
+//                   {link.icon && <link.icon size={20} color="$color" />}
+//                   <Text fontSize="$4" color="$color">
+//                     {link.title}
+//                   </Text>
+//                 </DrawerSidebarItem>
+//               </Link>
+//             ))}
+//           </View>
+//           <Separator marginVertical="$3" />
+//           <View paddingHorizontal="$4">
+//             <ProfileButton />
+//           </View>
+//         </Drawer.Content>
+//       </Drawer.Portal>
+//     </Drawer>
+//   )
+// }
+
+// export function TopTabNavBar({ isScreenSm }: TopTabNavBarProps) {
+//   const { isAuthenticated: isConvexAuthenticated } = useConvexAuth()
+//   const { user, isSignedIn } = useUser()
+//   const isAuthenticated = isConvexAuthenticated && isSignedIn && user
+
+//   const [smDrawerOpen, setSmDrawerOpen] = useState(false)
+//   const toggleSmDrawer = useEvent(() => setSmDrawerOpen(!smDrawerOpen))
+
+//   const handleCreatePress = () => {
+//     console.log('Create button pressed')
+//     // Navigate or open modal
+//   }
+
+//   return (
+//     <View
+//       flexDirection="row"
+//       paddingHorizontal="$3"
+//       paddingVertical="$2.5" // Matched PersistentSidebar item padding
+//       width="100%"
+//       tag="nav"
+//       alignItems="center"
+//       backgroundColor="$background"
+//       borderBottomWidth={1}
+//       borderBottomColor="$borderColor"
+//       minHeight={60} // Ensure a minimum height
+//       // zIndex={40} // If it needs to be above some content but below PersistentSidebar if they could overlap (unlikely with XStack)
+//     >
+//       <View flexDirection="row" alignItems="center" gap="$2.5">
+//         <Link
+//           href="/"
+//           style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '$2' }}
+//         >
+//           <View flexDirection="row" alignItems="center" gap="$0">
+//             <VidreamIcon />
+//             <Text fontSize="$6" fontWeight="bold" color="$color">
+//               Vidream
+//             </Text>
+//           </View>
+//         </Link>
+//       </View>
+
+//       {/* Center Section: Search Bar (Not SM only) */}
+//       {!isScreenSm && (
+//         <View flex={1} alignItems="center" justifyContent="center" paddingHorizontal="$4">
+//           {/* Replace with your actual Search Input Component */}
+//           <Button theme="alt1" icon={<Search />} chromeless width="60%" $maxWidth={500}>
+//             Search...
+//           </Button>
+//         </View>
+//       )}
+//       {/* On SM screens, search might be an icon that expands, or not present if bottom bar is primary */}
+//       {isScreenSm && (
+//         <View flex={1} justifyContent="flex-end" alignItems="flex-end" paddingRight="$2">
+//           {/* <Button icon={<Search />} circular chromeless /> */}
+//         </View>
+//       )}
+
+//       {/* Right Section: Action Buttons (always visible, layout adjusts) */}
+//       {/* If !isScreenSM, give it some space from search or align it right */}
+//       <View
+//         flexDirection="row"
+//         alignItems="center"
+//         gap="$2.5"
+//         marginLeft={isScreenSm ? '$0' : 'auto'}
+//       >
+//         <Button size="$3" onPress={handleCreatePress} icon={<Plus size="$2" />} tooltip="Create" padding="$1.5"/>
+//         {isAuthenticated && (
+//           <Button
+//             circular
+//             chromeless
+//             padding="$0"
+//             size="$3"
+//             icon={<Bell size="$1" strokeWidth={2} />}
+//             tooltip="Notifications"
+//           />
+//         )}
+//         {/* ProfileButton is visible on !SM. On SM, it's in the drawer or could be here too. */}
+//         <ProfileButton />
+//         {/* On SM, ProfileButton is in the drawer. If you want it here too: */}
+//         {/* {isScreenSm && <ProfileButton minimal />}  */}
+//       </View>
+
+//       {/* Drawer for SM screens */}
+//       {isScreenSm && (
+//         <SmallScreenDrawerContent open={smDrawerOpen} onOpenChange={setSmDrawerOpen} />
+//       )}
+//     </View>
+//   )
+// }

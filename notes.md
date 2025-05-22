@@ -12,3 +12,6 @@
 1. Make top nav bar more componentized between mobile and native
 1. Fix NavLink in TopTabNavBar.web
 1. Check clerk and convex on auth checks
+1. Figure out how to get root page to not have /home slug
+1. Make web sidebar responsively display over everything in md
+1. Write components to compenatize the navbars, the web search on sm screens in particular
