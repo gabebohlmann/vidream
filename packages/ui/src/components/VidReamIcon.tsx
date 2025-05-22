@@ -47,7 +47,7 @@ const VidReamIcon: React.FC<VidReamIconProps> = ({
         d="m10.5 7.5 6 4-6 4Z" // Path data for the triangle
         fill={finalPathFill} // Fill color for the triangle
         stroke={finalPathStroke} // Stroke color for the triangle
-        strokeWidth="1.25" // Stroke width
+        strokeWidth="1.5" // Stroke width
         strokeLinejoin="round" // Rounds the corners where path segments meet
         strokeLinecap="round" // Rounds the ends of the path strokes
       />

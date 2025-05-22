@@ -1,9 +1,10 @@
+// apps/expo/app/(tabs)/search.tsx
 import { View, Text, StyleSheet } from 'react-native'
 
-export default function TrendingPage() {
+export default function SearchPage() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Trending</Text>
+      <Text style={styles.text}>Search</Text>
     </View>
   )
 }

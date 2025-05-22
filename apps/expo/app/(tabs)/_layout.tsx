@@ -1,14 +1,13 @@
 // apps/expo/app/(tabs)/_layout.tsx
-import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { Tabs } from 'expo-router'
-import { Home, TvMinimalPlay, Flame, Film, CircleUserRound } from '@tamagui/lucide-icons'
+import { Home, TvMinimalPlay, Search, Film, CircleUserRound } from '@tamagui/lucide-icons'
 import { TopNavBar } from 'app/features/navigation/TopNavBar.native'
 
 export default function TabLayout() {
   return (
     <>
       <TopNavBar/>
-      <Tabs screenOptions={{ tabBarActiveTintColor: 'green', headerShown: false }}>
+      <Tabs screenOptions={{ tabBarActiveTintColor: '#138404', tabBarInactiveTintColor: '#FFFFFF', headerShown: false }}>
         <Tabs.Screen
           name="index"
           options={{
@@ -32,10 +31,10 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
-          name="trending"
+          name="search"
           options={{
-            title: 'Trending',
-            tabBarIcon: ({ color }) => <Flame size={28} color={color} />,
+            title: 'Search',
+            tabBarIcon: ({ color }) => <Search size={28} color={color} />,
             tabBarLabelStyle: {
               fontSize: 9,
               fontWeight: 'bold',
