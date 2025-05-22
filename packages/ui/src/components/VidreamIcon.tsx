@@ -40,9 +40,7 @@ const VidreamIcon: React.FC<VidreamIconProps> = ({
 
   return (
     <Svg width={widthProp} height={heightProp} viewBox="0 -4 32 32" {...props}>
-      {/* The outer rectangle, its fill is now controlled by the rectFill prop */}
       <Rect width="24" height="16" x="1" y="3.5" rx="5" fill={finalRectFill} />
-      {/* The inner triangle path */}
       <Path
         d="m10.5 7.5 6 4-6 4Z" // Path data for the triangle
         fill={finalPathFill} // Fill color for the triangle
