@@ -1,9 +1,8 @@
 // packages/app/features/navigation/TopTabNavBar.web.tsx
-// packages/app/features/navigation/TopTabNavBar.web.tsx
 'use client'
-import { Bell, Menu, Plus, Search, ArrowLeft } from '@tamagui/lucide-icons' // Added Search, ArrowLeft
+import { Bell, Menu, Plus, Search, ArrowLeft } from '@tamagui/lucide-icons'
 import type { GetProps } from 'tamagui'
-import React, { useEffect, useState, useRef } from 'react' // Added useRef
+import React, { useEffect, useState, useRef } from 'react'
 import {
   Button,
   Separator,
@@ -12,44 +11,29 @@ import {
   isWeb,
   styled,
   useEvent,
-  Input, // Import Tamagui Input
-  AnimatePresence, // For smoother transitions
+  Input,
+  AnimatePresence,
 } from 'tamagui'
-import { useMedia } from '@my/ui'
-import { Drawer } from './Drawer'
-import { ProfileButton } from './ProfileButton.web'
+// ... other imports from your file
 import VidreamIcon from '@my/ui/src/components/VidreamIcon'
 import { Link } from 'solito/link'
+import { ProfileButton } from './ProfileButton.web'
 import { useConvexAuth } from 'convex/react'
 import { useUser } from '@clerk/nextjs'
 import { allNavigationLinks } from './commonLinks'
 import type { NavLinkInfo } from './commonLinks'
-
-/////////////////////////////////////////////////////////////////
+import { Drawer } from './Drawer'
 
 // Props for TopTabNavBar
 interface TopTabNavBarProps {
   isScreenSm: boolean
-  // Props to control SM search mode from parent
   isSearchActiveSm: boolean
   onSetSearchActiveSm: (active: boolean) => void
-  onSearchSubmit?: (query: string) => void // Optional: if search is submitted from here
+  onSearchSubmit?: (query: string) => void
+  isSidebarExpanded?: boolean // New optional prop
 }
 
-// Simplified SidebarItem for the SM Drawer (or use a shared one)
-const DrawerSidebarItem = styled(View, {
-  // Similar to SidebarButton in PersistentSidebar but might have different styling/props for drawer context
-  paddingVertical: '$3',
-  paddingHorizontal: '$4',
-  flexDirection: 'row',
-  gap: '$3',
-  alignItems: 'center',
-  borderRadius: '$2',
-  hoverStyle: { backgroundColor: '$backgroundHover' },
-  pressStyle: { backgroundColor: '$backgroundPress' },
-})
-
-// ... (SmallScreenDrawerContent and DrawerSidebarItem remain the same)
+// ... (SmallScreenDrawerContent and DrawerSidebarItem remain the same from your file)
 function SmallScreenDrawerContent({
   open,
   onOpenChange,
@@ -57,8 +41,7 @@ function SmallScreenDrawerContent({
   open: boolean
   onOpenChange: (open: boolean) => void
 }) {
-  // const { currentTab, setCurrentTab, activeAt, intentAt, handleOnInteraction } = useTabs() // If using Tabs in drawer
-
+  // ... (your existing code for SmallScreenDrawerContent)
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
       <Drawer.Portal>
@@ -107,11 +90,24 @@ function SmallScreenDrawerContent({
   )
 }
 
+const DrawerSidebarItem = styled(View, {
+  // Similar to SidebarButton in PersistentSidebar but might have different styling/props for drawer context
+  paddingVertical: '$3',
+  paddingHorizontal: '$4',
+  flexDirection: 'row',
+  gap: '$3',
+  alignItems: 'center',
+  borderRadius: '$2',
+  hoverStyle: { backgroundColor: '$backgroundHover' },
+  pressStyle: { backgroundColor: '$backgroundPress' },
+})
+
 export function TopTabNavBar({
   isScreenSm,
   isSearchActiveSm,
   onSetSearchActiveSm,
   onSearchSubmit,
+  isSidebarExpanded, // Destructure new prop
 }: TopTabNavBarProps) {
   const { isAuthenticated: isConvexAuthenticated } = useConvexAuth()
   const { user, isSignedIn } = useUser()
@@ -121,18 +117,15 @@ export function TopTabNavBar({
   const toggleSmDrawer = useEvent(() => setSmDrawerOpen(!smDrawerOpen))
 
   const [searchQuerySm, setSearchQuerySm] = useState('')
-  const searchInputRef = useRef<HTMLInputElement>(null) // Tamagui Input ref type might differ
+  const searchInputRef = useRef<HTMLInputElement>(null)
 
   const handleCreatePress = () => {
     console.log('Create button pressed')
   }
 
-  
-  // Effect to focus input when SM search becomes active
   useEffect(() => {
     if (isScreenSm && isSearchActiveSm) {
       setTimeout(() => {
-        // Timeout helps ensure element is rendered and ready for focus
         searchInputRef.current?.focus()
       }, 50)
     }
@@ -142,49 +135,50 @@ export function TopTabNavBar({
     if (onSearchSubmit) {
       onSearchSubmit(searchQuerySm)
     }
-    // Potentially close search and clear query, or navigate to results
-    // onSetSearchActiveSm(false);
   }
 
-  // SM Screen Search Active UI
+  // Determine if the TopBar logo should be visible
+  // Hide if not SM screen AND sidebar is expanded
+  const showTopBarLogo = isScreenSm || !isSidebarExpanded
+
   if (isScreenSm && isSearchActiveSm) {
+    // ... (SM Search Active UI - no changes here from your latest version)
     return (
       <View
         flexDirection="row"
-        paddingHorizontal="$2" // Reduced padding for search mode
-        paddingVertical="$2" // Reduced padding
+        paddingHorizontal="$2"
+        paddingVertical="$2"
         width="100%"
         alignItems="center"
         backgroundColor="$background"
         borderBottomWidth={1}
         borderBottomColor="$borderColor"
-        minHeight={70}
+        minHeight={70} //Corrected from 60 in your previous version as it was in the diff
       >
         <Button
-          icon={<ArrowLeft size="$1.5" />} // Standard back icon size
+          icon={<ArrowLeft size="$1.5" />}
           onPress={() => {
             onSetSearchActiveSm(false)
-            setSearchQuerySm('') // Clear search query on back
+            setSearchQuerySm('')
           }}
           chromeless
           circular
-          size="$3" // Consistent button sizing
+          size="$3"
           marginRight="$2"
         />
         <Input
-          ref={searchInputRef as any} // Cast if specific Tamagui input ref type is needed
+          ref={searchInputRef as any}
           flex={1}
-          size="$3.5" // Match common input sizes
+          size="$3.5"
           placeholder="Search Vidream..."
           value={searchQuerySm}
           onChangeText={setSearchQuerySm}
           onSubmitEditing={handleSmSearchSubmit}
-          // autoFocus // Handled by useEffect for more reliability
           borderRadius="$3"
         />
         {searchQuerySm.length > 0 && (
           <Button
-            icon={<Plus size="$1" style={{ transform: [{ rotate: '45deg' }] }} />} // "X" icon
+            icon={<Plus size="$1" style={{ transform: [{ rotate: '45deg' }] }} />}
             onPress={() => setSearchQuerySm('')}
             chromeless
             circular
@@ -196,7 +190,6 @@ export function TopTabNavBar({
     )
   }
 
-  // Default UI (SM screen, search not active OR Not SM screen)
   return (
     <View
       flexDirection="row"
@@ -210,9 +203,8 @@ export function TopTabNavBar({
       borderBottomColor="$borderColor"
       minHeight={60}
     >
-      {/* Left Section: Hamburger (SM only, if not search active) & Logo */}
       <View flexDirection="row" alignItems="center" gap={isScreenSm ? '$2' : '$2.5'}>
-        {isScreenSm && ( // Hamburger for SM drawer
+        {isScreenSm && (
           <Button
             circular
             chromeless
@@ -221,8 +213,8 @@ export function TopTabNavBar({
             size="$3.5"
           />
         )}
-        {/* Logo - adjusted visibility slightly */}
-        {(!isScreenSm || (isScreenSm && !isSearchActiveSm)) && (
+        {/* Conditionally show TopBar Logo/Title */}
+        {showTopBarLogo && (!isScreenSm || (isScreenSm && !isSearchActiveSm)) && (
           <Link
             href="/"
             style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '$2' }}
@@ -237,7 +229,6 @@ export function TopTabNavBar({
         )}
       </View>
 
-      {/* Center Section: Search Bar (Not SM only) */}
       {!isScreenSm && (
         <View flex={1} alignItems="center" justifyContent="center" paddingHorizontal="$4">
           <Button theme="alt1" icon={<Search />} chromeless width="60%" $maxWidth={500}>
@@ -246,15 +237,13 @@ export function TopTabNavBar({
         </View>
       )}
 
-      {/* On SM screens, this space is now dynamic based on isSearchActiveSm */}
-      {isScreenSm && <View flex={1} /> /* Spacer to push right items */}
+      {isScreenSm && <View flex={1} />}
 
-      {/* Right Section: Action Buttons */}
       <View
         flexDirection="row"
         alignItems="center"
         gap="$2.5"
-        marginLeft={!isScreenSm ? 'auto' : '$0'} // 'auto' only if not SM to push right
+        marginLeft={!isScreenSm ? 'auto' : '$0'}
       >
         <Button
           size="$3"
@@ -276,7 +265,6 @@ export function TopTabNavBar({
         <ProfileButton />
       </View>
 
-      {/* Drawer for SM screens (only if not in search mode) */}
       {isScreenSm && (
         <SmallScreenDrawerContent open={smDrawerOpen} onOpenChange={setSmDrawerOpen} />
       )}
