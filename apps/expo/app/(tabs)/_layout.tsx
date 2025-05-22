@@ -2,11 +2,12 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { Tabs } from 'expo-router'
 import { Home, TvMinimalPlay, Flame, Film, CircleUserRound } from '@tamagui/lucide-icons'
-import { NativeNavigationLayout } from 'app/features/navigation'
+import { TopNavBar } from 'app/features/navigation/TopNavBar.native'
 
 export default function TabLayout() {
   return (
     <>
+      <TopNavBar/>
       <Tabs screenOptions={{ tabBarActiveTintColor: 'green', headerShown: false }}>
         <Tabs.Screen
           name="index"
@@ -64,7 +65,6 @@ export default function TabLayout() {
           }}
         />
       </Tabs>
-      {/* <NativeNavigationLayout/> */}
     </>
   )
 }

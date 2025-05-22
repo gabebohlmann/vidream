@@ -1,4 +1,4 @@
-// packages/ui/src/components/ProfileButton.tsx
+// packages/app/features/navigation/ProfileButton.web.tsx
 import { Avatar, Button, Popover, PopoverTrigger, View, Text, styled, useEvent } from 'tamagui'
 import { useUser, useClerk } from '@clerk/nextjs' // Or your specific Clerk import e.g. @clerk/nextjs
 import { Authenticated, Unauthenticated, useConvexAuth } from 'convex/react'
