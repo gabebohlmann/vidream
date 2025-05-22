@@ -1051,7 +1051,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.18.6, @babel/runtime@npm:^7.20.0, @babel/runtime@npm:^7.24.6, @babel/runtime@npm:^7.25.0, @babel/runtime@npm:^7.25.4, @babel/runtime@npm:^7.26.0":
+"@babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.18.6, @babel/runtime@npm:^7.20.0, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.24.6, @babel/runtime@npm:^7.25.0, @babel/runtime@npm:^7.25.4, @babel/runtime@npm:^7.26.0":
   version: 7.27.1
   resolution: "@babel/runtime@npm:7.27.1"
   checksum: 10/34cefcbf781ea5a4f1b93f8563327b9ac82694bebdae91e8bd9d7f58d084cbe5b9a6e7f94d77076e15b0bcdaa0040a36cb30737584028df6c4673b4c67b2a31d
@@ -3614,7 +3614,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-navigation/bottom-tabs@npm:^7.3.10, @react-navigation/bottom-tabs@npm:^7.3.12":
+"@react-navigation/bottom-tabs@npm:^7.3.10, @react-navigation/bottom-tabs@npm:^7.3.12, @react-navigation/bottom-tabs@npm:^7.3.13":
   version: 7.3.13
   resolution: "@react-navigation/bottom-tabs@npm:7.3.13"
   dependencies:
@@ -3712,7 +3712,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-navigation/native@npm:^7.1.6, @react-navigation/native@npm:^7.1.8":
+"@react-navigation/native@npm:^7.1.6, @react-navigation/native@npm:^7.1.8, @react-navigation/native@npm:^7.1.9":
   version: 7.1.9
   resolution: "@react-navigation/native@npm:7.1.9"
   dependencies:
@@ -5099,7 +5099,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/react-native-svg@npm:1.126.13":
+"@tamagui/react-native-svg@npm:1.126.13, @tamagui/react-native-svg@npm:^1.126.13":
   version: 1.126.13
   resolution: "@tamagui/react-native-svg@npm:1.126.13"
   checksum: 10/a5f52c118b6361e9193bfc7f1146dc36adc020f5dae042c6df8bb932e4d391065e4e9713f6465a2dbad3a3acd3ec8c6de63d9d4952dce5357d368ee299a2b6d7
@@ -5746,6 +5746,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanem/svg-injector@npm:^10.1.68":
+  version: 10.1.68
+  resolution: "@tanem/svg-injector@npm:10.1.68"
+  dependencies:
+    "@babel/runtime": "npm:^7.23.2"
+    content-type: "npm:^1.0.5"
+    tslib: "npm:^2.6.2"
+  checksum: 10/abf81ba51632f8c6bc299e9a46818a215cecffc56c196ccb9503d9159866e36658c29e7f04bb1ed43c3dd87089de1f0393f7696ed0d858eb2efc0893f020e534
+  languageName: node
+  linkType: hard
+
 "@tootallnate/once@npm:2.0.0":
   version: 2.0.0
   resolution: "@tootallnate/once@npm:2.0.0"
@@ -5990,6 +6001,13 @@ __metadata:
   version: 4.0.2
   resolution: "@types/parse-json@npm:4.0.2"
   checksum: 10/5bf62eec37c332ad10059252fc0dab7e7da730764869c980b0714777ad3d065e490627be9f40fc52f238ffa3ac4199b19de4127196910576c2fe34dd47c7a470
+  languageName: node
+  linkType: hard
+
+"@types/prop-types@npm:^15.7.14":
+  version: 15.7.14
+  resolution: "@types/prop-types@npm:15.7.14"
+  checksum: 10/d0c5407b9ccc3dd5fae0ccf9b1007e7622ba5e6f1c18399b4f24dff33619d469da4b9fa918a374f19dc0d9fe6a013362aab0b844b606cfc10676efba3f5f736d
   languageName: node
   linkType: hard
 
@@ -6956,6 +6974,7 @@ __metadata:
     "@tamagui/colors": "npm:^1.126.13"
     "@tamagui/font-inter": "npm:^1.126.13"
     "@tamagui/lucide-icons": "npm:^1.126.13"
+    "@tamagui/react-native-svg": "npm:^1.126.13"
     "@tamagui/shorthands": "npm:^1.126.13"
     "@tamagui/themes": "npm:^1.126.13"
     "@types/react": "npm:~19.0.10"
@@ -6965,6 +6984,7 @@ __metadata:
     expo-linking: "npm:~7.1.4"
     react-hook-form: "npm:^7.56.4"
     react-native-safe-area-context: "npm:5.4.0"
+    react-svg: "npm:^16.3.0"
     solito: "npm:^4.2.2"
   languageName: unknown
   linkType: soft
@@ -8303,7 +8323,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"content-type@npm:~1.0.4, content-type@npm:~1.0.5":
+"content-type@npm:^1.0.5, content-type@npm:~1.0.4, content-type@npm:~1.0.5":
   version: 1.0.5
   resolution: "content-type@npm:1.0.5"
   checksum: 10/585847d98dc7fb8035c02ae2cb76c7a9bd7b25f84c447e5ed55c45c2175e83617c8813871b4ee22f368126af6b2b167df655829007b21aa10302873ea9c62662
@@ -13780,6 +13800,8 @@ __metadata:
   resolution: "next-app@workspace:apps/next"
   dependencies:
     "@clerk/nextjs": "npm:^6.19.4"
+    "@react-navigation/bottom-tabs": "npm:^7.3.13"
+    "@react-navigation/native": "npm:^7.1.9"
     "@rehookify/datepicker": "npm:^6.6.8"
     "@tamagui/config": "npm:^1.126.13"
     "@tamagui/next-plugin": "npm:^1.126.13"
@@ -13795,6 +13817,7 @@ __metadata:
     react-dom: "npm:19.0.0"
     react-native: "npm:0.79.2"
     react-native-web: "npm:^0.20.0"
+    react-navigation: "npm:^5.0.0"
     tamagui: "npm:^1.126.13"
     tree-kill: "npm:^1.2.2"
     vercel: "npm:latest"
@@ -15390,6 +15413,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-navigation@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "react-navigation@npm:5.0.0"
+  checksum: 10/90a44a82e6b6cf39cde4a14b7ba3e6bef241af247b155c61a3cc00db694260e47a29bc617acad03cb98a7a70f215ee58a92902f988a4e52e444ff18fef545ea7
+  languageName: node
+  linkType: hard
+
 "react-refresh@npm:^0.14.0":
   version: 0.14.2
   resolution: "react-refresh@npm:0.14.2"
@@ -15445,6 +15475,21 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 10/62498094ff3877a37f351b29e6cad9e38b2eb1ac3c0cb27ebf80aee96554f80b35e17bdb552bcd7ac8b7cb9904fea93ea5668f2057c73d38f90b5d46bb9b27ab
+  languageName: node
+  linkType: hard
+
+"react-svg@npm:^16.3.0":
+  version: 16.3.0
+  resolution: "react-svg@npm:16.3.0"
+  dependencies:
+    "@babel/runtime": "npm:^7.26.0"
+    "@tanem/svg-injector": "npm:^10.1.68"
+    "@types/prop-types": "npm:^15.7.14"
+    prop-types: "npm:^15.8.1"
+  peerDependencies:
+    react: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10/0d32579f4c5fee24e876e1bda5ca14638c79b801f2b65524154319a757f1d6abb94210276a85ad179f65359a14adecf2816994e7a42e3e78a20c9bef34a8ac78
   languageName: node
   linkType: hard
 
@@ -17264,7 +17309,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:2.8.1, tslib@npm:^2.0.0, tslib@npm:^2.0.3, tslib@npm:^2.1.0, tslib@npm:^2.3.1, tslib@npm:^2.4.0, tslib@npm:^2.5.0, tslib@npm:^2.5.2, tslib@npm:^2.6.3, tslib@npm:^2.7.0, tslib@npm:^2.8.0":
+"tslib@npm:2.8.1, tslib@npm:^2.0.0, tslib@npm:^2.0.3, tslib@npm:^2.1.0, tslib@npm:^2.3.1, tslib@npm:^2.4.0, tslib@npm:^2.5.0, tslib@npm:^2.5.2, tslib@npm:^2.6.2, tslib@npm:^2.6.3, tslib@npm:^2.7.0, tslib@npm:^2.8.0":
   version: 2.8.1
   resolution: "tslib@npm:2.8.1"
   checksum: 10/3e2e043d5c2316461cb54e5c7fe02c30ef6dccb3384717ca22ae5c6b5bc95232a6241df19c622d9c73b809bea33b187f6dbc73030963e29950c2141bc32a79f7

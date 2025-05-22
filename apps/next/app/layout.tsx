@@ -4,15 +4,15 @@ import { NextTamaguiProvider } from 'app/provider/NextTamaguiProvider'
 import { ConvexReactClient } from 'convex/react'
 import { ClerkProvider } from '@clerk/nextjs'
 import ConvexClientProviderWithClerk from '../components/ConvexProviderWithClerk'
-import NavBarDrawer from '@my/ui/src/components/NavBarDrawer'
+
 if (!process.env.NEXT_PUBLIC_CONVEX_URL) {
   throw new Error('Missing NEXT_PUBLIC_CONVEX_URL in your .env file')
 }
 
 export const metadata: Metadata = {
-  title: 'Tamagui • App Router',
-  description: 'Tamagui, Solito, Expo & Next.js',
-  icons: '/favicon.ico',
+  title: 'VidReam',
+  description: 'Video streaming site',
+  icons: '/favicon.svg',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

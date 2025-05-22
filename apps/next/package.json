@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.19.4",
+    "@react-navigation/bottom-tabs": "^7.3.13",
+    "@react-navigation/native": "^7.1.9",
     "@rehookify/datepicker": "^6.6.8",
     "@tamagui/config": "^1.126.13",
     "@tamagui/next-theme": "^1.126.13",
@@ -22,6 +24,7 @@
     "react-dom": "19.0.0",
     "react-native": "0.79.2",
     "react-native-web": "^0.20.0",
+    "react-navigation": "^5.0.0",
     "tamagui": "^1.126.13",
     "vercel": "latest"
   },

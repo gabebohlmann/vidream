@@ -3,7 +3,8 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
-    "../ui/src"
+    "../ui/src",
+    "../config/src/tabs.ts"
   ],
   "compilerOptions": {
     "composite": true,

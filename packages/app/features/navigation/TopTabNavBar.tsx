@@ -1,8 +1,8 @@
-// packages/ui/src/components/NavBarDrawer.tsx
+// packages/app/features/navigation/TopTabNavBar.tsx
 // Top Navbar with Swippable Drawer on Smaller Screens from Tamagui Bento
 'use client'
 import { Bell, Menu, Plus } from '@tamagui/lucide-icons'
-import type { StackProps, TabLayout, TabsTabProps } from 'tamagui'
+import type { StackProps, TabLayout, TabsTabProps } from '@my/ui'
 import { useEffect, useState } from 'react'
 import {
   Anchor,
@@ -20,10 +20,11 @@ import {
   styled,
   useEvent,
 } from 'tamagui'
-import { useMedia } from 'tamagui'
+import { useMedia } from '@my/ui'
 import { useWindowDimensions } from 'tamagui'
-import { Drawer } from './common/Drawer'
-import { ProfileButton } from './ProfileButton'
+import { Drawer } from './Drawer'
+import { ProfileButton } from '@my/ui/src/components/ProfileButton'
+import { SquarePlay } from '@tamagui/lucide-icons'
 // how to use with URL params:
 // import { createParam } from 'solito'
 // const { useParam, useParams } = createParam()
@@ -102,10 +103,10 @@ const useTabs = () => {
 }
 
 interface NavBarDrawerProps {
-  isSignedIn?: boolean;
+  isSignedIn?: boolean
 }
 
-export default function NavBarDrawer({ isSignedIn }: NavBarDrawerProps) {
+export function TopTabNavBar({ isSignedIn }: NavBarDrawerProps) {
   const { currentTab, setCurrentTab, activeAt, intentAt, handleOnInteraction } = useTabs()
   // Removed triggerOpen, setTriggerOpen, closeTrigger state as it's now in ProfileButton
   const { sm } = useMedia()
@@ -135,29 +136,12 @@ export default function NavBarDrawer({ isSignedIn }: NavBarDrawerProps) {
         borderBottomWidth={1} // Optional: add a subtle border
         borderBottomColor="$borderColor" // Optional
       >
-        {sm ? (
-          <SideBar />
-        ) : (
-          <View
-            flexDirection="row"
-            padding="$2" // This seems like a logo container
-            alignItems="center"
-            // backgroundColor="#fff" // Consider using theme background: $backgroundStrong or $backgroundFocus
-            // borderRadius={1000_000}  // Can use $true for a perfect circle if parent is square
-            // Example for themed logo background:
-            backgroundColor="$backgroundFocus"
-            borderRadius="$10" // Tamagui token for rounded corners
-          >
-            <Image
-              resizeMode="contain"
-              width={25}
-              height={25}
-              // $sm sizes are not needed here due to the sm ? <SideBar /> condition
-              // source={{ uri: '/bento/tamagui-icon.png' }} // Ensure this path is correct
-              alt="Bento logo"
-            />
-          </View>
-        )}
+        <View flexDirection="row" alignItems="center">
+          <SquarePlay size={32} color="#FFFFFF" strokeWidth={2.25} fill="#1b9e0a" />
+          <Text paddingLeft="$2" fontSize="$7" fontWeight="bold">
+            VidReam
+          </Text>
+        </View>
         {!sm && (
           <Tabs
             value={currentTab}
@@ -223,17 +207,13 @@ export default function NavBarDrawer({ isSignedIn }: NavBarDrawerProps) {
             </View>
           </Tabs>
         )}
-        {/* Conditionally rendered Create Button */}
-        {isSignedIn && (
-          <Button size="$3" onPress={handleCreatePress} icon={<Plus size="$1" />}>
-            {/* You can add text to the button if desired: */}
-            {/* <Button.Text>Create</Button.Text> */}
-          </Button>
-        )}
+        {/* Right corner buttons */}
         <View flexDirection="row" alignItems="center" gap="$3">
+          {/* Conditionally rendered Create Button */}
+          <Button size="$3" onPress={handleCreatePress} icon={<Plus size="$1" />}></Button>
           <Button circular chromeless padding="$0" size="$3">
             <Button.Icon>
-              <Bell size="$1" />
+              <Bell size="$1" strokeWidth={2} />
             </Button.Icon>
           </Button>
           <ProfileButton />
