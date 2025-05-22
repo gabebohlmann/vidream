@@ -32,7 +32,7 @@ export function ProfileButton() {
   return (
     <>
       <Unauthenticated>
-        <Button themeInverse icon={<CircleUserRound size="$1.5" />}>
+        <Button icon={<CircleUserRound size="$1.5" />}>
           <Link href="/sign-in">
             <Text> Sign In</Text>
           </Link>
@@ -109,7 +109,12 @@ export function ProfileButton() {
         ) : (
           // Fallback in case isAuthenticated is true but user object isn't loaded yet
           // or if there's a discrepancy. Can also redirect to sign-in.
-          <Button onPress={() => openSignIn()} themeInverse>
+          <Button
+            onPress={() => openSignIn()}
+            themeInverse
+            pressStyle={{ backgroundColor: 'grey' }}
+            hoverStyle={{ backgroundColor: 'grey' }}
+          >
             Sign In
           </Button>
         )}

@@ -10,7 +10,7 @@ if (!process.env.NEXT_PUBLIC_CONVEX_URL) {
 }
 
 export const metadata: Metadata = {
-  title: 'VidReam',
+  title: 'Vidream',
   description: 'Video streaming site',
   icons: '/favicon.svg',
 }

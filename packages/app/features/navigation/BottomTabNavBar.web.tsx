@@ -45,20 +45,13 @@ export function BottomTabNavBar({ tabs }: CustomBottomTabBarProps) {
         // const isActiveOriginal = pathname === tab.href || (tab.href !== '/app/home' && pathname.startsWith(tab.href));
 
         // Option 2: Simplified and often more robust isActive logic
-        let isActive;
-        if (tab.href === '/app/home') { // IMPORTANT: Ensure '/app/home' is the correct unique href for your Home tab
-          isActive = pathname === tab.href;
+        let isActive
+        if (tab.href === '/app/home') {
+          // IMPORTANT: Ensure '/app/home' is the correct unique href for your Home tab
+          isActive = pathname === tab.href
         } else {
-          isActive = pathname?.startsWith(tab.href);
+          isActive = pathname?.startsWith(tab.href)
         }
-
-        // For debugging the active state for each tab:
-        // console.log('Tab Check:', {
-        //   tabName: tab.name,
-        //   tabHref: tab.href,
-        //   currentPathname: pathname,
-        //   calculatedIsActive: isActive
-        // });
 
         return (
           <Button
@@ -69,7 +62,7 @@ export function BottomTabNavBar({ tabs }: CustomBottomTabBarProps) {
             flexShrink={1} // Allow shrinking if absolutely necessary
             chromeless
             onPress={() => handleTabPress(tab.href)}
-            backgroundColor={isActive ? '$backgroundHover' : 'transparent'}
+            // backgroundColor={isActive ? '$backgroundHover' : 'transparent'}
             paddingVertical="$2"
             pressStyle={{ backgroundColor: '$backgroundHover' }}
             minWidth={0} // Override any default minWidth from Button styles
@@ -85,11 +78,11 @@ export function BottomTabNavBar({ tabs }: CustomBottomTabBarProps) {
               // If you need padding *inside* the button, around icon/text:
               paddingHorizontal="$1" // e.g., token $1 or $2 for small internal padding
             >
-              <tab.icon color={isActive ? '$colorFocus' : '$color'} size={20} />
+              <tab.icon color={isActive ? '#138404' : '$color'} size={20} />
               <Text
                 fontSize={10}
-                color={isActive ? '$colorFocus' : '$color'}
-                fontWeight={isActive ? 'bold' : 'normal'}
+                color={isActive ? '#138404' : '$color'}
+                fontWeight="bold"
                 textAlign="center" // Center text, especially if it wraps
                 // The Text component should wrap by default if its content is too long
                 // for the width of this YStack (which is constrained by the Button).

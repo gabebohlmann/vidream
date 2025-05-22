@@ -26,6 +26,9 @@ import { Drawer } from './Drawer'
 import { ProfileButton } from './ProfileButton.web'
 import { SquarePlay } from '@tamagui/lucide-icons'
 import VidreamIcon from '@my/ui/src/components/VidreamIcon'
+import { Link } from 'solito/link'
+import { useConvexAuth } from 'convex/react'
+import { useUser } from '@clerk/nextjs'
 // how to use with URL params:
 // import { createParam } from 'solito'
 // const { useParam, useParams } = createParam()
@@ -36,20 +39,12 @@ const links = [
     slug: 'home',
   },
   {
+    title: 'Flashes',
+    slug: 'flashes',
+  },
+  {
     title: 'Subscriptions',
     slug: 'subscriptions',
-  },
-  {
-    title: 'Trending',
-    slug: 'trending',
-  },
-  {
-    title: 'Music',
-    slug: 'music',
-  },
-  {
-    title: 'Podcasts',
-    slug: 'podcasts',
   },
 ]
 
@@ -107,7 +102,10 @@ interface NavBarDrawerProps {
   isSignedIn?: boolean
 }
 
-export function TopTabNavBar({ isSignedIn }: NavBarDrawerProps) {
+export function TopTabNavBar() {
+  const { isAuthenticated: isConvexAuthenticated } = useConvexAuth()
+  const { user, isSignedIn } = useUser() //
+  const isAuthenticated = isConvexAuthenticated && isSignedIn && user
   const { currentTab, setCurrentTab, activeAt, intentAt, handleOnInteraction } = useTabs()
   // Removed triggerOpen, setTriggerOpen, closeTrigger state as it's now in ProfileButton
   const { sm } = useMedia()
@@ -141,7 +139,7 @@ export function TopTabNavBar({ isSignedIn }: NavBarDrawerProps) {
           {/* <SquarePlay size={32} color="#FFFFFF" strokeWidth={2.25} fill="#1b9e0a" /> */}
           <VidreamIcon />
           <Text paddingLeft="$2" fontSize="$7" fontWeight="bold">
-            VidReam
+            Vidream
           </Text>
         </View>
         {!sm && (
@@ -196,12 +194,12 @@ export function TopTabNavBar({ isSignedIn }: NavBarDrawerProps) {
                       paddingHorizontal="$3" // Reduced padding a bit for a tighter look
                       paddingVertical="$2"
                     >
-                      <NavLink
+                      <Link
                         // href={`/bento/shells/navbars/${link.slug}`} // Correct href
-                        href={`#`} // Placeholder
+                        href={`/${link.slug}`} // Placeholder
                       >
-                        {link.title}
-                      </NavLink>
+                        <Text>{link.title}</Text>
+                      </Link>
                     </Tabs.Tab>
                   )
                 )}
@@ -213,21 +211,16 @@ export function TopTabNavBar({ isSignedIn }: NavBarDrawerProps) {
         <View flexDirection="row" alignItems="center" gap="$3">
           {/* Conditionally rendered Create Button */}
           <Button size="$3" onPress={handleCreatePress} icon={<Plus size="$1" />}></Button>
-          <Button circular chromeless padding="$0" size="$3">
-            <Button.Icon>
-              <Bell size="$1" strokeWidth={2} />
-            </Button.Icon>
-          </Button>
-          <ProfileButton />
+          {isAuthenticated && (
+            <Button circular chromeless padding="$0" size="$3">
+              <Button.Icon>
+                <Bell size="$1" strokeWidth={2} />
+              </Button.Icon>
+            </Button>
+          )}
+          {!sm && <ProfileButton />}
         </View>
       </View>
-      {/* The following View might be for content display based on the selected tab */}
-      {/* This should ideally be handled by a router or conditional rendering based on currentTab */}
-      {!sm && (
-        <View flex={1} backgroundColor="$background" padding="$4">
-          <Text>Content for {currentTab}</Text>
-        </View>
-      )}
     </View>
   )
 }
@@ -236,7 +229,12 @@ export function TopTabNavBar({ isSignedIn }: NavBarDrawerProps) {
 // but ensure DropDownItem and DropDownText are removed if they were here.
 // NavLink, SideBar, SideBarContent, TabsRovingIndicator remain.
 
-const NavLink = View.styleable<{ href: string }>(({ children, href = '#', ...rest }, ref) => {
+interface NavLinkProps extends GetProps<typeof View> {
+  href: string
+  children: React.ReactNode
+}
+
+const NavLink = View.styleable<NavLinkProps>(({ children, href = '#', ...rest }, ref) => {
   return (
     <View
       ref={ref}
@@ -246,10 +244,10 @@ const NavLink = View.styleable<{ href: string }>(({ children, href = '#', ...res
       justifyContent="center"
       {...rest}
     >
-      <Anchor href={href} textDecorationLine="none">
+      <Link href={href}>
         <Text
           // opacity={0.9} // Handled by theme or direct color
-          fontSize="$5" // Consider using slightly smaller for nav items unless it's a design choice
+          fontSize="$4" // Consider using slightly smaller for nav items unless it's a design choice
           fontWeight="$5"
           // lineHeight="$5" // Usually inherited or set on Text directly
           color="$color" // Use themed color, $color12 is very strong
@@ -262,7 +260,7 @@ const NavLink = View.styleable<{ href: string }>(({ children, href = '#', ...res
         >
           {children}
         </Text>
-      </Anchor>
+      </Link>
     </View>
   )
 })
@@ -421,7 +419,7 @@ function SideBarContent({ onOpenChange, open }: { onOpenChange: () => void; open
                           justifyContent="flex-start" // Align text to the start
                           width="100%" // Ensure NavLink fills the Tab
                         >
-                          {link.title}
+                          <Text>{link.title}</Text>
                         </NavLink>
                       </Tabs.Tab>
                     ))}

@@ -24,6 +24,8 @@ import { useWindowDimensions } from 'tamagui'
 import { Drawer } from './Drawer'
 import { SquarePlay } from '@tamagui/lucide-icons'
 import VidreamIcon from '@my/ui/src/components/VidreamIcon'
+import { useConvexAuth } from 'convex/react'
+import { useUser } from '@clerk/clerk-expo'
 // how to use with URL params:
 // import { createParam } from 'solito'
 // const { useParam, useParams } = createParam()
@@ -32,7 +34,10 @@ interface NavBarDrawerProps {
   isSignedIn?: boolean
 }
 
-export function TopNavBar({ isSignedIn }: NavBarDrawerProps) {
+export function TopNavBar() {
+  const { isAuthenticated: isConvexAuthenticated } = useConvexAuth()
+  const { user, isSignedIn } = useUser() //
+  const isAuthenticated = isConvexAuthenticated && isSignedIn && user
   const { sm } = useMedia()
   const handleCreatePress = () => {
     // TODO: Implement your create action
@@ -72,11 +77,13 @@ export function TopNavBar({ isSignedIn }: NavBarDrawerProps) {
         <View flexDirection="row" alignItems="center" gap="$3">
           {/* Conditionally rendered Create Button */}
           <Button size="$3" onPress={handleCreatePress} icon={<Plus size="$1" />}></Button>
-          <Button circular chromeless padding="$0" size="$3">
-            <Button.Icon>
-              <Bell size="$1" strokeWidth={2} />
-            </Button.Icon>
-          </Button>
+          {isAuthenticated && (
+            <Button circular chromeless padding="$0" size="$3">
+              <Button.Icon>
+                <Bell size="$1" strokeWidth={2} />
+              </Button.Icon>
+            </Button>
+          )}
         </View>
       </View>
     </View>

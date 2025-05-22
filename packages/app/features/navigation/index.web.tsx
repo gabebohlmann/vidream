@@ -25,7 +25,7 @@ export function WebNavigationLayout({
 
   return (
     <YStack flex={1} backgroundColor="$background">
-      <TopTabNavBar isSignedIn={isSignedIn} /* title={title} */ />
+      <TopTabNavBar />
 
       <View
         flex={1}

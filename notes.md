@@ -6,6 +6,9 @@
 1. Move to non default exports
 1. Update BottomTabNavBar to use TabsLayou from @my/ui as in TopTabNavBar
 1. Standardize $ vs {} usage for tgui comp props
+1. Standardize Link vs router.push usage for buttons/links
 1. Add logo fill on tab focus
 1. Replace an stylesheets with Tamagui
 1. Make top nav bar more componentized between mobile and native
+1. Fix NavLink in TopTabNavBar.web
+1. Check clerk and convex on auth checks
