@@ -2,7 +2,7 @@
 import { Tabs } from 'expo-router'
 import { Home, TvMinimalPlay, Search, Film, CircleUserRound } from '@tamagui/lucide-icons'
 import { TopNavBar } from 'app/features/navigation/TopNavBar.native'
-import { Pressable } from 'react-native'
+import { Pressable, PressableProps } from 'react-native'
 
 const TabBarButton = (props: PressableProps) => {
   return (
@@ -32,7 +32,7 @@ export default function TabLayout() {
           name="index"
           options={{
             title: 'Home',
-            tabBarIcon: ({ color }) => <Home size={28} color={color} strokeWidth={1.5} />,
+            tabBarIcon: ({ color }) => <Home size={28} color={color as any} strokeWidth={1.5} />,
             tabBarLabelStyle: {
               fontSize: 9,
               fontWeight: 'bold',
@@ -43,7 +43,7 @@ export default function TabLayout() {
           name="flashes"
           options={{
             title: 'Flashes',
-            tabBarIcon: ({ color }) => <Film size={28} color={color} strokeWidth={1.5} />,
+            tabBarIcon: ({ color }) => <Film size={28} color={color as any} strokeWidth={1.5} />,
             tabBarLabelStyle: {
               fontSize: 9,
               fontWeight: 'bold',
@@ -54,7 +54,7 @@ export default function TabLayout() {
           name="search"
           options={{
             title: 'Search',
-            tabBarIcon: ({ color }) => <Search size={28} color={color} strokeWidth={1.5} />,
+            tabBarIcon: ({ color }) => <Search size={28} color={color as any} strokeWidth={1.5} />,
             tabBarLabelStyle: {
               fontSize: 9,
               fontWeight: 'bold',
@@ -65,7 +65,9 @@ export default function TabLayout() {
           name="subscriptions"
           options={{
             title: 'Subscriptions',
-            tabBarIcon: ({ color }) => <TvMinimalPlay size={28} color={color} strokeWidth={1.5} />,
+            tabBarIcon: ({ color }) => (
+              <TvMinimalPlay size={28} color={color as any} strokeWidth={1.5} />
+            ),
             tabBarLabelStyle: {
               fontSize: 9,
               fontWeight: 'bold',
@@ -77,7 +79,7 @@ export default function TabLayout() {
           options={{
             title: 'Account',
             tabBarIcon: ({ color }) => (
-              <CircleUserRound size={28} color={color} strokeWidth={1.5} />
+              <CircleUserRound size={28} color={color as any} strokeWidth={1.5} />
             ),
             tabBarLabelStyle: {
               fontSize: 9,

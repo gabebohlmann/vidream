@@ -23,7 +23,7 @@ import { useMedia } from '@my/ui'
 import { useWindowDimensions } from 'tamagui'
 import { Drawer } from './Drawer'
 import { SquarePlay } from '@tamagui/lucide-icons'
-import VidreamIcon from '@my/ui/src/components/VidReamIcon'
+import VidreamIcon from '@my/ui/src/components/VidreamIcon'
 // how to use with URL params:
 // import { createParam } from 'solito'
 // const { useParam, useParams } = createParam()

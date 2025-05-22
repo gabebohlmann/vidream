@@ -1,10 +1,10 @@
-// packages/ui/src/components/VidReamIcon.tsx
+// packages/ui/src/components/VidreamIcon.tsx
 import React from 'react'
 import { Svg, Path, Rect, SvgProps } from 'react-native-svg' // Import SvgProps for better typing
 import { getTokenValue } from 'tamagui' // To resolve Tamagui tokens
 
 // Define an interface for the component's props for better TypeScript support
-interface VidReamIconProps extends SvgProps {
+interface VidreamIconProps extends SvgProps {
   width?: number
   height?: number
   rectFill?: string // Can be a color string (e.g., '#RRGGBB') or a Tamagui token string (e.g., '$colorName')
@@ -12,7 +12,7 @@ interface VidReamIconProps extends SvgProps {
   pathStroke?: string // Can be a color string or a Tamagui token string
 }
 
-const VidReamIcon: React.FC<VidReamIconProps> = ({
+const VidreamIcon: React.FC<VidreamIconProps> = ({
   width: widthProp = 48, // Default width if not provided
   height: heightProp = 48, // Default height if not provided
   rectFill: rectFillProp = '#138404', // Default color for the rectangle's fill
@@ -55,4 +55,4 @@ const VidReamIcon: React.FC<VidReamIconProps> = ({
   )
 }
 
-export default VidReamIcon
+export default VidreamIcon

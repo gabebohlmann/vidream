@@ -23,8 +23,9 @@ import {
 import { useMedia } from '@my/ui'
 import { useWindowDimensions } from 'tamagui'
 import { Drawer } from './Drawer'
-import { ProfileButton } from './ProfileButton'
+import { ProfileButton } from './ProfileButton.web'
 import { SquarePlay } from '@tamagui/lucide-icons'
+import VidreamIcon from '@my/ui/src/components/VidreamIcon'
 // how to use with URL params:
 // import { createParam } from 'solito'
 // const { useParam, useParams } = createParam()
@@ -137,7 +138,8 @@ export function TopTabNavBar({ isSignedIn }: NavBarDrawerProps) {
         borderBottomColor="$borderColor" // Optional
       >
         <View flexDirection="row" alignItems="center">
-          <SquarePlay size={32} color="#FFFFFF" strokeWidth={2.25} fill="#1b9e0a" />
+          {/* <SquarePlay size={32} color="#FFFFFF" strokeWidth={2.25} fill="#1b9e0a" /> */}
+          <VidreamIcon />
           <Text paddingLeft="$2" fontSize="$7" fontWeight="bold">
             VidReam
           </Text>

@@ -2,9 +2,9 @@
 'use client'
 
 import { View, YStack, useMedia } from '@my/ui'
-import { BottomTabNavBar } from './BottomTabNavBar'
+import { BottomTabNavBar } from './BottomTabNavBar.web'
 import type { TabConfig } from '@my/config/src/tabs' // Import the type
-import { TopTabNavBar } from './TopTabNavBar' // Adjust path as needed
+import { TopTabNavBar } from './TopTabNavBar.web' // Adjust path as needed
 
 interface WebNavigationLayoutProps {
   children: React.ReactNode
