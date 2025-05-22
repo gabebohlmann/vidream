@@ -1,7 +1,6 @@
 // packages/app/features/navigation/TopTabNavBar.web.tsx
 'use client'
 import { Bell, Menu, Plus, Search, ArrowLeft } from '@tamagui/lucide-icons'
-import type { GetProps } from 'tamagui'
 import React, { useEffect, useState, useRef } from 'react'
 import {
   Button,
@@ -13,8 +12,8 @@ import {
   useEvent,
   Input,
   AnimatePresence,
+  XStack,
 } from 'tamagui'
-// ... other imports from your file
 import VidreamIcon from '@my/ui/src/components/VidreamIcon'
 import { Link } from 'solito/link'
 import { ProfileButton } from './ProfileButton.web'
@@ -24,16 +23,14 @@ import { allNavigationLinks } from './commonLinks'
 import type { NavLinkInfo } from './commonLinks'
 import { Drawer } from './Drawer'
 
-// Props for TopTabNavBar
 interface TopTabNavBarProps {
   isScreenSm: boolean
   isSearchActiveSm: boolean
   onSetSearchActiveSm: (active: boolean) => void
   onSearchSubmit?: (query: string) => void
-  isSidebarExpanded?: boolean // New optional prop
+  onToggleSidebarExpand?: () => void
 }
 
-// ... (SmallScreenDrawerContent and DrawerSidebarItem remain the same from your file)
 function SmallScreenDrawerContent({
   open,
   onOpenChange,
@@ -41,17 +38,16 @@ function SmallScreenDrawerContent({
   open: boolean
   onOpenChange: (open: boolean) => void
 }) {
-  // ... (your existing code for SmallScreenDrawerContent)
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
       <Drawer.Portal>
         <Drawer.Overlay animation="lazy" enterStyle={{ opacity: 0 }} exitStyle={{ opacity: 0 }} />
         <Drawer.Content
           paddingVertical="$4"
-          width={280} // Slightly wider for SM drawer
+          width={280}
           alignItems="flex-start"
           backgroundColor="$background"
-          borderRightWidth={isWeb ? 0 : 1} // No border if it's an overlay drawer on web
+          borderRightWidth={isWeb ? 0 : 1}
           borderRightColor="$borderColor"
           gap="$2"
           animation="medium"
@@ -91,7 +87,6 @@ function SmallScreenDrawerContent({
 }
 
 const DrawerSidebarItem = styled(View, {
-  // Similar to SidebarButton in PersistentSidebar but might have different styling/props for drawer context
   paddingVertical: '$3',
   paddingHorizontal: '$4',
   flexDirection: 'row',
@@ -107,7 +102,7 @@ export function TopTabNavBar({
   isSearchActiveSm,
   onSetSearchActiveSm,
   onSearchSubmit,
-  isSidebarExpanded, // Destructure new prop
+  onToggleSidebarExpand,
 }: TopTabNavBarProps) {
   const { isAuthenticated: isConvexAuthenticated } = useConvexAuth()
   const { user, isSignedIn } = useUser()
@@ -137,12 +132,10 @@ export function TopTabNavBar({
     }
   }
 
-  // Determine if the TopBar logo should be visible
-  // Hide if not SM screen AND sidebar is expanded
-  const showTopBarLogo = isScreenSm || !isSidebarExpanded
+  const showTopBarLogo = (isScreenSm && !isSearchActiveSm) || !isScreenSm
 
   if (isScreenSm && isSearchActiveSm) {
-    // ... (SM Search Active UI - no changes here from your latest version)
+    // SM Search Active UI
     return (
       <View
         flexDirection="row"
@@ -151,9 +144,10 @@ export function TopTabNavBar({
         width="100%"
         alignItems="center"
         backgroundColor="$background"
+        minHeight={70}
+        // Add border properties here
         borderBottomWidth={1}
         borderBottomColor="$borderColor"
-        minHeight={70} //Corrected from 60 in your previous version as it was in the diff
       >
         <Button
           icon={<ArrowLeft size="$1.5" />}
@@ -190,6 +184,7 @@ export function TopTabNavBar({
     )
   }
 
+  // Default UI
   return (
     <View
       flexDirection="row"
@@ -199,35 +194,36 @@ export function TopTabNavBar({
       tag="nav"
       alignItems="center"
       backgroundColor="$background"
+      minHeight={60}
+      // Add border properties here
       borderBottomWidth={1}
       borderBottomColor="$borderColor"
-      minHeight={60}
     >
-      <View flexDirection="row" alignItems="center" gap={isScreenSm ? '$2' : '$2.5'}>
-        {isScreenSm && (
+      <XStack alignItems="center" gap="$2.5">
+        {!isScreenSm && onToggleSidebarExpand && (
           <Button
             circular
             chromeless
-            onPress={toggleSmDrawer}
-            icon={<Menu size="$1.5" />}
+            onPress={onToggleSidebarExpand}
+            icon={<Menu size="$2" />}
             size="$3.5"
+            marginLeft="$2.5"
           />
         )}
-        {/* Conditionally show TopBar Logo/Title */}
-        {showTopBarLogo && (!isScreenSm || (isScreenSm && !isSearchActiveSm)) && (
+        {showTopBarLogo && (
           <Link
             href="/"
             style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '$2' }}
           >
-            <View flexDirection="row" alignItems="center" gap="$0">
-              <VidreamIcon />
-              <Text fontSize="$6" fontWeight="bold" color="$color">
+            <XStack alignItems="center" gap="$0">
+              <VidreamIcon/>
+              <Text fontSize="$6" fontWeight="bold" color="$color" paddingBottom="$1">
                 Vidream
               </Text>
-            </View>
+            </XStack>
           </Link>
         )}
-      </View>
+      </XStack>
 
       {!isScreenSm && (
         <View flex={1} alignItems="center" justifyContent="center" paddingHorizontal="$4">
@@ -243,7 +239,7 @@ export function TopTabNavBar({
         flexDirection="row"
         alignItems="center"
         gap="$2.5"
-        marginLeft={!isScreenSm ? 'auto' : '$0'}
+        marginLeft={!isScreenSm ? 'auto' : showTopBarLogo ? '$0' : 'auto'}
       >
         <Button
           size="$3"

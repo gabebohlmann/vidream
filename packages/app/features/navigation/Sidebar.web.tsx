@@ -1,22 +1,26 @@
 // packages/app/features/navigation/Sidebar.web.tsx
 'use client'
 
-import React from 'react' // Removed useState as it's now a prop
-import { Button, View, YStack, XStack, Text, styled, AnimatePresence, Separator } from 'tamagui'
-import { Link } from 'solito/link'
-import { Menu, ChevronLeft } from '@tamagui/lucide-icons'
+import React from 'react'
+import { View, YStack, Text, styled, AnimatePresence, Separator } from 'tamagui'
 import { primaryNavigationItems, allNavigationLinks } from './commonLinks'
 import type { NavLinkInfo } from './commonLinks'
+import { Link } from 'solito/link'
 
-const SidebarButton = styled(XStack, {
+const SidebarButton = styled(Link, {
   name: 'SidebarButton',
   tag: 'a',
+  display: 'flex',
+  flexDirection: 'row',
+  marginTop: '$2',
   paddingVertical: '$2.5',
-  paddingHorizontal: '$3',
+  paddingHorizontal: '$0',
+  marginHorizontal: '$3',
   gap: '$3',
-  alignItems: 'center',
+  alignItems: 'flex-start', // This vertically aligns icon & text to the top in expanded view
   borderRadius: '$3',
   cursor: 'pointer',
+  textDecorationLine: 'none',
   hoverStyle: {
     backgroundColor: '$backgroundHover',
   },
@@ -32,10 +36,11 @@ const SidebarButton = styled(XStack, {
     collapsed: {
       true: {
         flexDirection: 'column',
-        paddingHorizontal: '$1',
+        paddingHorizontal: '$2',
+        marginHorizontal: '$0',
         paddingVertical: '$2',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center', // This horizontally centers icon & text in collapsed view
         width: '100%',
         gap: '$1',
       },
@@ -45,78 +50,60 @@ const SidebarButton = styled(XStack, {
 
 interface SidebarProps {
   isExpanded: boolean
-  onToggleExpand: () => void
 }
 
-export function Sidebar({ isExpanded, onToggleExpand }: SidebarProps) {
-  // Accept props
-  // const [isExpanded, setIsExpanded] = useState(false) // Removed: State is lifted
-  const currentWidth = isExpanded ? 240 : 96
+export function Sidebar({ isExpanded }: SidebarProps) {
+  const currentWidth = isExpanded ? 200 : 90 // Your current width values
 
   const renderNavItem = (link: NavLinkInfo, index: number) => (
-    <Link key={link.slug} href={link.href} asChild>
-      <SidebarButton collapsed={!isExpanded}>
-        {isExpanded ? (
-          <>
-            <link.icon size={20} color="$color" />
-            <Text fontSize="$3" color="$color" fontWeight={'500'}>
-              {link.title}
-            </Text>
-          </>
-        ) : (
-          <>
-            {React.cloneElement(link.largeIcon, {
-              size: 24,
-              color: '$color',
-            })}
-            <Text fontSize="$1" color="$color" textAlign="center" numberOfLines={1} ellipse>
-              {link.title}
-            </Text>
-          </>
-        )}
-      </SidebarButton>
-    </Link>
+    <SidebarButton key={link.slug} href={link.href} collapsed={!isExpanded}>
+      {isExpanded ? (
+        <>
+          <link.icon size={20} color="$color" />
+          <Text fontSize="$3" color="$color" fontWeight={'500'}>
+            {link.title}
+          </Text>
+        </>
+      ) : (
+        <>
+          {React.cloneElement(link.largeIcon, {
+            size: 24,
+            color: '$color',
+          })}
+          <Text fontSize="10px" color="$color" textAlign="left" numberOfLines={1} ellipse>
+            {link.title}
+          </Text>
+        </>
+      )}
+    </SidebarButton>
   )
 
   return (
     <YStack
       width={currentWidth}
       backgroundColor="$background"
-      paddingVertical="$3"
-      paddingHorizontal={isExpanded ? '$3' : '$1.5'}
+      paddingBottom="$3"
+      // Regarding your padding:
+      // paddingHorizontal sets L/R. paddingLeft overrides L.
+      // So, current effective padding: Left=$4, Right (from paddingHorizontal's second value if it were split, or from $3)= $3
+      // This might be why items feel offset if not intentional.
+      // If paddingHorizontal is "$3", then Left=$4, Right=$3.
+      // If paddingHorizontal is e.g., {isExpanded ? '$0' : '$0'}, then Left=$4, Right=$0.
+      paddingHorizontal={isExpanded ? '$3' : '$3'}
+      paddingLeft="$4" // You added this.
+      marginHorizontal="$0"
       gap="$1.5"
-      borderRightWidth={1}
-      borderRightColor="$borderColor"
+      alignItems="flex-start"
       animation="medium"
-      animateOnly={['width', 'paddingHorizontal']}
-      height="100vh"
+      animateOnly={['width', 'paddingHorizontal', 'alignItems']}
+      height="100%"
       position="sticky"
       top={0}
-      zIndex={50}
+      zIndex={40}
+      // Add border properties here
+      borderRightWidth={1}
+      borderRightColor="$borderColor" // Use your theme's border color token
     >
-      <XStack
-        paddingHorizontal={isExpanded ? '$0' : '$0'}
-        alignItems="center"
-        justifyContent={isExpanded ? 'flex-start' : 'center'}
-        marginBottom="$2"
-        minHeight={40}
-      >
-        <Button
-          icon={isExpanded ? <ChevronLeft /> : <Menu />}
-          onPress={onToggleExpand} // Use the passed-in handler
-          chromeless
-          circular
-          size="$3.5"
-        />
-        {isExpanded && (
-          <Link href="/" style={{ textDecoration: 'none', marginLeft: '$3' }}>
-            <Text fontSize="$6" fontWeight="bold" color="$color">
-              Vidream
-            </Text>
-          </Link>
-        )}
-      </XStack>
-
       {primaryNavigationItems.filter((link) => link.isPrimary).map(renderNavItem)}
 
       <AnimatePresence>
@@ -126,8 +113,10 @@ export function Sidebar({ isExpanded, onToggleExpand }: SidebarProps) {
             enterStyle={{ opacity: 0, y: -5 }}
             exitStyle={{ opacity: 0, y: -5 }}
             gap="$1.5"
+            alignSelf="stretch"
+            alignItems="flex-start"
           >
-            <Separator marginVertical="$2" />
+            <Separator marginVertical="$2" width="100%" />
             {allNavigationLinks.filter((link) => !link.isPrimary).map(renderNavItem)}
           </YStack>
         )}

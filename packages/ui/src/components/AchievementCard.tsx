@@ -41,7 +41,6 @@ export const AchievementCard = ({
               {progress.current}
             </SizableText>
             <SizableText size="$2" theme="alt1">
-              {' '}
               / {progress.full} {progress.label}
             </SizableText>
           </XStack>

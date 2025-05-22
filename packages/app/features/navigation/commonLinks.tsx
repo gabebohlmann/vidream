@@ -61,7 +61,7 @@ export const primaryNavigationItems: NavLinkInfo[] = [
     isPrimary: true,
   },
   {
-    title: 'Subscriptions',
+    title: 'Subs',
     slug: 'subscriptions',
     href: '/subscriptions',
     icon: TvMinimalPlay,
