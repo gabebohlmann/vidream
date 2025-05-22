@@ -11,11 +11,11 @@ import type { NavLinkInfo } from './commonLinks'
 const SidebarButton = styled(XStack, {
   name: 'SidebarButton',
   tag: 'a', // For semantic HTML when used with Solito's Link asChild
-  paddingVertical: '$2.5', // Adjusted padding
-  paddingHorizontal: '$3',
-  gap: '$3',
+  paddingVertical: '$2.5',
+  paddingHorizontal: '$32',
+  gap: '$3', // This gap will apply between icon and text when expanded
   alignItems: 'center',
-  borderRadius: '$3', // Slightly larger radius
+  borderRadius: '$3',
   cursor: 'pointer',
 
   hoverStyle: {
@@ -29,46 +29,72 @@ const SidebarButton = styled(XStack, {
     active: {
       true: {
         backgroundColor: '$backgroundFocus',
-        fontWeight: 'bold',
-        // Add other active styles if needed
+        // color: '$colorFocus', // Text color might need to be handled directly on Text component
+        // If you want icon color to change, it needs to be passed to the icon
       },
     },
     collapsed: {
       true: {
-        paddingHorizontal: '$0', // No horizontal padding when collapsed
-        justifyContent: 'center', // Center icon when collapsed
-        width: '100%', // Ensure it takes full width for centering
+        flexDirection: 'column', // Arrange icon and text vertically
+        paddingHorizontal: '$1', // Minimal horizontal padding for the content inside
+        paddingVertical: '$2',   // Adjust vertical padding for collapsed state
+        justifyContent: 'center',
+        alignItems: 'center',    // Center items horizontally in the column
+        width: '100%',
+        gap: '$1', // Smaller gap for vertical icon and text
       },
     },
   } as const,
 })
 
 export function Sidebar() {
-  const [isExpanded, setIsExpanded] = useState(true) // Default to expanded
-  const currentWidth = isExpanded ? 240 : 72 // Standard widths for expanded/collapsed sidebars
+  // Default to collapsed view
+  const [isExpanded, setIsExpanded] = useState(false)
+  // Widen the collapsed sidebar, e.g., to 96px. Adjust as needed.
+  const currentWidth = isExpanded ? 240 : 80
 
-  // TODO: Determine active route, e.g., using Solito's usePathname
-  // const pathname = usePathname(); // If you're using Next.js with Solito
+  // TODO: Determine active route for active styling
+  // const pathname = usePathname();
 
   const renderNavItem = (link: NavLinkInfo, index: number) => (
     <Link key={link.slug} href={link.href} asChild>
       <SidebarButton
-        // active={pathname === link.href} // Example active state
+        // active={pathname === link.href} // Implement your active state logic
         collapsed={!isExpanded}
       >
         {isExpanded ? (
           <>
+            {/* Expanded: Icon and Text side-by-side */}
             <link.icon size={20} color="$color" />
             <Text
-              fontSize="$4"
-              color="$color"
-              fontWeight={/*pathname === link.href ? '700' :*/ '500'}
+              fontSize="$3" // Consistent with common sidebar text sizes
+              color="$color" // Default color
+              fontWeight={"500"}
             >
               {link.title}
             </Text>
           </>
         ) : (
-          React.cloneElement(link.largeIcon, { color: '$color' }) // Ensure largeIcon has proper props
+          // Collapsed: Icon above Text
+          <>
+            {React.cloneElement(link.largeIcon, {
+              size: 24,
+              color: "$color",
+            })}
+            <Text
+              fontSize="10px  "
+              color="$color"
+              textAlign="center"
+              numberOfLines={1}
+              ellipse
+              // Ensure the text component itself can occupy a reasonable width if needed
+              // though the parent button width (constrained by currentWidth) is the primary factor.
+              // minWidth={50} // Example, if text itself needs a min width before ellipsizing
+              // maxWidth="100%" // Ensure it doesn't overflow its container
+            >
+              {link.title}
+            </Text>
+          </>
         )}
       </SidebarButton>
     </Link>
@@ -77,10 +103,10 @@ export function Sidebar() {
   return (
     <YStack
       width={currentWidth}
-      backgroundColor="$background" // Or a specific sidebar background color e.g. $background2
+      backgroundColor="$background"
       paddingVertical="$3"
-      paddingHorizontal={isExpanded ? '$3' : '$2'} // Adjust horizontal padding based on state
-      gap="$2" // Gap between items
+      paddingHorizontal={isExpanded ? "$3" : "$1.5"}
+      gap="$1.5"
       borderRightWidth={1}
       borderRightColor="$borderColor"
       animation="medium"
@@ -88,27 +114,25 @@ export function Sidebar() {
       height="100vh"
       position="sticky"
       top={0}
-      zIndex={50} // Ensure it's above content but below modals/drawers
+      zIndex={50}
     >
-      {/* Header: Hamburger Menu / Toggle Button & Optional Logo */}
       <XStack
-        paddingHorizontal={isExpanded ? '$0' : '$0'} // No extra padding for this row here, handled by parent
+        paddingHorizontal={isExpanded ? '$0' : '$0'}
         alignItems="center"
-        justifyContent={isExpanded ? 'flex-start' : 'center'} // Align button to start or center
+        justifyContent={isExpanded ? 'flex-start' : 'center'}
         marginBottom="$2"
-        minHeight={40} // Ensure consistent height for the button area
+        minHeight={40}
       >
         <Button
+          // Ensure the icon flips correctly based on the new default state
           icon={isExpanded ? <ChevronLeft /> : <Menu />}
           onPress={() => setIsExpanded(!isExpanded)}
           chromeless
           circular
-          size="$3.5" // Slightly larger button
+          size="$3.5"
         />
         {isExpanded && (
           <Link href="/" style={{ textDecoration: 'none', marginLeft: '$3' }}>
-            {/* You can place your App logo/name here if desired */}
-            {/* <VidreamIcon /> */}
             <Text fontSize="$6" fontWeight="bold" color="$color">
               Vidream
             </Text>
@@ -119,14 +143,13 @@ export function Sidebar() {
       {/* Primary Navigation Items */}
       {primaryNavigationItems.filter((link) => link.isPrimary).map(renderNavItem)}
 
-      {/* Divider and Additional links when expanded */}
       <AnimatePresence>
         {isExpanded && (
           <YStack
             animation="medium"
             enterStyle={{ opacity: 0, y: -5 }}
             exitStyle={{ opacity: 0, y: -5 }}
-            gap="$2" // Keep consistent gap
+            gap="$1.5"
           >
             <Separator marginVertical="$2" />
             {allNavigationLinks.filter((link) => !link.isPrimary).map(renderNavItem)}
@@ -134,16 +157,11 @@ export function Sidebar() {
         )}
       </AnimatePresence>
 
-      {/* Spacer */}
       <View flex={1} />
 
-      {/* Optional: Footer content like user profile, settings shortcut */}
       {isExpanded && (
         <View paddingHorizontal="$0" paddingBottom="$2">
-          {/* Example: <ProfileButton /> or other elements */}
-          {/* <Text fontSize="$2" color="$colorPress" textAlign="center">
-            © Vidream
-          </Text> */}
+          {/* Footer content */}
         </View>
       )}
     </YStack>
