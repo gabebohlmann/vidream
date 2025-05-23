@@ -90,7 +90,7 @@ function SmallScreenDrawerContent({
           <Link
             href={item.href}
             key={item.slug}
-            onPress={() => onOpenChange(false)}
+            onClick={() => onOpenChange(false)}
             style={{ textDecoration: 'none', display: 'block', width: '100%' }}
             asChild
           >
@@ -104,7 +104,7 @@ function SmallScreenDrawerContent({
     if (!item.href || !item.icon) return null
 
     return (
-      <Link key={item.slug} href={item.href} onPress={() => onOpenChange(false)} asChild>
+      <Link key={item.slug} href={item.href} onClick={() => onOpenChange(false)} asChild>
         <DrawerClickableItem>
           <item.icon size={20} color="$color" />
           <Text fontSize="$4" color="$color" flex={1}>
@@ -359,7 +359,7 @@ export function TopTabNavBar({
         <ProfileButton />
       </View>
 
-      {isScreenSm && open /* This should be smDrawerOpen */ ? (
+      {isScreenSm && smDrawerOpen ? (
         <SmallScreenDrawerContent open={smDrawerOpen} onOpenChange={setSmDrawerOpen} />
       ) : null}
     </View>
