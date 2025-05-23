@@ -95,7 +95,7 @@ export function WebNavigationLayout({
           <XStack flex={1} position="relative">
             <Sidebar isExpanded={isSidebarExpanded} />
             <View flex={1} position="relative">
-              <YStack fullscreen scrollable_y>
+              <YStack fullscreen scrollable_y     >
                 <View padding="$4">{children}</View>
               </YStack>
             </View>
