@@ -34,7 +34,7 @@ interface TopTabNavBarProps {
 
 const DrawerClickableItem = styled(XStack, {
   name: 'DrawerClickableItem',
-  tag: 'div',
+  // tag: 'div',
   width: '100%',
   paddingVertical: '$3',
   paddingHorizontal: '$3.5',
