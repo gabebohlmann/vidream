@@ -158,12 +158,9 @@ function SmallScreenDrawerContent({
           >
             {/* Fixed Header Part - Ensure no stray spaces between these direct children */}
             <View paddingHorizontal="$3.5" paddingVertical="$3" width="100%">
-              <XStack alignItems="center" gap="$0">
-                <VidreamIcon />
-                <Text fontSize="$6" fontWeight="bold" color="$color" paddingBottom="$1">
-                  Vidream
-                </Text>
-              </XStack>
+              <Text fontSize="$6" fontWeight="bold">
+                Menu
+              </Text>
             </View>
             <Separator width="100%" />
             {/* Scrollable Content Part */}
@@ -359,6 +356,7 @@ export function TopTabNavBar({
             tooltip="Notifications"
           />
         ) : null}
+        <ProfileButton />
       </View>
 
       {isScreenSm && open /* This should be smDrawerOpen */ ? (
