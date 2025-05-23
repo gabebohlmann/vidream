@@ -3105,12 +3105,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@my/config@workspace:packages/config"
   dependencies:
-    "@tamagui/animations-react-native": "npm:1.126.13"
-    "@tamagui/build": "npm:1.126.13"
-    "@tamagui/font-inter": "npm:1.126.13"
-    "@tamagui/shorthands": "npm:1.126.13"
-    "@tamagui/themes": "npm:1.126.13"
-    tamagui: "npm:1.126.13"
+    "@tamagui/animations-react-native": "npm:^1.126.12"
+    "@tamagui/build": "npm:^1.126.12"
+    "@tamagui/font-inter": "npm:^1.126.12"
+    "@tamagui/shorthands": "npm:^1.126.12"
+    "@tamagui/themes": "npm:^1.126.12"
+    tamagui: "npm:^1.126.12"
   languageName: unknown
   linkType: soft
 
@@ -3119,12 +3119,12 @@ __metadata:
   resolution: "@my/ui@workspace:packages/ui"
   dependencies:
     "@my/config": "npm:0.0.1"
-    "@tamagui/build": "npm:1.126.13"
-    "@tamagui/toast": "npm:1.126.13"
+    "@tamagui/build": "npm:^1.126.12"
+    "@tamagui/toast": "npm:^1.126.12"
     "@ts-react/form": "npm:^1.8.3"
     react-dropzone: "npm:^14.3.8"
     react-hook-form: "npm:^7.56.4"
-    tamagui: "npm:1.126.13"
+    tamagui: "npm:^1.126.12"
   languageName: unknown
   linkType: soft
 
@@ -4207,7 +4207,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/animations-react-native@npm:1.126.13":
+"@tamagui/animations-react-native@npm:^1.126.12":
   version: 1.126.13
   resolution: "@tamagui/animations-react-native@npm:1.126.13"
   dependencies:
@@ -4255,7 +4255,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/babel-plugin@npm:1.126.13":
+"@tamagui/babel-plugin@npm:^1.126.12":
   version: 1.126.13
   resolution: "@tamagui/babel-plugin@npm:1.126.13"
   dependencies:
@@ -4269,7 +4269,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/build@npm:1.126.13":
+"@tamagui/build@npm:1.126.13, @tamagui/build@npm:^1.126.12":
   version: 1.126.13
   resolution: "@tamagui/build@npm:1.126.13"
   dependencies:
@@ -4374,7 +4374,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/cli@npm:1.126.13":
+"@tamagui/cli@npm:^1.126.12":
   version: 1.126.13
   resolution: "@tamagui/cli@npm:1.126.13"
   dependencies:
@@ -4448,7 +4448,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/colors@npm:1.126.13":
+"@tamagui/colors@npm:1.126.13, @tamagui/colors@npm:^1.126.12":
   version: 1.126.13
   resolution: "@tamagui/colors@npm:1.126.13"
   checksum: 10/aec82cfffa358cce37f2282a51ed23d566d7c102d5c01ce183aa6f981220fd5203bb45840aac1aec8144fb1ed10792113a2c6b0ca8f058eadfd627c6ebe877d8
@@ -4475,7 +4475,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/config@npm:1.126.13":
+"@tamagui/config@npm:^1.126.12":
   version: 1.126.13
   resolution: "@tamagui/config@npm:1.126.13"
   dependencies:
@@ -4639,7 +4639,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/font-inter@npm:1.126.13":
+"@tamagui/font-inter@npm:1.126.13, @tamagui/font-inter@npm:^1.126.12":
   version: 1.126.13
   resolution: "@tamagui/font-inter@npm:1.126.13"
   dependencies:
@@ -4853,7 +4853,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/lucide-icons@npm:1.126.13":
+"@tamagui/lucide-icons@npm:^1.126.12":
   version: 1.126.13
   resolution: "@tamagui/lucide-icons@npm:1.126.13"
   dependencies:
@@ -4866,7 +4866,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/next-plugin@npm:1.126.13":
+"@tamagui/next-plugin@npm:^1.126.12":
   version: 1.126.13
   resolution: "@tamagui/next-plugin@npm:1.126.13"
   dependencies:
@@ -4888,7 +4888,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/next-theme@npm:1.126.13":
+"@tamagui/next-theme@npm:^1.126.12":
   version: 1.126.13
   resolution: "@tamagui/next-theme@npm:1.126.13"
   dependencies:
@@ -5054,7 +5054,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/react-native-svg@npm:1.126.13":
+"@tamagui/react-native-svg@npm:1.126.13, @tamagui/react-native-svg@npm:^1.126.12":
   version: 1.126.13
   resolution: "@tamagui/react-native-svg@npm:1.126.13"
   checksum: 10/a5f52c118b6361e9193bfc7f1146dc36adc020f5dae042c6df8bb932e4d391065e4e9713f6465a2dbad3a3acd3ec8c6de63d9d4952dce5357d368ee299a2b6d7
@@ -5235,7 +5235,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/shorthands@npm:1.126.13":
+"@tamagui/shorthands@npm:1.126.13, @tamagui/shorthands@npm:^1.126.12":
   version: 1.126.13
   resolution: "@tamagui/shorthands@npm:1.126.13"
   dependencies:
@@ -5425,7 +5425,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/themes@npm:1.126.13":
+"@tamagui/themes@npm:1.126.13, @tamagui/themes@npm:^1.126.12":
   version: 1.126.13
   resolution: "@tamagui/themes@npm:1.126.13"
   dependencies:
@@ -5445,7 +5445,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/toast@npm:1.126.13":
+"@tamagui/toast@npm:^1.126.12":
   version: 1.126.13
   resolution: "@tamagui/toast@npm:1.126.13"
   dependencies:
@@ -6925,13 +6925,13 @@ __metadata:
   dependencies:
     "@my/ui": "npm:0.0.1"
     "@react-navigation/native": "npm:^6.1.17"
-    "@tamagui/animations-react-native": "npm:1.126.13"
-    "@tamagui/colors": "npm:1.126.13"
-    "@tamagui/font-inter": "npm:1.126.13"
-    "@tamagui/lucide-icons": "npm:1.126.13"
-    "@tamagui/react-native-svg": "npm:1.126.13"
-    "@tamagui/shorthands": "npm:1.126.13"
-    "@tamagui/themes": "npm:1.126.13"
+    "@tamagui/animations-react-native": "npm:^1.126.12"
+    "@tamagui/colors": "npm:^1.126.12"
+    "@tamagui/font-inter": "npm:^1.126.12"
+    "@tamagui/lucide-icons": "npm:^1.126.12"
+    "@tamagui/react-native-svg": "npm:^1.126.12"
+    "@tamagui/shorthands": "npm:^1.126.12"
+    "@tamagui/themes": "npm:^1.126.12"
     "@types/react": "npm:~19.0.10"
     "@types/react-native": "npm:^0.73.0"
     burnt: "npm:^0.12.2"
@@ -10158,7 +10158,7 @@ __metadata:
     "@react-native-async-storage/async-storage": "npm:^2.1.2"
     "@react-navigation/bottom-tabs": "npm:^7.3.12"
     "@react-navigation/native": "npm:^7.1.8"
-    "@tamagui/babel-plugin": "npm:1.126.13"
+    "@tamagui/babel-plugin": "npm:^1.126.12"
     app: "npm:0.0.0"
     babel-plugin-module-resolver: "npm:^5.0.2"
     burnt: "npm:^0.12.2"
@@ -13758,9 +13758,9 @@ __metadata:
     "@react-navigation/bottom-tabs": "npm:^7.3.13"
     "@react-navigation/native": "npm:^7.1.9"
     "@rehookify/datepicker": "npm:^6.6.8"
-    "@tamagui/config": "npm:1.126.13"
-    "@tamagui/next-plugin": "npm:1.126.13"
-    "@tamagui/next-theme": "npm:1.126.13"
+    "@tamagui/config": "npm:^1.126.12"
+    "@tamagui/next-plugin": "npm:^1.126.12"
+    "@tamagui/next-theme": "npm:^1.126.12"
     "@types/node": "npm:^20.14.1"
     app: "npm:0.0.0"
     eslint-config-next: "npm:^14.2.3"
@@ -13773,7 +13773,7 @@ __metadata:
     react-native: "npm:0.79.2"
     react-native-web: "npm:^0.20.0"
     react-navigation: "npm:^5.0.0"
-    tamagui: "npm:1.126.13"
+    tamagui: "npm:^1.126.12"
     tree-kill: "npm:^1.2.2"
     vercel: "npm:latest"
     vitest: "npm:^2.1.1"
@@ -16494,7 +16494,7 @@ __metadata:
     "@biomejs/biome": "npm:^1.9.3"
     "@clerk/clerk-js": "npm:^5.67.2"
     "@hookform/resolvers": "npm:^5.0.1"
-    "@tamagui/cli": "npm:1.126.13"
+    "@tamagui/cli": "npm:^1.126.12"
     check-dependency-version-consistency: "npm:^4.1.0"
     convex: "npm:^1.24.1"
     eslint: "npm:^9.3.0"
@@ -16892,7 +16892,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tamagui@npm:1.126.13":
+"tamagui@npm:^1.126.12":
   version: 1.126.13
   resolution: "tamagui@npm:1.126.13"
   dependencies:
@@ -18537,8 +18537,8 @@ __metadata:
   linkType: hard
 
 "zod@npm:^3.24.4":
-  version: 3.25.24
-  resolution: "zod@npm:3.25.24"
-  checksum: 10/348d4e34234b88c2c37715eebc9fe0151359be0dedde0d60f34dc713c7274538694997e68b582cf8131817f0b973bdbf17398e41094ea34c3f9cdc8beb438ada
+  version: 3.25.25
+  resolution: "zod@npm:3.25.25"
+  checksum: 10/8e9866d57488ee70cff8fe1a48138567e8c350503a28174161b2e1d19022f9bdf34da11c62a6fad952f4efcd6dadd3508853272106ba1e1d4f86ede82ef26a81
   languageName: node
   linkType: hard

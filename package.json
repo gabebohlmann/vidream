@@ -31,14 +31,14 @@
     "react-refresh": "^0.14.0",
     "react-native-svg": "15.11.2",
     "react-native-web": "~0.19.12",
-    "@tamagui/animations-react-native": "1.126.13",
+    "@tamagui/animations-react-native": "^1.126.12",
     "typescript": "5.8.3"
   },
   "dependencies": {
     "@babel/runtime": "^7.24.6",
     "@clerk/clerk-js": "^5.67.2",
     "@hookform/resolvers": "^5.0.1",
-    "@tamagui/cli": "1.126.13",
+    "@tamagui/cli": "^1.126.12",
     "check-dependency-version-consistency": "^4.1.0",
     "convex": "^1.24.1",
     "eslint": "^9.3.0",
