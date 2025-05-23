@@ -1,40 +1,15 @@
-// packages/app/features/navigation/TopNavBar.native.tsx
+// // packages/app/features/navigation/TopNavBar.native.tsx
 // Top Navbar with Swippable Drawer on Smaller Screens from Tamagui Bento
 'use client'
-import { Bell, Menu, Plus } from '@tamagui/lucide-icons'
-import type { StackProps, TabLayout, TabsTabProps } from '@my/ui'
-import {
-  Anchor,
-  AnimatePresence,
-  // Avatar, // Removed
-  Button,
-  Image,
-  // Popover, // Removed
-  // PopoverTrigger, // Removed
-  Separator,
-  Tabs,
-  Text,
-  View,
-  isWeb,
-  styled,
-  useEvent,
-} from 'tamagui'
+import { Bell, Plus } from '@tamagui/lucide-icons'
+import { Button, Text, View } from 'tamagui'
 import { useMedia } from '@my/ui'
-import { useWindowDimensions } from 'tamagui'
-import { Drawer } from './Drawer'
-import { SquarePlay } from '@tamagui/lucide-icons'
 import VidreamIcon from '@my/ui/src/components/VidreamIcon'
-import { useConvexAuth } from 'convex/react'
+import { Authenticated, useConvexAuth } from 'convex/react'
 import { useUser } from '@clerk/clerk-expo'
-// how to use with URL params:
-// import { createParam } from 'solito'
-// const { useParam, useParams } = createParam()
+import { ProfileButton } from './ProfileButton.native'
 
-interface NavBarDrawerProps {
-  isSignedIn?: boolean
-}
-
-export function TopNavBar() {
+export default function TopNavBar() {
   const { isAuthenticated: isConvexAuthenticated } = useConvexAuth()
   const { user, isSignedIn } = useUser() //
   const isAuthenticated = isConvexAuthenticated && isSignedIn && user
@@ -76,14 +51,15 @@ export function TopNavBar() {
         {/* Right corner buttons */}
         <View flexDirection="row" alignItems="center" gap="$3">
           {/* Conditionally rendered Create Button */}
-          <Button size="$3" onPress={handleCreatePress} icon={<Plus size="$1" />}></Button>
-          {isAuthenticated && (
-            <Button circular chromeless padding="$0" size="$3">
+          <Authenticated>
+            <Button size="$2" onPress={handleCreatePress} icon={<Plus size="$1" />}></Button>
+            <Button circular chromeless padding="$0" size="$2">
               <Button.Icon>
                 <Bell size="$1" strokeWidth={2} />
               </Button.Icon>
             </Button>
-          )}
+          </Authenticated>
+          <ProfileButton />
         </View>
       </View>
     </View>
