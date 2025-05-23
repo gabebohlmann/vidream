@@ -1,7 +1,7 @@
 // apps/expo/app/(tabs)/_layout.tsx
 import { Tabs } from 'expo-router'
 import { Home, TvMinimalPlay, Search, Film, CircleUserRound } from '@tamagui/lucide-icons'
-import { TopNavBar } from 'app/features/navigation/TopNavBar.native'
+import TopNavBar from 'app/features/navigation/TopNavBar.native'
 import { Pressable, PressableProps } from 'react-native'
 
 const TabBarButton = (props: PressableProps) => {

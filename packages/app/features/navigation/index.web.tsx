@@ -4,7 +4,7 @@
 import { View, YStack, XStack, useMedia } from '@my/ui'
 import { BottomTabNavBar } from './BottomTabNavBar.web'
 import type { TabConfig } from '@my/config/src/tabs'
-import { TopTabNavBar } from './TopTabNavBar.web'
+import { TopTabNavBar } from './TopNavBar.web'
 import { Sidebar } from './Sidebar.web'
 import { useState, useEffect } from 'react' // Import useEffect
 import { usePathname } from 'solito/navigation' // Import usePathname here
