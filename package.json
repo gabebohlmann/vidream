@@ -30,7 +30,7 @@
     "react-dom": "19.0.0",
     "react-refresh": "^0.14.0",
     "react-native-svg": "15.11.2",
-    "react-native-web": "~0.19.12",
+    "react-native-web": "~0.19.12"
   },
   "dependencies": {
     "@babel/runtime": "^7.24.6",
