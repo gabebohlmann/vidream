@@ -1,0 +1,36 @@
+/* app/globals.css or your main global stylesheet */
+
+/* For Webkit-based browsers (Chrome, Safari, Edge, Opera) */
+::-webkit-scrollbar {
+  width: 3px;  /* MODIFIED: Make scrollbar thinner (e.g., 6px or 4px) */
+  height: 6px; /* MODIFIED: For horizontal scrollbars, make this match width */
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--colorA2, var(--color2, transparent));
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color7, var(--colorA7, #888));
+  border-radius: 10px;
+  border: 1px solid transparent; /* Adjust border for thinner scrollbar if needed */
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color8, var(--colorA8, #555));
+}
+
+::-webkit-scrollbar-button {
+  display: none; /* This hides the up/down arrow buttons */
+  width: 0;      /* Further ensure they take no space */
+  height: 0;     /* Further ensure they take no space */
+}
+
+
+/* For Firefox */
+html { /* Or a more specific selector for scrollable areas */
+  scrollbar-width: thin; /* This makes it thin in Firefox, "auto" is default */
+  scrollbar-color: var(--color7, #888) var(--colorA2, var(--color2, transparent)); /* thumb track */
+}

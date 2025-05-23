@@ -4,6 +4,7 @@ import { NextTamaguiProvider } from 'app/provider/NextTamaguiProvider'
 import { ConvexReactClient } from 'convex/react'
 import { ClerkProvider } from '@clerk/nextjs'
 import ConvexClientProviderWithClerk from '../components/ConvexProviderWithClerk'
+import './globals.css'
 
 if (!process.env.NEXT_PUBLIC_CONVEX_URL) {
   throw new Error('Missing NEXT_PUBLIC_CONVEX_URL in your .env file')

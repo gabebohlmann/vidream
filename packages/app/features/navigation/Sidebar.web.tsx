@@ -2,16 +2,7 @@
 'use client'
 
 import React from 'react'
-import {
-  View,
-  YStack,
-  Text,
-  styled,
-  AnimatePresence,
-  Separator,
-  XStack,
-  ScrollView, // Import ScrollView
-} from 'tamagui'
+import { View, YStack, Text, styled, AnimatePresence, Separator, XStack, ScrollView } from 'tamagui'
 import { rootLinks, allSidebarSections } from './commonLinks'
 import type { NavLinkInfo } from './commonLinks'
 import { Link } from 'solito/link'
@@ -47,11 +38,11 @@ const SidebarInteractiveItem = styled(XStack, {
         paddingVertical: '$2',
         paddingHorizontal: '$0',
         alignItems: 'center',
-      }
+      },
     },
     active: { true: { backgroundColor: '$backgroundFocus' } },
   } as const,
-});
+})
 
 const SubheadingTextDisplay = styled(Text, {
   name: 'SubheadingTextDisplay',
@@ -62,21 +53,24 @@ const SubheadingTextDisplay = styled(Text, {
   marginHorizontal: '$3',
   width: '100%',
   display: 'flex',
-});
+})
 
 interface SidebarProps {
-  isExpanded: boolean;
+  isExpanded: boolean
   // activeRoute?: string;
 }
 
 export function Sidebar({ isExpanded /*, activeRoute */ }: SidebarProps) {
-  const currentWidth = isExpanded ? 200 : 90;
+  const currentWidth = isExpanded ? 200 : 90
 
-  const renderItem = (item: NavLinkInfo) => {
-    if (!item || !item.slug) return null;
+  const renderItem = (item: NavLinkInfo | undefined): React.ReactNode => {
+    // Ensure item can be undefined
+    if (!item || !item.slug) return null
 
     if (item.isSubheading) {
-      // Subheadings are only rendered if the sidebar is expanded (handled by parent conditional)
+      // Subheadings are only rendered if the sidebar is expanded
+      if (!isExpanded) return null
+
       const subheadingContent = (
         <XStack flex={1} ai="center" jc="space-between" gap="$2">
           <Text fontWeight="bold" fontSize="$3" color="$color" ellipse>
@@ -84,7 +78,8 @@ export function Sidebar({ isExpanded /*, activeRoute */ }: SidebarProps) {
           </Text>
           {item.href && <ChevronRight size={16} color="$colorFocus" />}
         </XStack>
-      );
+      )
+
       if (item.href) {
         return (
           <Link
@@ -92,136 +87,159 @@ export function Sidebar({ isExpanded /*, activeRoute */ }: SidebarProps) {
             key={item.slug}
             style={{ textDecoration: 'none', display: 'block', marginHorizontal: '$3' }}
           >
-            <SidebarInteractiveItem isExpandedState={true} isSubheadingLinkStyle={true}>
+            <SidebarInteractiveItem
+              isExpandedState={true}
+              isSubheadingLinkStyle={true} /* active={activeRoute === item.href} */
+            >
               {subheadingContent}
             </SidebarInteractiveItem>
           </Link>
-        );
+        )
       }
-      return <SubheadingTextDisplay key={item.slug}>{item.title}</SubheadingTextDisplay>;
+      return <SubheadingTextDisplay key={item.slug}>{item.title}</SubheadingTextDisplay>
     }
 
-    if (!item.href) return null;
+    // Regular NavLinkItem
+    if (!item.href) return null // Must have href to be a link
 
-    // This function is now called for items *within* the expanded ScrollView
-    // or for rootLinks in the collapsed view.
-    if (!isExpanded) { // COLLAPSED VIEW (for rootLinks)
+    if (!isExpanded) {
+      // COLLAPSED VIEW
       if (item.isRootLink && item.largeIcon) {
         return (
-          <Link href={item.href} key={item.slug} style={{ textDecoration: 'none', display: 'block', marginHorizontal: '$0' }}>
-            <SidebarInteractiveItem isExpandedState={false}>
+          <Link
+            href={item.href}
+            key={item.slug}
+            style={{ textDecoration: 'none', display: 'block', marginHorizontal: '$0' }}
+          >
+            <SidebarInteractiveItem
+              isExpandedState={false} /* active={activeRoute === item.href} */
+            >
               {React.cloneElement(item.largeIcon, { size: 24, color: '$color' })}
               <Text fontSize="10px" color="$color" textAlign="center" numberOfLines={1} ellipse>
                 {item.title}
               </Text>
             </SidebarInteractiveItem>
           </Link>
-        );
+        )
       }
-      return null;
+      return null
     }
 
-    // EXPANDED VIEW (for all items inside ScrollView)
+    // EXPANDED VIEW
     if (item.icon) {
       return (
-        <Link href={item.href} key={item.slug} style={{ textDecoration: 'none', display: 'block', marginHorizontal: '$3' }}>
-          <SidebarInteractiveItem isExpandedState={true}>
+        <Link
+          href={item.href}
+          key={item.slug}
+          style={{ textDecoration: 'none', display: 'block', marginHorizontal: '$3' }}
+        >
+          <SidebarInteractiveItem isExpandedState={true} /* active={activeRoute === item.href} */>
             <item.icon size={20} color="$color" />
             <Text fontSize="$3" color="$color" fontWeight={'500'}>
               {item.title}
             </Text>
           </SidebarInteractiveItem>
         </Link>
-      );
+      )
     }
-    return null;
-  };
+    return null
+  }
+
+  const rootLinkItems =
+    rootLinks && Array.isArray(rootLinks) ? rootLinks.map(renderItem).filter(Boolean) : []
+  const sectionsContent =
+    isExpanded && allSidebarSections && Array.isArray(allSidebarSections) ? (
+      <AnimatePresence>
+        <YStack
+          animation="medium"
+          enterStyle={{ opacity: 0, y: -5 }}
+          exitStyle={{ opacity: 0, y: -5 }}
+          gap="$0.5"
+          alignSelf="stretch"
+          alignItems="flex-start"
+          // Removed marginTop here, will be handled by separator or YStack gap from parent
+        >
+          {allSidebarSections.map((section, sectionIdx) => (
+            <React.Fragment key={section.id}>
+              {(sectionIdx > 0 &&
+                !section.noSeparatorBefore &&
+                section.links &&
+                section.links.length > 0 &&
+                !section.links[0]?.isSubheading) ||
+              (sectionIdx === 0 &&
+                rootLinks &&
+                rootLinks.length > 0 &&
+                section.links &&
+                section.links.length > 0 &&
+                !section.links[0]?.isSubheading) ? ( // Separator after rootLinks if first section doesn't start with subheading
+                <Separator marginVertical="$2" width="100%" />
+              ) : null}
+              {Array.isArray(section.links) && section.links.map(renderItem).filter(Boolean)}
+            </React.Fragment>
+          ))}
+        </YStack>
+      </AnimatePresence>
+    ) : null
 
   return (
-    <YStack // This is the main fixed-size sidebar container
+    <YStack
       width={currentWidth}
       backgroundColor="$background"
-      height="100%" // It takes full viewport height
+      height="100%"
       position="sticky"
       top={0}
       zIndex={40}
       borderRightWidth={1}
       borderRightColor="$borderColor"
-      // Animation for width change
       animation="medium"
       animateOnly={['width']}
     >
       {!isExpanded && (
-        // Collapsed View: Items directly in YStack, centered
         <YStack
-          flex={1} // Use flex to push content to top if not enough items
-          paddingHorizontal="$0" // Let items center themselves
-          paddingVertical="$2" // Some overall padding for collapsed items
+          flex={1}
+          paddingHorizontal="$0"
+          paddingVertical="$1.5" // Overall vertical padding for collapsed items
           gap="$1.5"
           alignItems="center"
         >
-          {rootLinks.map(renderItem)}
-          <View flex={1} /> {/* Spacer to push items up if not filling height */}
+          {rootLinkItems}
+          <View flex={1} />
         </YStack>
       )}
 
       {isExpanded && (
         <ScrollView
-          flex={1} // ScrollView takes all available space within the main YStack
+          flex={1}
           width="100%"
-          showsVerticalScrollIndicator={true} // Show scrollbar
-          // Apply overall padding for the scrollable content area
-          // paddingHorizontal is now $0 as items manage their own marginHorizontal: $3
-          // paddingLeft and paddingRight on the ScrollView or its contentContainerStyle
-          // will set the overall inset from the sidebar edges.
-          // Using YStack's paddingLeft=$4, paddingRight=$3 from your previous structure.
+          showsVerticalScrollIndicator={true}
           paddingLeft="$4"
           paddingRight="$3"
-          // paddingTop and paddingBottom will be on the inner YStack
+          paddingTop="$2" // Padding at the start of scrollable area
+          paddingBottom="$3" // Padding at the end of scrollable area
         >
-          <YStack // This YStack holds all scrollable content
-            gap="$0.5" // Consistent small gap between all items/sections
-            alignItems="flex-start" // All items/sections start from left
-            paddingTop="$2"     // Space at the very top of scrollable content
-            paddingBottom="$3"  // Space at the very end of scrollable content
-          >
-            {/* Render Root Links first (now part of scroll) */}
-            {rootLinks.map(renderItem)}
-
-            {/* Separator if sections follow */}
-            {allSidebarSections.length > 0 && rootLinks.length > 0 && (
+          <YStack gap="$0.5" alignItems="flex-start">
+            {rootLinkItems}
+            {/* Separator between rootLinks and sections block, if both have content */}
+            {rootLinks && rootLinks.length > 0 && sectionsContent ? (
               <Separator marginVertical="$2" width="100%" />
-            )}
-
-            {/* Render Sections - AnimatePresence can wrap the YStack for sections */}
-            <AnimatePresence>
-              <YStack
-                animation="medium"
-                enterStyle={{ opacity: 0, y: -5 }}
-                exitStyle={{ opacity: 0, y: -5 }}
-                gap="$0.5"
-                alignSelf="stretch"
-                alignItems="flex-start"
-                // marginTop is handled by the Separator or padding/gap of parent
-              >
-                {allSidebarSections.map((section, sectionIdx) => (
-                  <React.Fragment key={section.id}>
-                    {sectionIdx > 0 && !section.noSeparatorBefore && (
-                      <Separator marginVertical="$2" width="100%" />
-                    )}
-                    {Array.isArray(section.links) && section.links.map(renderItem)}
-                  </React.Fragment>
-                ))}
-              </YStack>
-            </AnimatePresence>
-
-             {/* Footer content if it should scroll with the rest */}
-            <View marginTop="$4" paddingHorizontal="$0" paddingBottom="$2" borderTopWidth={1} borderTopColor="$borderColorLowContrast">
-                <Text fontSize="$2" color="$colorSubtle" ta="center">© Vidream App</Text>
+            ) : null}
+            {sectionsContent}
+            {/* Footer content inside scroll */}
+            <View
+              marginTop="$4"
+              paddingHorizontal="$0"
+              paddingBottom="$2"
+              paddingTop="$2"
+              borderTopWidth={1}
+              borderTopColor="$borderColorLowContrast"
+            >
+              <Text fontSize="$2" color="$colorSubtle" ta="center">
+                © Vidream {new Date().getFullYear()}
+              </Text>
             </View>
           </YStack>
         </ScrollView>
       )}
     </YStack>
-  );
+  )
 }

@@ -15,3 +15,7 @@
 1. Figure out how to get root page to not have /home slug
 1. Make web sidebar responsively display over everything in md
 1. Write components to compenatize the navbars, the web search on sm screens in particular
+1. Figure out how to theme sidebar scrollview
+1. Update Sidebar to use Drawer compoent
+
+

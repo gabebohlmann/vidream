@@ -1,6 +1,6 @@
 // packages/app/features/navigation/TopTabNavBar.web.tsx
 'use client'
-import { Bell, Menu, Plus, Search, ArrowLeft, ChevronRight } from '@tamagui/lucide-icons' // Added ChevronRight
+import { Bell, Menu, Plus, Search, ArrowLeft, ChevronRight } from '@tamagui/lucide-icons'
 import React, { useEffect, useState, useRef } from 'react'
 import {
   Button,
@@ -11,69 +11,77 @@ import {
   styled,
   useEvent,
   Input,
-  AnimatePresence,
+  // AnimatePresence, // Not used in current SmallScreenDrawerContent
   XStack,
-  YStack, // Added YStack for drawer content layout
+  YStack,
+  ScrollView, // Import ScrollView
 } from 'tamagui'
 import VidreamIcon from '@my/ui/src/components/VidreamIcon'
 import { Link } from 'solito/link'
 import { ProfileButton } from './ProfileButton.web'
 import { useConvexAuth } from 'convex/react'
 import { useUser } from '@clerk/nextjs'
-// Updated imports from commonLinks
-import {
-  rootLinks,
-  allSidebarSections, // Using this for a more comprehensive drawer
-} from './commonLinks'
+import { rootLinks, allSidebarSections } from './commonLinks'
 import type { NavLinkInfo } from './commonLinks'
 import { Drawer } from './Drawer'
 
 interface TopTabNavBarProps {
-  isScreenSm: boolean;
-  isSearchActiveSm: boolean;
-  onSetSearchActiveSm: (active: boolean, targetHref?: string | null) => void; // Keep signature from previous fix
-  onSearchSubmit?: (query: string) => void;
-  onToggleSidebarExpand?: () => void;
+  isScreenSm: boolean
+  isSearchActiveSm: boolean
+  onSetSearchActiveSm: (active: boolean, targetHref?: string | null) => void
+  onSearchSubmit?: (query: string) => void
+  onToggleSidebarExpand?: () => void
 }
 
-// Styled item for the drawer
 const DrawerItem = styled(XStack, {
   name: 'DrawerItem',
-  tag: 'a', // For Link asChild
+  tag: 'div', // Use 'div' if Link asChild handles the anchor, or 'a' if this IS the anchor
   width: '100%',
   paddingVertical: '$3',
-  paddingHorizontal: '$3.5', // A bit more padding for drawer items
+  paddingHorizontal: '$3.5',
   gap: '$3.5',
   alignItems: 'center',
   borderRadius: '$3',
   hoverStyle: { backgroundColor: '$backgroundHover' },
   pressStyle: { backgroundColor: '$backgroundPress' },
-  // Add active variant if needed, though drawer usually just navigates
-});
+})
 
 const DrawerSubheading = styled(Text, {
   name: 'DrawerSubheading',
   fontWeight: 'bold',
-  fontSize: '$3', // Slightly smaller than sidebar subheading for drawer context
+  fontSize: '$3',
   color: '$color',
   paddingVertical: '$2',
   paddingHorizontal: '$3.5',
-  marginTop: '$2',
+  marginTop: '$2', // Space above subheading
   width: '100%',
-});
-
+})
 
 function SmallScreenDrawerContent({
   open,
   onOpenChange,
 }: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  open: boolean
+  onOpenChange: (open: boolean) => void
 }) {
-  const renderDrawerItem = (item: NavLinkInfo) => {
-    // Handle subheadings in the drawer
+  const renderDrawerItem = (item: NavLinkInfo | undefined): React.ReactNode => {
+    if (!item || !item.slug) return null
+
     if (item.isSubheading) {
-      // Linkable subheading
+      const subheadingContent = (
+        <XStack flex={1} ai="center" jc="space-between" gap="$2">
+          <Text
+            fontWeight="bold"
+            fontSize="$4"
+            color={item.href ? '$colorFocus' : '$color'}
+            ellipse
+          >
+            {item.title}
+          </Text>
+          {item.href && <ChevronRight size={18} color="$colorFocus" />}
+        </XStack>
+      )
+
       if (item.href) {
         return (
           <Link
@@ -83,46 +91,80 @@ function SmallScreenDrawerContent({
             style={{ textDecoration: 'none', display: 'block', width: '100%' }}
             asChild
           >
-            <DrawerItem>
-              <Text fontWeight="bold" fontSize="$4" color="$colorFocus" flex={1}>{item.title}</Text>
-              <ChevronRight size={18} color="$colorFocus" />
-            </DrawerItem>
+            {/* Ensure DrawerItem uses a tag that Link asChild can work with, like 'div' or View-based component */}
+            <DrawerItem tag="div">{subheadingContent}</DrawerItem>
           </Link>
-        );
+        )
       }
-      // Non-linkable subheading
-      return <DrawerSubheading key={item.slug}>{item.title}</DrawerSubheading>;
+      return <DrawerSubheading key={item.slug}>{item.title}</DrawerSubheading>
     }
 
-    // Regular link item, must have href and an icon to be rendered in drawer
     if (!item.href || !item.icon) {
-      return null;
+      return null
     }
 
     return (
       <Link key={item.slug} href={item.href} onPress={() => onOpenChange(false)} asChild>
-        <DrawerItem>
+        <DrawerItem tag="div">
           <item.icon size={20} color="$color" />
           <Text fontSize="$4" color="$color" flex={1}>
             {item.title}
           </Text>
         </DrawerItem>
       </Link>
-    );
-  };
+    )
+  }
+
+  const mappedRootLinks =
+    rootLinks && Array.isArray(rootLinks) ? rootLinks.map(renderDrawerItem).filter(Boolean) : []
+
+  const mappedSections =
+    allSidebarSections && Array.isArray(allSidebarSections)
+      ? allSidebarSections
+          .map((section, sectionIndex) => {
+            const sectionItems =
+              section.links && Array.isArray(section.links)
+                ? section.links.map(renderDrawerItem).filter(Boolean)
+                : []
+
+            // Determine if this section has any visible content (either a non-linkable subheading or actual items)
+            const hasNonLinkableSubheading = section.links.find((l) => l.isSubheading && !l.href)
+            if (sectionItems.length === 0 && !hasNonLinkableSubheading) {
+              return null
+            }
+
+            // Determine if a separator is needed before this section's items
+            // (not before the section's own subheading if it's the first thing)
+            const needsSeparatorBeforeItems =
+              (mappedRootLinks.length > 0 &&
+                sectionIndex === 0 &&
+                !section.links[0]?.isSubheading) ||
+              (sectionIndex > 0 && !section.links[0]?.isSubheading && !section.noSeparatorBefore)
+
+            return (
+              <React.Fragment key={section.id}>
+                {/* Separator before section items if needed (and if section itself doesn't start with subheading) */}
+                {needsSeparatorBeforeItems ? (
+                  <Separator marginVertical="$2.5" marginHorizontal="$3.5" />
+                ) : null}
+                {/* Render the items (which includes subheadings first if present) */}
+                {sectionItems}
+              </React.Fragment>
+            )
+          })
+          .filter(Boolean)
+      : []
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
       <Drawer.Portal>
         <Drawer.Overlay animation="lazy" enterStyle={{ opacity: 0 }} exitStyle={{ opacity: 0 }} />
         <Drawer.Content
-          paddingVertical="$2" // Reduced top/bottom padding for the content itself
+          paddingVertical="$0" // Drawer.Content itself has no vertical padding
           width={280}
           alignItems="flex-start"
           backgroundColor="$background"
-          // borderRightWidth={isWeb ? 0 : 1} // Drawer usually doesn't have right border on web
-          // borderRightColor="$borderColor"
-          gap="$0.5" // Smaller gap between items in the drawer
+          gap="$0" // No gap for direct children of Drawer.Content
           animation="medium"
           enterStyle={{ x: -280 }}
           exitStyle={{ x: -280 }}
@@ -131,44 +173,46 @@ function SmallScreenDrawerContent({
           shadowOpacity={0.2}
           shadowRadius={10}
         >
-          <View paddingHorizontal="$3.5" paddingVertical="$3">
+          {/* Fixed Header Part */}
+          <View paddingHorizontal="$3.5" paddingVertical="$3" width="100%">
             <Text fontSize="$6" fontWeight="bold">
               Menu
             </Text>
           </View>
-          <Separator />
+          <Separator width="100%" />
 
-          <YStack width="100%" gap="$0.5" paddingVertical="$2">
-            {/* Render root links first */}
-            {rootLinks.map(renderDrawerItem)}
-
-            {/* Render sections from allSidebarSections */}
-            {allSidebarSections.map((section, sectionIndex) => (
-              <React.Fragment key={section.id}>
-                {/* Add separator if section isn't the first one after rootLinks,
-                    or if it's not flagged with noSeparatorBefore (if that flag is used consistently)
-                    A simple separator between each section from allSidebarSections might be cleaner.
-                */}
-                {(rootLinks.length > 0 || sectionIndex > 0) && !section.links[0]?.isSubheading && (
-                   <Separator marginVertical="$2.5" marginHorizontal="$3.5"/>
+          {/* Scrollable Content Part */}
+          <ScrollView
+            flex={1} // Allows ScrollView to take available vertical space
+            width="100%"
+            showsVerticalScrollIndicator={true} // Ensure scrollbar is visible
+            // contentContainerStyle={{ paddingBottom: '$2' }} // Optional: if extra space needed at end of scroll
+          >
+            <YStack width="100%" gap="$0.5" paddingVertical="$2">
+              {mappedRootLinks}
+              {/* Separator between rootLinks and the first actual section content if both exist */}
+              {mappedRootLinks.length > 0 &&
+                mappedSections.length > 0 &&
+                (allSidebarSections[0]?.links[0]?.isSubheading ||
+                  !allSidebarSections[0]?.noSeparatorBefore) && (
+                  <Separator marginVertical="$2.5" marginHorizontal="$3.5" />
                 )}
-                {section.links.map(renderDrawerItem)}
-              </React.Fragment>
-            ))}
-          </YStack>
+              {mappedSections}
+            </YStack>
+          </ScrollView>
 
-          <View flex={1} /> {/* Spacer */}
-          <Separator marginVertical="$2.5" marginHorizontal="$3.5"/>
-          <View paddingHorizontal="$3.5" paddingBottom="$3">
+          {/* Fixed Footer Part */}
+          <Separator width="100%" />
+          <View paddingHorizontal="$3.5" paddingVertical="$2.5" width="100%">
             <ProfileButton />
           </View>
         </Drawer.Content>
       </Drawer.Portal>
     </Drawer>
-  );
+  )
 }
 
-
+// ... (Rest of TopTabNavBar component, including its main return logic) ...
 export function TopTabNavBar({
   isScreenSm,
   isSearchActiveSm,
@@ -176,37 +220,38 @@ export function TopTabNavBar({
   onSearchSubmit,
   onToggleSidebarExpand,
 }: TopTabNavBarProps) {
-  const { isAuthenticated: isConvexAuthenticated } = useConvexAuth();
-  const { user, isSignedIn } = useUser();
-  const isAuthenticated = isConvexAuthenticated && isSignedIn && user;
+  const { isAuthenticated: isConvexAuthenticated } = useConvexAuth()
+  const { user, isSignedIn } = useUser()
+  const isAuthenticated = isConvexAuthenticated && isSignedIn && user
 
-  const [smDrawerOpen, setSmDrawerOpen] = useState(false);
-  const toggleSmDrawer = useEvent(() => setSmDrawerOpen(!smDrawerOpen));
+  const [smDrawerOpen, setSmDrawerOpen] = useState(false)
+  const toggleSmDrawer = useEvent(() => setSmDrawerOpen(!smDrawerOpen))
 
-  const [searchQuerySm, setSearchQuerySm] = useState('');
-  const searchInputRef = useRef<HTMLInputElement>(null);
+  const [searchQuerySm, setSearchQuerySm] = useState('')
+  const searchInputRef = useRef<HTMLInputElement>(null)
 
   const handleCreatePress = () => {
-    console.log('Create button pressed');
-  };
+    console.log('Create button pressed')
+  }
 
   useEffect(() => {
     if (isScreenSm && isSearchActiveSm) {
       setTimeout(() => {
-        searchInputRef.current?.focus();
-      }, 50);
+        searchInputRef.current?.focus()
+      }, 50)
     }
-  }, [isScreenSm, isSearchActiveSm]);
+  }, [isScreenSm, isSearchActiveSm])
 
   const handleSmSearchSubmit = () => {
     if (onSearchSubmit) {
-      onSearchSubmit(searchQuerySm);
+      onSearchSubmit(searchQuerySm)
     }
-  };
+  }
 
-  const showTopBarLogo = (isScreenSm && !isSearchActiveSm) || !isScreenSm;
+  const showTopBarLogo = (isScreenSm && !isSearchActiveSm) || !isScreenSm
 
   if (isScreenSm && isSearchActiveSm) {
+    // SM Search Active UI
     return (
       <View
         flexDirection="row"
@@ -222,8 +267,8 @@ export function TopTabNavBar({
         <Button
           icon={<ArrowLeft size="$1.5" />}
           onPress={() => {
-            onSetSearchActiveSm(false, null); // Pass null for targetHref
-            setSearchQuerySm('');
+            onSetSearchActiveSm(false, null)
+            setSearchQuerySm('')
           }}
           chromeless
           circular
@@ -251,9 +296,10 @@ export function TopTabNavBar({
           />
         )}
       </View>
-    );
+    )
   }
 
+  // Default UI for TopTabNavBar
   return (
     <View
       flexDirection="row"
@@ -268,18 +314,15 @@ export function TopTabNavBar({
       borderBottomColor="$borderColor"
     >
       <XStack alignItems="center" gap="$2.5">
-        {/* Hamburger for SM Drawer (Menu Icon) */}
         {isScreenSm && (
           <Button
             circular
             chromeless
             onPress={toggleSmDrawer}
-            icon={<Menu size="$2" />} // Ensure this is the correct size you want
-            size="$3" // Ensure this is the correct size you want
-            // marginLeft="$1.5" // Present in user's code, keeping it if intended
+            icon={<Menu size="$2" />}
+            size="$3"
           />
         )}
-        {/* Hamburger for !SM Persistent Sidebar (Menu Icon) */}
         {!isScreenSm && onToggleSidebarExpand && (
           <Button
             circular
@@ -287,7 +330,7 @@ export function TopTabNavBar({
             onPress={onToggleSidebarExpand}
             icon={<Menu size="$2" />}
             size="$3"
-            marginLeft="$1.5" // This was in your code for the !sm hamburger
+            marginLeft="$1.5"
           />
         )}
         {showTopBarLogo && (
@@ -319,7 +362,7 @@ export function TopTabNavBar({
         flexDirection="row"
         alignItems="center"
         gap="$2.5"
-        marginLeft={!isScreenSm ? 'auto' : (showTopBarLogo ? '$0' : 'auto')}
+        marginLeft={!isScreenSm ? 'auto' : showTopBarLogo ? '$0' : 'auto'}
       >
         <Button
           size="$3"
@@ -341,10 +384,9 @@ export function TopTabNavBar({
         <ProfileButton />
       </View>
 
-      {/* Drawer for SM screens (only if not in search mode) */}
       {isScreenSm && (
         <SmallScreenDrawerContent open={smDrawerOpen} onOpenChange={setSmDrawerOpen} />
       )}
     </View>
-  );
-}     
+  )
+}
