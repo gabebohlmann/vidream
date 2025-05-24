@@ -1,6 +1,6 @@
 // packages/app/features/auth/reset-password/screen.web.tsx
 'use client'
-import React, { useMemo } from 'react'
+import React, { Suspense, useMemo } from 'react'
 import { useSignIn as useClerkSignInWeb } from '@clerk/nextjs'
 import { ResetPasswordForm, type ClerkResetPasswordProps } from './form'
 import { useSearchParams } from 'solito/navigation'
@@ -28,5 +28,9 @@ export default function ResetPasswordScreenWebWrapper() {
     setActive: clerkSignInHookOutput.setActive as ClerkResetPasswordProps['setActive'],
   }
 
-  return <ResetPasswordForm clerkResetPassword={clerkProps} initialEmail={initialEmail} />
+  return (
+    <Suspense>
+      <ResetPasswordForm clerkResetPassword={clerkProps} initialEmail={initialEmail} />
+    </Suspense>
+  )
 }

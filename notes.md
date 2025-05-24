@@ -17,5 +17,6 @@
 1. Write components to compenatize the navbars, the web search on sm screens in particular
 1. Figure out how to theme sidebar scrollview
 1. Update Sidebar to use Drawer compoent
+1. Figure out why next/app/auth/sign-in and reset-password use search params but sign-up doesn't need them
 
 

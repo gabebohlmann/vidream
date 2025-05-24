@@ -4,6 +4,7 @@ import React, { useMemo, useEffect } from 'react'
 import { useSignIn as useClerkSignInWeb } from '@clerk/nextjs' // Or @clerk/clerk-react
 import { SignInForm, ClerkSignInProps } from './form' // Adjust path
 import { useSearchParams, useUpdateSearchParams } from 'solito/navigation'
+import { Suspense } from 'react'
 
 export default function SignInScreen() {
   // Keep consistent export
@@ -35,5 +36,9 @@ export default function SignInScreen() {
     setActive: clerkSignInHookOutput.setActive,
   }
 
-  return <SignInForm clerkSignIn={clerkProps} initialEmail={initialEmail} />
+  return (
+    <Suspense>
+      <SignInForm clerkSignIn={clerkProps} initialEmail={initialEmail} />
+    </Suspense>
+  )
 }
