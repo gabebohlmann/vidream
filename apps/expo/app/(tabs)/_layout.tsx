@@ -3,6 +3,9 @@ import { Tabs } from 'expo-router'
 import { Home, TvMinimalPlay, Search, Film, CircleUserRound } from '@tamagui/lucide-icons'
 import TopNavBar from 'app/features/navigation/TopNavBar.native'
 import { Pressable, PressableProps } from 'react-native'
+import { Theme } from '@my/ui'
+import { useColorScheme } from 'react-native'
+
 
 const TabBarButton = (props: PressableProps) => {
   return (
@@ -17,13 +20,14 @@ const TabBarButton = (props: PressableProps) => {
 }
 
 export default function TabLayout() {
+  const colorScheme = useColorScheme()
+  const isDarkMode = colorScheme === 'dark'
   return (
     <>
-      <TopNavBar />
       <Tabs
         screenOptions={{
           tabBarActiveTintColor: '#138404',
-          tabBarInactiveTintColor: '#FFFFFF',
+          tabBarInactiveTintColor: isDarkMode ? '#FFFFFF' : '#000000',
           headerShown: false,
           tabBarButton: (props) => <TabBarButton {...props} />,
         }}
@@ -33,10 +37,6 @@ export default function TabLayout() {
           options={{
             title: 'Home',
             tabBarIcon: ({ color }) => <Home size={28} color={color as any} strokeWidth={1.5} />,
-            tabBarLabelStyle: {
-              fontSize: 9,
-              fontWeight: 'bold',
-            },
           }}
         />
         <Tabs.Screen
@@ -44,10 +44,6 @@ export default function TabLayout() {
           options={{
             title: 'Flashes',
             tabBarIcon: ({ color }) => <Film size={28} color={color as any} strokeWidth={1.5} />,
-            tabBarLabelStyle: {
-              fontSize: 9,
-              fontWeight: 'bold',
-            },
           }}
         />
         <Tabs.Screen
@@ -55,10 +51,6 @@ export default function TabLayout() {
           options={{
             title: 'Search',
             tabBarIcon: ({ color }) => <Search size={28} color={color as any} strokeWidth={1.5} />,
-            tabBarLabelStyle: {
-              fontSize: 9,
-              fontWeight: 'bold',
-            },
           }}
         />
         <Tabs.Screen
@@ -68,10 +60,6 @@ export default function TabLayout() {
             tabBarIcon: ({ color }) => (
               <TvMinimalPlay size={28} color={color as any} strokeWidth={1.5} />
             ),
-            tabBarLabelStyle: {
-              fontSize: 9,
-              fontWeight: 'bold',
-            },
           }}
         />
         <Tabs.Screen
@@ -81,10 +69,13 @@ export default function TabLayout() {
             tabBarIcon: ({ color }) => (
               <CircleUserRound size={28} color={color as any} strokeWidth={1.5} />
             ),
-            tabBarLabelStyle: {
-              fontSize: 9,
-              fontWeight: 'bold',
-            },
+          }}
+        />
+        <Tabs.Screen
+          name="upload"
+          options={{
+            title: 'Upload',
+            href: null, // Disable the default tab behavior
           }}
         />
       </Tabs>

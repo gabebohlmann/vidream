@@ -10,6 +10,7 @@ import { ClerkProvider, useAuth, ClerkLoaded } from '@clerk/clerk-expo'
 import { ConvexProviderWithClerk } from 'convex/react-clerk'
 import { ConvexReactClient } from 'convex/react'
 import * as SecureStore from 'expo-secure-store'
+import TopNavBar from 'app/features/navigation/TopNavBar.native'
 
 const tokenCache = {
   async getToken(key: string) {
@@ -74,6 +75,7 @@ function RootLayoutNav() {
         <ClerkLoaded>
           <Provider>
             <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+              <TopNavBar />
               <Stack screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
               </Stack>

@@ -114,7 +114,7 @@ export const UniversalThemeProvider = ({
         // themeClassNameOnRoot={true} // Check Tamagui docs if this is needed for native theming
       >
         <NavigationThemeProvider value={actualTheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <StatusBar style={actualTheme === 'dark' ? 'light' : 'dark'} />
+          {/* <StatusBar style={actualTheme === 'dark' ? 'dark' : 'light'} /> */}
           {children}
         </NavigationThemeProvider>
       </CoreTamaguiProvider>

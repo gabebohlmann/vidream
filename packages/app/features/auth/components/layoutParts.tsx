@@ -1,3 +1,4 @@
+// packages/app/features/auth/components/layoutParts.tsx
 import { View, styled } from 'tamagui'
 import { useMedia } from 'tamagui'
 import type { MediaQueryKey } from '@tamagui/web'

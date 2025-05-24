@@ -1,3 +1,4 @@
+// packages/app/features/auth/components/inputsParts.tsx
 import { getFontSized } from '@tamagui/get-font-sized'
 import { getSpace } from '@tamagui/get-token'
 import { User } from '@tamagui/lucide-icons'

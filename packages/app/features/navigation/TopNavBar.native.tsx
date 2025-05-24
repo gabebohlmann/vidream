@@ -1,29 +1,35 @@
-// // packages/app/features/navigation/TopNavBar.native.tsx
+// packages/app/features/navigation/TopNavBar.native.tsx
 // Top Navbar with Swippable Drawer on Smaller Screens from Tamagui Bento
 'use client'
 import { Bell, Plus } from '@tamagui/lucide-icons'
 import { Button, Text, View } from 'tamagui'
-import { useMedia } from '@my/ui'
+import { useMedia, Theme } from '@my/ui'
 import VidreamIcon from '@my/ui/src/components/VidreamIcon'
 import { Authenticated, useConvexAuth } from 'convex/react'
 import { useUser } from '@clerk/clerk-expo'
 import { ProfileButton } from './ProfileButton.native'
+import { useRouter } from 'solito/navigation'
+import { useColorScheme } from 'react-native'
 
 export default function TopNavBar() {
   const { isAuthenticated: isConvexAuthenticated } = useConvexAuth()
   const { user, isSignedIn } = useUser() //
   const isAuthenticated = isConvexAuthenticated && isSignedIn && user
   const { sm } = useMedia()
+  const router = useRouter()
   const handleCreatePress = () => {
     // TODO: Implement your create action
     console.log('Create button pressed')
-    // Example: navigation.navigate('/create') or open a modal
+    router.push('/upload')
   }
+  const statusBarHeight = 30
+  const colorScheme = useColorScheme()
   return (
     <View
       flexDirection="column"
       width="100%"
-      marginTop={30}
+      paddingTop={statusBarHeight} // Adjust for status bar height
+      backgroundColor="$background" // Use theme color
       // Consider making height more dynamic or theme-based if 610/800 is too rigid
       // height={610}
       // $gtXs={{ height: 800 }}
