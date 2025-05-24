@@ -28,9 +28,5 @@ export default function ResetPasswordScreenWebWrapper() {
     setActive: clerkSignInHookOutput.setActive as ClerkResetPasswordProps['setActive'],
   }
 
-  return (
-    <Suspense>
-      <ResetPasswordForm clerkResetPassword={clerkProps} initialEmail={initialEmail} />
-    </Suspense>
-  )
+  return <ResetPasswordForm clerkResetPassword={clerkProps} initialEmail={initialEmail} />
 }

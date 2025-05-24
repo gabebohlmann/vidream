@@ -36,9 +36,5 @@ export default function SignInScreen() {
     setActive: clerkSignInHookOutput.setActive,
   }
 
-  return (
-    <Suspense>
-      <SignInForm clerkSignIn={clerkProps} initialEmail={initialEmail} />
-    </Suspense>
-  )
+  return <SignInForm clerkSignIn={clerkProps} initialEmail={initialEmail} />
 }
