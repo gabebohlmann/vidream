@@ -13,7 +13,8 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
-import type * as video from "../video.js";
+import type * as bunnyActions from "../bunnyActions.js";
+import type * as videos from "../videos.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -24,7 +25,8 @@ import type * as video from "../video.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
-  video: typeof video;
+  bunnyActions: typeof bunnyActions;
+  videos: typeof videos;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

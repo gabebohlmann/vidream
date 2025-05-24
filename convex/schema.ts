@@ -3,40 +3,45 @@ import { defineSchema, defineTable } from 'convex/server'
 import { v } from 'convex/values'
 
 export default defineSchema({
-  tasks: defineTable({
-    // Your existing table
-    text: v.string(),
-    isCompleted: v.boolean(),
-  }),
+  // Your other tables (e.g., tasks) might be here
+  // tasks: defineTable({
+  //   text: v.string(),
+  //   isCompleted: v.boolean(),
+  // }),
   videos: defineTable({
-    userId: v.string(), // To associate video with a user (Clerk user ID)
+    userId: v.string(), // Clerk User ID, to associate video with a user
     title: v.string(),
     description: v.optional(v.string()),
     tags: v.optional(v.array(v.string())),
-    visibility: v.union(
-      // Enforce specific values
-      v.literal('public'),
-      v.literal('private'),
-      v.literal('unlisted')
-    ),
-    bunnyLibraryId: v.optional(v.string()), // Store Bunny.net Library ID used
-    bunnyVideoGUID: v.optional(v.string()), // Store the GUID from Bunny Stream after upload
-    playbackUrl: v.optional(v.string()), // Optional: Store direct HLS/DASH URL
-    thumbnailUrl: v.optional(v.string()),
-    duration: v.optional(v.number()), // in seconds
+    visibility: v.union(v.literal('public'), v.literal('private'), v.literal('unlisted')),
+
+    // Bunny Stream related fields
+    bunnyLibraryId: v.optional(v.string()), // The Bunny Library ID used for this video
+    bunnyVideoGUID: v.optional(v.string()), // The GUID from Bunny Stream after video object creation
+
+    // Status and Playback details (updated after upload & processing)
     processingStatus: v.optional(
       v.union(
-        v.literal('pending_upload'),
-        v.literal('uploading'),
-        v.literal('processing'),
-        v.literal('finished'),
-        v.literal('failed')
+        v.literal('pending_upload'), // Initial state before any interaction with Bunny
+        v.literal('credentials_generated'), // Bunny video object created, TUS credentials ready
+        v.literal('uploading'), // Client has started TUS upload
+        v.literal('processing'), // Bunny is processing/transcoding the video
+        v.literal('finished'), // Processing complete, video is streamable
+        v.literal('failed_upload'), // TUS upload failed
+        v.literal('failed_processing') // Bunny processing failed
       )
     ),
+    playbackUrl: v.optional(v.string()), // e.g., HLS manifest URL from Bunny
+    thumbnailUrl: v.optional(v.string()), // Thumbnail URL from Bunny
+    duration: v.optional(v.number()), // Video duration in seconds
+
+    // Optional: Add timestamps for creation and updates
+    // createdAt: v.number(), // v.optional(v.number()) if you set it manually
+    // updatedAt: v.optional(v.number()),
+
     // Add other fields as needed: views, likes, category, etc.
   })
-    .index('by_userId', ['userId']) // Example index
-    .index('by_visibility', ['visibility']),
-  // You might also want a table for user-specific Bunny Stream API keys if managing them per user,
-  // or a secure way to store your main library API key for backend use.
+    .index('by_userId', ['userId']) // Index for querying videos by user
+    .index('by_visibility', ['visibility']) // Index for querying by visibility
+    .index('by_processingStatus', ['processingStatus']), // Index for videos by status
 })

@@ -18,5 +18,8 @@
 1. Figure out how to theme sidebar scrollview
 1. Update Sidebar to use Drawer compoent
 1. Figure out why next/app/auth/sign-in and reset-password use search params but sign-up doesn't need them
+1. Fix tooltip ts errors on tgui buttons. probably props/types related
+    * https://tamagui.dev/ui/tooltip
+1. Fix @/convex import error on nextjs
 
 

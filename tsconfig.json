@@ -3,9 +3,11 @@
     "esModuleInterop": true,
     "strictNullChecks": true,
     "noUncheckedIndexedAccess": true,
+    "baseUrl": ".",
     "paths": {
-      "app/*": ["./packages/app/*"],
-      "@my/ui/*": ["./packages/ui/*"]
+      "app/*": ["packages/app/*"],
+      "@my/ui/*": ["packages/ui/*"],
+      "@/convex/*": ["convex/*"],
     }
   },
   "extends": "./tsconfig.base",

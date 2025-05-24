@@ -1,4 +1,4 @@
-// packages/app/features/navigation/TopTabNavBar.web.tsx
+// packages/app/features/navigation/TopNavBar.web.tsx
 'use client'
 import { Bell, Menu, Plus, Search, ArrowLeft, ChevronRight } from '@tamagui/lucide-icons'
 import React, { useEffect, useState, useRef } from 'react'
@@ -17,6 +17,7 @@ import {
 } from 'tamagui'
 import VidreamIcon from '@my/ui/src/components/VidreamIcon'
 import { Link } from 'solito/link'
+import { useRouter } from 'solito/navigation'
 import { ProfileButton } from './ProfileButton.web'
 import { useConvexAuth } from 'convex/react'
 import { useUser } from '@clerk/nextjs'
@@ -34,7 +35,6 @@ interface TopTabNavBarProps {
 
 const DrawerClickableItem = styled(XStack, {
   name: 'DrawerClickableItem',
-  // tag: 'div',
   width: '100%',
   paddingVertical: '$3',
   paddingHorizontal: '$3.5',
@@ -154,32 +154,25 @@ function SmallScreenDrawerContent({
             exitStyle={{ x: -280 }}
             elevate
             zIndex={100000}
-            pointerEvents="auto" // Explicitly ensure pointer events are on for content
+            pointerEvents="auto"
           >
-            {/* Fixed Header Part - Ensure no stray spaces between these direct children */}
             <View paddingHorizontal="$3.5" paddingVertical="$3" width="100%">
               <Text fontSize="$6" fontWeight="bold">
                 Menu
               </Text>
             </View>
             <Separator width="100%" />
-            {/* Scrollable Content Part */}
             <ScrollView
               flex={1}
               width="100%"
               showsVerticalScrollIndicator={true}
-              contentContainerStyle={{ paddingVertical: '$2' }} // Padding for the scrollable surface itself
-              // Test: Add a distinct background to the ScrollView to see its bounds
-              // backgroundColor="$color3"
+              contentContainerStyle={{ paddingVertical: '$2' }}
             >
               <YStack width="100%" gap="$0.5">
-                {/* Render pre-calculated, filtered root link elements */}
                 {rootLinkElements.length > 0 ? rootLinkElements : null}
-                {/* Separator: Only if there are root links AND sections to separate */}
                 {rootLinkElements.length > 0 && sectionElements.length > 0 ? (
                   <Separator marginVertical="$2.5" marginHorizontal="$3.5" />
                 ) : null}
-                {/* Render pre-calculated, filtered section elements */}
                 {sectionElements.length > 0 ? sectionElements : null}
               </YStack>
             </ScrollView>
@@ -200,6 +193,7 @@ export function TopTabNavBar({
   const { isAuthenticated: isConvexAuthenticated } = useConvexAuth()
   const { user, isSignedIn } = useUser()
   const isAuthenticated = isConvexAuthenticated && isSignedIn && user
+  const router = useRouter() // MODIFIED: Initialize useRouter
 
   const [smDrawerOpen, setSmDrawerOpen] = useState(false)
   const toggleSmDrawer = useEvent(() => setSmDrawerOpen(!smDrawerOpen))
@@ -208,7 +202,8 @@ export function TopTabNavBar({
   const searchInputRef = useRef<HTMLInputElement>(null)
 
   const handleCreatePress = () => {
-    console.log('Create button pressed')
+    router.push('/upload')
+    console.log('Create button pressed, navigating to /create')
   }
 
   useEffect(() => {
@@ -339,13 +334,16 @@ export function TopTabNavBar({
         gap="$2.5"
         marginLeft={!isScreenSm ? 'auto' : showTopBarLogo ? '$0' : 'auto'}
       >
-        <Button
-          size="$3"
-          onPress={handleCreatePress}
-          icon={<Plus size="$2" />}
-          tooltip="Create"
-          padding="$1.5"
-        />
+        {/* Ensure create button is only shown if authenticated, or remove this check if not needed */}
+        {isAuthenticated && (
+          <Button
+            size="$3"
+            onPress={handleCreatePress}
+            icon={<Plus size="$2" />}
+            tooltip="Create"
+            padding="$1.5"
+          />
+        )}
         {isAuthenticated ? (
           <Button
             circular
