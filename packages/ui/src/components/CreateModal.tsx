@@ -1,5 +1,5 @@
 import { X } from '@tamagui/lucide-icons'
-import { CreateScreen } from 'app/features/create/screen'
+// import { CreateScreen } from 'app/features/create/screen'
 import { Button, Dialog, Unspaced } from 'tamagui'
 
 export function CreateModal({
@@ -56,7 +56,7 @@ export function CreateModal({
           pt="$8"
           px="$0"
         >
-          <CreateScreen />
+          {/* <CreateScreen /> */}
           <Unspaced>
             <Dialog.Close asChild>
               <Button position="absolute" top="$3" right="$3" size="$2" circular icon={X} />
