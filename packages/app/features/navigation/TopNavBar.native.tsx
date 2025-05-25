@@ -18,8 +18,6 @@ export default function TopNavBar() {
   const { sm } = useMedia()
   const router = useRouter()
   const handleCreatePress = () => {
-    // TODO: Implement your create action
-    console.log('Create button pressed')
     router.push('/upload')
   }
   const statusBarHeight = 30

@@ -203,7 +203,6 @@ export function TopTabNavBar({
 
   const handleCreatePress = () => {
     router.push('/upload')
-    console.log('Create button pressed, navigating to /create')
   }
 
   useEffect(() => {

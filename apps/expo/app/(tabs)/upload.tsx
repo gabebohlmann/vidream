@@ -35,7 +35,7 @@ export default function UploadVideoPage() {
     // Option 1: Use SafeAreaView directly from react-native-safe-area-context
     // and ensure it fills the screen. The UploadVideoForm already has a SafeAreaView,
     // so you might not need another one here if UploadVideoForm is meant to be the full screen.
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, paddingHorizontal: '10', marginTop: '-30' }}>
       <UploadVideoFormNative libraryId={libraryId as string} />
     </SafeAreaView>
   )

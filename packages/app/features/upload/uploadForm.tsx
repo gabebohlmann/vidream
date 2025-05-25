@@ -18,6 +18,7 @@ import {
   Adapt,
   Sheet,
   ScrollView,
+  Separator,
 } from '@my/ui'
 import { Info, UploadCloud } from '@tamagui/lucide-icons'
 import { useForm, Controller } from 'react-hook-form'
@@ -383,7 +384,7 @@ export function CoreUploadVideoForm({ libraryId, FilePickerComponent }: UploadVi
         >
           <Form onSubmit={handleSubmit(onSubmit)} gap="$5">
             <H1 alignSelf="center" size="$8" $xs={{ size: '$7' }} color="$color12">
-              Upload New Video
+              Upload Video
             </H1>
 
             {formError && (
@@ -407,7 +408,7 @@ export function CoreUploadVideoForm({ libraryId, FilePickerComponent }: UploadVi
                 }
                 return (
                   <InputComponent
-                    label="Title*"
+                    label="Title"
                     errorMessage={errors.title?.message}
                     id="video-title"
                   >
@@ -434,7 +435,7 @@ export function CoreUploadVideoForm({ libraryId, FilePickerComponent }: UploadVi
                 }
                 return (
                   <InputComponent
-                    label="Description (Optional)"
+                    label="Description (optional)"
                     errorMessage={errors.description?.message}
                     id="video-description"
                   >
@@ -447,6 +448,7 @@ export function CoreUploadVideoForm({ libraryId, FilePickerComponent }: UploadVi
                       disabled={loading}
                       size="$4"
                       minHeight={100}
+                      style={{ paddingBottom: 60 }}
                     />
                   </InputComponent>
                 )
@@ -584,8 +586,11 @@ export function CoreUploadVideoForm({ libraryId, FilePickerComponent }: UploadVi
             <Form.Trigger asChild disabled={loading}>
               <Button
                 icon={loading && uploadProgress === null ? <Spinner /> : UploadCloud}
-                theme={loading ? undefined : 'active'}
+                theme={loading ? undefined : 'gray'}
+                borderColor="grey"
+                borderWidth={1}
                 disabled={loading}
+                marginTop="$5"
               >
                 {loading
                   ? uploadProgress === null

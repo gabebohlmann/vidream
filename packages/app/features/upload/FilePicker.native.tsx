@@ -43,13 +43,13 @@ export function NativeFilePicker({ onFileSelected, disabled, currentFile }: File
         disabled={disabled}
         theme={file ? 'green' : 'gray'}
       >
-        {file ? `Selected: ${file.name}` : 'Choose Video File (Native)'}
+        {file ? `Selected: ${file.name}` : 'Choose Video File'}
       </Button>
-      {file && file.uri && (
+      {/* {file && file.uri && (
         <Text fontSize="$2" color="$gray10" mt="$2">
           URI: {file.uri.substring(0, 70)}...
         </Text>
-      )}
+      )} */}
     </>
   )
 }
