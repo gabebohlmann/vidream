@@ -1,5 +1,5 @@
 // apps/expo/app/(tabs)/upload.tsx
-import UploadVideoForm from 'app/features/upload/form'
+import UploadVideoFormNative from 'app/features/upload/form.native'
 import { SafeAreaView } from 'react-native-safe-area-context' // Using this directly for top level
 import { View, Text, YStack } from '@my/ui' // Assuming YStack is available for easy flex column
 import { useEffect } from 'react'
@@ -35,8 +35,8 @@ export default function UploadVideoPage() {
     // Option 1: Use SafeAreaView directly from react-native-safe-area-context
     // and ensure it fills the screen. The UploadVideoForm already has a SafeAreaView,
     // so you might not need another one here if UploadVideoForm is meant to be the full screen.
-    //<SafeAreaView style={{ flex: 1 }}>
-      <UploadVideoForm libraryId={libraryId as string} />
-    //</SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
+      <UploadVideoFormNative libraryId={libraryId as string} />
+    </SafeAreaView>
   )
 }
