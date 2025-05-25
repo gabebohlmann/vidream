@@ -25,17 +25,15 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SafeAreaView, Platform } from 'react-native'
 import { useMutation, useAction } from 'convex/react'
-import { api } from '../../../../convex/_generated/api'
+import { api } from '../../../../convex/_generated/api' // Adjusted path for clarity
 import { useRouter } from 'solito/navigation'
 import * as tus from 'tus-js-client'
-import type { Id } from '../../../../convex/_generated/dataModel'
+import type { Id } from '../../../../convex/_generated/dataModel' // Adjusted path
 import type { FilePickerProps, NativeFileAsset } from './types'
 
 const FormCard = YStack
 
-// --- DEBUGGING: Set to true to enable console logs for rendering ---
-// !! IMPORTANT: Set this to true to help debug the reset issue !!
-const DEBUG_RENDER = false // <--- SET TO true FOR DEBUGGING
+const DEBUG_RENDER = false
 
 const InputComponent = React.memo(
   ({
@@ -57,7 +55,9 @@ const InputComponent = React.memo(
     }
     return (
       <YStack gap="$2" {...rest}>
-        <Label htmlFor={id} onLayout={undefined}>
+        <Label htmlFor={id} onLayout={undefined} Unmz={undefined}>
+          {' '}
+          {/* Added Unmz={undefined} for potential Tamagui prop */}
           {label}
         </Label>
         {children}
@@ -85,28 +85,35 @@ InputComponent.displayName = 'InputComponent'
 export const videoFileSchemaPart = Platform.select({
   web: z
     .instanceof(File)
-    .refine((file) => file.size > 0, 'Video file is required.')
+    .refine((file) => file && file.size > 0, 'Video file is required.') // Added check for file existence
     .refine(
-      (file) => file.type.startsWith('video/'),
+      (file) => file && file.type.startsWith('video/'), // Added check for file existence
       'File must be a video type (e.g., video/mp4).'
     ),
-  default: z
+  default: z // For native
     .object({
       uri: z.string().min(1, 'File URI is missing'),
       name: z.string().min(1, 'File name is missing'),
-      type: z.string().optional(),
+      type: z.string().optional(), // Mime type
       size: z
         .number()
-        .optional()
-        .refine((s) => s === undefined || s > 0, 'File size is invalid'),
-      file: z.any().optional(),
+        .optional() // Size might not always be available immediately
+        .refine(
+          (s) => s === undefined || s > 0,
+          'File size is invalid if provided and not positive'
+        ),
+      file: z.any().optional(), // This will hold the File object created from URI for TUS
     })
     .refine(
-      (file) =>
+      (
+        file // Check based on mimeType or extension
+      ) =>
         (file.type && file.type.startsWith('video/')) ||
-        (!file.type && file.name.match(/\.(mp4|mov|avi|mkv|webm|m4v)$/i)),
-      'File must be a video.'
-    ),
+        (!file.type && file.name && file.name.match(/\.(mp4|mov|avi|mkv|webm|m4v|quicktime)$/i)), // Added quicktime
+      'Selected file must be a video.'
+    )
+    .nullable() // Allow the field to be null initially before a file is picked
+    .optional(), // Make the whole object optional or nullable depending on RHF default
 })
 
 export const videoSchema = z.object({
@@ -120,11 +127,11 @@ export const videoSchema = z.object({
     .optional(),
   tags: z.string().optional(),
   visibility: z.enum(['public', 'private', 'unlisted']).default('public'),
-  videoFile: videoFileSchemaPart,
+  videoFile: videoFileSchemaPart as z.ZodType<VideoFileFieldType>, // Explicitly cast for clarity
 })
 
 export type VideoFormData = z.infer<typeof videoSchema>
-export type VideoFileFieldType = VideoFormData['videoFile']
+export type VideoFileFieldType = z.infer<typeof videoFileSchemaPart>
 
 const BUNNY_TUS_ENDPOINT = 'https://video.bunnycdn.com/tusupload'
 
@@ -160,6 +167,7 @@ export function CoreUploadVideoForm({ libraryId, FilePickerComponent }: UploadVi
       description: '',
       tags: '',
       visibility: 'public' as 'public' | 'private' | 'unlisted',
+      videoFile: undefined, // Initialize videoFile as undefined
     }),
     []
   )
@@ -170,16 +178,16 @@ export function CoreUploadVideoForm({ libraryId, FilePickerComponent }: UploadVi
     formState: { errors },
     watch,
     reset,
+    setValue, // Added setValue to potentially clear file input
   } = useForm<VideoFormData>({
     resolver: zodResolver(videoSchema),
     defaultValues: memoizedDefaultValues,
   })
 
-  const videoFile = watch('videoFile') as VideoFileFieldType | undefined
+  const videoFile = watch('videoFile')
 
   const onSubmit = useCallback(
     async (data: VideoFormData) => {
-      // ... (onSubmit logic remains the same as previous correct version)
       setLoading(true)
       setFormError(null)
       setUploadProgress(0)
@@ -189,8 +197,10 @@ export function CoreUploadVideoForm({ libraryId, FilePickerComponent }: UploadVi
         setLoading(false)
         return
       }
-      if (!data.videoFile) {
-        setFormError('No video file selected.')
+
+      const currentVideoFile = data.videoFile // Get from validated data
+      if (!currentVideoFile) {
+        setFormError('No video file selected or file is invalid.')
         setLoading(false)
         return
       }
@@ -237,25 +247,34 @@ export function CoreUploadVideoForm({ libraryId, FilePickerComponent }: UploadVi
         let uploadableForTus: File
         let tusMetadata: tus.UploadOptions['metadata']
 
-        if (Platform.OS === 'web' && data.videoFile instanceof File) {
-          uploadableForTus = data.videoFile
+        if (Platform.OS === 'web' && currentVideoFile instanceof File) {
+          uploadableForTus = currentVideoFile
           tusMetadata = {
-            filetype: data.videoFile.type,
+            filetype: currentVideoFile.type,
             title: data.title,
-            name: data.videoFile.name,
+            name: currentVideoFile.name,
           }
-        } else if (Platform.OS !== 'web') {
-          const nativeFile = data.videoFile as NativeFileAsset
+        } else if (
+          Platform.OS !== 'web' &&
+          typeof currentVideoFile === 'object' &&
+          currentVideoFile !== null &&
+          'uri' in currentVideoFile
+        ) {
+          const nativeFile = currentVideoFile as NativeFileAsset
           if (nativeFile.file instanceof File) {
+            // If File object is already prepared (e.g., from cache)
             uploadableForTus = nativeFile.file
           } else if (nativeFile.uri) {
             const response = await fetch(nativeFile.uri)
+            if (!response.ok) throw new Error(`Failed to fetch native file: ${response.statusText}`)
             const blob = await response.blob()
-            uploadableForTus = new File([blob], nativeFile.name || 'video.mp4', {
-              type: nativeFile.type || (blob.type !== '' ? blob.type : 'video/mp4'),
+            uploadableForTus = new File([blob], nativeFile.name || 'video_from_native.mp4', {
+              type: nativeFile.type || (blob.type !== '' ? blob.type : 'application/octet-stream'), // Provide a fallback MIME type
             })
           } else {
-            throw new Error('Unsupported native file structure for TUS upload.')
+            throw new Error(
+              'Unsupported native file structure for TUS upload: URI missing and no File object.'
+            )
           }
           tusMetadata = {
             filetype: uploadableForTus.type,
@@ -263,7 +282,8 @@ export function CoreUploadVideoForm({ libraryId, FilePickerComponent }: UploadVi
             name: uploadableForTus.name,
           }
         } else {
-          throw new Error('Invalid video file provided.')
+          console.error('Invalid video file structure:', currentVideoFile)
+          throw new Error('Invalid video file provided for TUS upload.')
         }
 
         const upload = new tus.Upload(uploadableForTus, {
@@ -276,9 +296,11 @@ export function CoreUploadVideoForm({ libraryId, FilePickerComponent }: UploadVi
             LibraryId: bunnyLibraryId,
           },
           metadata: tusMetadata,
+          chunkSize: Platform.OS === 'web' ? undefined : 5 * 1024 * 1024, // Optional: Set chunk size for native (e.g., 5MB) if needed for stability
+          uploadSize: uploadableForTus.size, // Explicitly set uploadSize if available
           onError: async (error) => {
             console.error('Failed to upload to Bunny Stream:', error)
-            setFormError(`Upload failed: ${(error as Error).message || 'Unknown error'}`)
+            setFormError(`Upload failed: ${(error as Error).message || 'Unknown TUS error'}`)
             if (convexVideoId) {
               await updateVideoDetailsMutation({ convexVideoId, status: 'failed_upload' })
             }
@@ -286,28 +308,40 @@ export function CoreUploadVideoForm({ libraryId, FilePickerComponent }: UploadVi
             setUploadProgress(null)
           },
           onProgress: (bytesUploaded, bytesTotal) => {
-            const percentage = (bytesUploaded / bytesTotal) * 100
-            setUploadProgress(percentage)
+            let percentage = 0
+            // Ensure bytesTotal is positive to avoid division by zero or NaN
+            if (bytesTotal > 0) {
+              percentage = (bytesUploaded / bytesTotal) * 100
+            } else if (bytesUploaded > 0) {
+              // If bytesTotal is not yet known but we are uploading, show some progress (e.g., 1% or based on chunks)
+              // This case should ideally be rare with TUS once upload starts
+              percentage = 1
+            }
+            // **MODIFIED: Clamp the percentage between 0 and 100**
+            const clampedPercentage = Math.min(Math.max(percentage, 0), 100)
+            setUploadProgress(clampedPercentage)
           },
           onSuccess: async () => {
             console.log('Upload successful to Bunny Stream! Video GUID:', bunnyVideoGUID)
             if (convexVideoId) {
               await updateVideoDetailsMutation({
                 convexVideoId,
-                status: 'processing',
+                status: 'processing', // Bunny will now process/transcode
               })
             }
             setFormError(null)
             setLoading(false)
-            setUploadProgress(100)
-            reset()
+            setUploadProgress(100) // Ensure it ends at 100
+            reset(memoizedDefaultValues) // Reset form to initial default values
+            setValue('videoFile', undefined) // Explicitly clear the file input field
             alert('Video upload initiated successfully! It will be processed shortly.')
+            // Consider navigating or giving more feedback
           },
         })
 
         upload.start()
       } catch (error: any) {
-        console.error('Error in upload process:', error)
+        console.error('Error in overall upload process:', error)
         setFormError(error.message || 'An unexpected error occurred during the upload process.')
         if (
           convexVideoId &&
@@ -331,6 +365,8 @@ export function CoreUploadVideoForm({ libraryId, FilePickerComponent }: UploadVi
       generateBunnyCredentialsAction,
       updateVideoDetailsMutation,
       reset,
+      memoizedDefaultValues, // Added memoizedDefaultValues to dependency array for reset
+      setValue, // Added setValue
     ]
   )
 
@@ -363,7 +399,6 @@ export function CoreUploadVideoForm({ libraryId, FilePickerComponent }: UploadVi
               </Text>
             )}
 
-            {/* Title Field (Should be working) */}
             <Controller
               control={control}
               name="title"
@@ -378,10 +413,10 @@ export function CoreUploadVideoForm({ libraryId, FilePickerComponent }: UploadVi
                     id="video-title"
                   >
                     <TamaguiInput
-                      {...field} // Spread first
-                      value={field.value ?? ''} // Then explicitly set value
-                      onChangeText={field.onChange} // Explicitly map RHF's onChange to onChangeText
-                      onBlur={field.onBlur} // Explicitly map RHF's onBlur
+                      {...field}
+                      value={field.value ?? ''}
+                      onChangeText={field.onChange}
+                      onBlur={field.onBlur}
                       placeholder="Enter video title"
                       disabled={loading}
                       size="$4"
@@ -391,7 +426,6 @@ export function CoreUploadVideoForm({ libraryId, FilePickerComponent }: UploadVi
               }}
             />
 
-            {/* Description Field (TextArea) */}
             <Controller
               control={control}
               name="description"
@@ -406,10 +440,10 @@ export function CoreUploadVideoForm({ libraryId, FilePickerComponent }: UploadVi
                     id="video-description"
                   >
                     <TextArea
-                      {...field} // Spread first
-                      value={field.value ?? ''} // Then explicitly set value
-                      onChangeText={field.onChange} // Explicitly map RHF's onChange to onChangeText
-                      onBlur={field.onBlur} // Explicitly map RHF's onBlur
+                      {...field}
+                      value={field.value ?? ''}
+                      onChangeText={field.onChange}
+                      onBlur={field.onBlur}
                       placeholder="Tell viewers about your video"
                       disabled={loading}
                       size="$4"
@@ -420,7 +454,6 @@ export function CoreUploadVideoForm({ libraryId, FilePickerComponent }: UploadVi
               }}
             />
 
-            {/* Tags Field (TamaguiInput) */}
             <Controller
               control={control}
               name="tags"
@@ -435,10 +468,10 @@ export function CoreUploadVideoForm({ libraryId, FilePickerComponent }: UploadVi
                     id="video-tags"
                   >
                     <TamaguiInput
-                      {...field} // Spread first
-                      value={field.value ?? ''} // Then explicitly set value
-                      onChangeText={field.onChange} // Explicitly map RHF's onChange to onChangeText
-                      onBlur={field.onBlur} // Explicitly map RHF's onBlur
+                      {...field}
+                      value={field.value ?? ''}
+                      onChangeText={field.onChange}
+                      onBlur={field.onBlur}
                       placeholder="e.g., gaming, tutorial, vlog"
                       disabled={loading}
                       size="$4"
@@ -448,7 +481,6 @@ export function CoreUploadVideoForm({ libraryId, FilePickerComponent }: UploadVi
               }}
             />
 
-            {/* Visibility Field (Select) */}
             <Controller
               control={control}
               name="visibility"
@@ -463,13 +495,11 @@ export function CoreUploadVideoForm({ libraryId, FilePickerComponent }: UploadVi
                     id="video-visibility"
                   >
                     <Select
-                      // {...field} // Spreading field here might be okay, but onValueChange is more specific
-                      value={field.value} // Explicitly set value
-                      onValueChange={field.onChange} // RHF's onChange handles the value update
-                      // onBlur={field.onBlur} // Select might not have a standard onBlur, or RHF handles it via onValueChange
+                      value={field.value}
+                      onValueChange={field.onChange}
                       disabled={loading}
                       size="$4"
-                      native={Platform.OS !== 'web'}
+                      native={Platform.OS !== 'web'} // Keep this for native Select behavior
                     >
                       <Select.Trigger>
                         <Select.Value placeholder="Select visibility" />
@@ -507,11 +537,12 @@ export function CoreUploadVideoForm({ libraryId, FilePickerComponent }: UploadVi
               }}
             />
 
-            {/* File Picker (Assumed to be working correctly with RHF's onChange) */}
             <Controller
               name="videoFile"
               control={control}
-              render={({ field: { onChange, value } }) => (
+              render={(
+                { field: { onChange, value: rhfValue } } // rhfValue for clarity
+              ) => (
                 <InputComponent
                   label="Video File*"
                   errorMessage={errors.videoFile?.message as string | undefined}
@@ -519,22 +550,21 @@ export function CoreUploadVideoForm({ libraryId, FilePickerComponent }: UploadVi
                 >
                   <FilePickerComponent
                     onFileSelected={(fileAsset) => {
-                      onChange(fileAsset)
+                      onChange(fileAsset) // Update React Hook Form's state
                     }}
                     disabled={loading}
-                    currentFile={value as VideoFileFieldType | undefined}
+                    currentFile={rhfValue as VideoFileFieldType | undefined} // Pass current RHF value
                   />
                 </InputComponent>
               )}
             />
 
-            {/* Loading and Submit Button (remains the same) */}
             {loading && uploadProgress !== null && (
               <YStack gap="$2" ai="center">
                 <Text>
-                  {uploadProgress === 100
+                  {uploadProgress === 100 && !formError // Check for formError
                     ? 'Finalizing...'
-                    : `Uploading: ${uploadProgress.toFixed(0)}%`}
+                    : `Uploading: ${Math.min(uploadProgress, 100).toFixed(0)}%`}
                 </Text>
                 <View
                   width="100%"
@@ -543,21 +573,27 @@ export function CoreUploadVideoForm({ libraryId, FilePickerComponent }: UploadVi
                   borderRadius="$2"
                   overflow="hidden"
                 >
-                  <View width={`${uploadProgress}%`} height="100%" backgroundColor="$blue10" />
+                  <View
+                    width={`${Math.min(uploadProgress, 100)}%`}
+                    height="100%"
+                    backgroundColor="$blue10"
+                  />
                 </View>
               </YStack>
             )}
 
             <Form.Trigger asChild disabled={loading}>
               <Button
-                icon={loading ? <Spinner /> : UploadCloud}
+                icon={loading && uploadProgress === null ? <Spinner /> : UploadCloud}
                 theme={loading ? undefined : 'active'}
                 disabled={loading}
               >
                 {loading
                   ? uploadProgress === null
                     ? 'Preparing...'
-                    : 'Uploading...'
+                    : uploadProgress === 100 && !formError
+                      ? 'Finalizing...'
+                      : 'Uploading...'
                   : 'Upload Video'}
               </Button>
             </Form.Trigger>
