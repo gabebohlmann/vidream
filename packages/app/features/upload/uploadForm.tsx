@@ -56,7 +56,6 @@ const InputComponent = React.memo(
     return (
       <YStack gap="$2" {...rest}>
         <Label htmlFor={id} onLayout={undefined} Unmz={undefined}>
-          {' '}
           {/* Added Unmz={undefined} for potential Tamagui prop */}
           {label}
         </Label>
