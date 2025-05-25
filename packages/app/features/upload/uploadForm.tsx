@@ -376,10 +376,11 @@ export function CoreUploadVideoForm({ libraryId, FilePickerComponent }: UploadVi
         <FormCard
           padding="$4"
           gap="$5"
-          borderWidth={Platform.OS === 'web' ? 1 : 0}
+          // borderWidth={Platform.OS === 'web' ? 1 : 0}
           borderColor="$borderColor"
           borderRadius="$4"
-          marginHorizontal={Platform.OS === 'web' ? '$4' : '$0'}
+          paddingHorizontal={Platform.OS === 'web' ? '30%' : '$0'}
+          // marginRight={Platform.OS === 'web' ? '30px' : '0'}
           $gtMd={{ marginHorizontal: '$10' }}
         >
           <Form onSubmit={handleSubmit(onSubmit)} gap="$5">
