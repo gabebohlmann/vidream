@@ -37,8 +37,8 @@ export default function TopNavBar() {
     >
       <View
         flexDirection="row"
-        paddingHorizontal="$3" // Consistent padding
-        paddingVertical="$2"
+        paddingHorizontal="$3" // Conistent padding
+        paddingVertical="$1"
         minWidth="100%"
         tag="nav"
         alignItems="center"
