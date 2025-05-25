@@ -4,6 +4,7 @@ import { NextTamaguiProvider } from 'app/provider/NextTamaguiProvider'
 import { ConvexReactClient } from 'convex/react'
 import { ClerkProvider } from '@clerk/nextjs'
 import ConvexClientProviderWithClerk from '../components/ConvexProviderWithClerk'
+import ReplykeProviderWithClerk from '../components/ReplykeProviderWithClerk'
 import './globals.css'
 
 if (!process.env.NEXT_PUBLIC_CONVEX_URL) {
@@ -25,7 +26,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <ClerkProvider>
           <ConvexClientProviderWithClerk>
-            <NextTamaguiProvider>{children}</NextTamaguiProvider>
+            <ReplykeProviderWithClerk>
+              <NextTamaguiProvider>{children}</NextTamaguiProvider>
+            </ReplykeProviderWithClerk>
           </ConvexClientProviderWithClerk>
         </ClerkProvider>
       </body>

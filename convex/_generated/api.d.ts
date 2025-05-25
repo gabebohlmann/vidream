@@ -14,6 +14,9 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as bunnyActions from "../bunnyActions.js";
+import type * as http from "../http.js";
+import type * as replykeAuthHttp from "../replykeAuthHttp.js";
+import type * as replykeNodeActions from "../replykeNodeActions.js";
 import type * as videos from "../videos.js";
 
 /**
@@ -26,6 +29,9 @@ import type * as videos from "../videos.js";
  */
 declare const fullApi: ApiFromModules<{
   bunnyActions: typeof bunnyActions;
+  http: typeof http;
+  replykeAuthHttp: typeof replykeAuthHttp;
+  replykeNodeActions: typeof replykeNodeActions;
   videos: typeof videos;
 }>;
 export declare const api: FilterApi<

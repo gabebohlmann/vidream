@@ -22,7 +22,7 @@
     * https://tamagui.dev/ui/tooltip
 1. Fix @/convex import error on nextjs
 1. Add sign in placeholders for unavailable actions when Unauthenticated like upload, your library etc.
-1.
+1. Remove all console.logs
 1.
 1.
 1.

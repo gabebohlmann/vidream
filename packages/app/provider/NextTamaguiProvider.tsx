@@ -18,10 +18,10 @@ export const NextTamaguiProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setTheme] = useRootTheme();
 
   // Log initial theme and any changes
-  useEffect(() => {
-    console.log('[NextTamaguiProvider] Theme from useRootTheme() DID UPDATE to:', theme);
-  }, [theme]);
-  console.log('[NextTamaguiProvider] Rendering with theme from useRootTheme():', theme);
+  // useEffect(() => {
+  //   console.log('[NextTamaguiProvider] Theme from useRootTheme() DID UPDATE to:', theme);
+  // }, [theme]);
+  // console.log('[NextTamaguiProvider] Rendering with theme from useRootTheme():', theme);
 
   useServerInsertedHTML(() => {
     // @ts-ignore

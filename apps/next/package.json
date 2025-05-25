@@ -15,6 +15,7 @@
     "@react-navigation/bottom-tabs": "^7.3.13",
     "@react-navigation/native": "^7.1.9",
     "@rehookify/datepicker": "^6.6.8",
+    "@replyke/react-js": "^5.0.4",
     "@tamagui/config": "^1.126.13",
     "@tamagui/next-theme": "^1.126.13",
     "app": "0.0.0",
