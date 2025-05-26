@@ -1,5 +1,5 @@
+  // apps/expo/metro.config.js
 // apps/expo/metro.config.js
-// Learn more https://docs.expo.io/guides/customizing-metro
 /**
  * @type {import('expo/metro-config')}
  */

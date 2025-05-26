@@ -78,6 +78,13 @@ export default function TabLayout() {
             href: null, // Disable the default tab behavior
           }}
         />
+        <Tabs.Screen
+          name="(auth)"
+          options={{
+            title: 'Auth',
+            href: null,
+          }}
+        />
       </Tabs>
     </>
   )

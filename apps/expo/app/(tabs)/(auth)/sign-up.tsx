@@ -1,4 +1,4 @@
-// apps/expo/app/(auth)/sign-up.tsx
+// apps/expo/app/(tabs)/(auth)/sign-up.tsx
 import SignUpScreen from 'app/features/auth/sign-up/screen.native'
 
 export default function SignUpPage() {

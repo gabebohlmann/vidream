@@ -18,10 +18,10 @@
   },
   "dependencies": {
     "@my/config": "0.0.1",
+    "@rehookify/datepicker": "^6.6.8",
     "@tamagui/toast": "^1.126.13",
     "@ts-react/form": "^1.8.3",
     "react-dropzone": "^14.3.8",
-    "react-hook-form": "^7.56.4",
     "tamagui": "^1.126.13"
   },
   "devDependencies": {

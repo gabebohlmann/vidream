@@ -1,5 +1,6 @@
+// apps/expo/app/(tabs)/account.tsx
 import { View, Text, StyleSheet } from 'react-native'
-import SignInPage from '../(auth)/sign-in'
+import SignInPage from './(auth)/sign-in'
 
 export default function AccountPage() {
   return <SignInPage />

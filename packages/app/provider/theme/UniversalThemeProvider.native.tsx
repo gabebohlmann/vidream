@@ -7,6 +7,7 @@ import { config } from '@my/ui'; // Your Tamagui config from tamagui.config.ts
 import { StatusBar } from 'expo-status-bar';
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { Appearance, useColorScheme as useNativeColorScheme, Platform } from 'react-native'; // Added Platform
+import { SafeAreaFrameContext, SafeAreaView } from 'react-native-safe-area-context';
 
 // Type for the custom theme context, mirroring @tamagui/next-theme's API
 type CustomThemeContextValue = {
@@ -114,8 +115,8 @@ export const UniversalThemeProvider = ({
         // themeClassNameOnRoot={true} // Check Tamagui docs if this is needed for native theming
       >
         <NavigationThemeProvider value={actualTheme === 'dark' ? DarkTheme : DefaultTheme}>
-          {/* <StatusBar style={actualTheme === 'dark' ? 'dark' : 'light'} /> */}
-          {children}
+          <StatusBar translucent={true} style={actualTheme === 'dark' ? 'light' : 'dark'} />
+            {children}
         </NavigationThemeProvider>
       </CoreTamaguiProvider>
     </ThemeContext.Provider>

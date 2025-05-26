@@ -150,8 +150,7 @@ export const SignInForm: React.FC<SignInViewProps> = ({ clerkSignIn, initialEmai
               >
                 <Text>Cancel</Text>
               </Button>
-              <Theme inverse>
-                <SubmitButton
+                <Button
                   onPress={() => {
                     if (!isLoaded) {
                       setUiError('Still loading. Please wait.')
@@ -160,7 +159,10 @@ export const SignInForm: React.FC<SignInViewProps> = ({ clerkSignIn, initialEmai
                     submit()
                   }}
                   br="$10" // You can also use theme tokens like $radius.lg
-                  disabled={!isLoaded || form.formState.isSubmitting}
+                disabled={!isLoaded || form.formState.isSubmitting}
+                theme="gray" // Use your theme token for default button style
+                // borderColor="$color"
+                backgroundColor="$gray7"
                 >
                   <Text>
                     {isLoaded
@@ -169,8 +171,7 @@ export const SignInForm: React.FC<SignInViewProps> = ({ clerkSignIn, initialEmai
                         : 'Sign In'
                       : 'Loading...'}
                   </Text>
-                </SubmitButton>
-              </Theme>
+                </Button>
               <Link href="/sign-up" passHref>
                 <Paragraph
                   ta="center"

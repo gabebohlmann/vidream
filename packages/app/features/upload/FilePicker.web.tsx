@@ -28,7 +28,7 @@ export function WebFilePicker({ onFileSelected, disabled, currentFile }: FilePic
         disabled={disabled}
         theme={file ? "green" : "gray"}
       >
-        {file ? `Selected: ${file.name}` : "Choose Video File (Web)"}
+        {file ? `Selected: ${file.name}` : "Choose Video File"}
       </Button>
       {/* Optionally display error if needed, though RHF handles it outside */}
     </>

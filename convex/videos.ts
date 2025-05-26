@@ -72,15 +72,20 @@ export const updateVideoDetails = mutation({
     status: v.optional(
       v.union(
         v.literal('uploading'),
-        v.literal('processing'), // Bunny is processing
-        v.literal('finished'), // Bunny finished processing / Transcoding complete
+        v.literal('processing'),
+        v.literal('finished'),
         v.literal('failed_upload'),
         v.literal('failed_processing')
       )
     ),
     playbackUrl: v.optional(v.string()),
     thumbnailUrl: v.optional(v.string()),
-    duration: v.optional(v.number()), // in seconds
+    duration: v.optional(v.number()),
+    // --- New Replyke Args ---
+    replykeEntityId: v.optional(v.string()),
+    replykeEntityShortId: v.optional(v.string()),
+    replykeForeignId: v.optional(v.string()),
+    // --- End New Replyke Args ---
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity()
@@ -90,24 +95,29 @@ export const updateVideoDetails = mutation({
       throw new ConvexError('Video not found for status update.')
     }
 
-    // If called by an authenticated user, check ownership
     if (identity && videoToUpdate.userId !== identity.subject) {
       throw new ConvexError("Not authorized to update this video's details.")
     }
-    // If called by a webhook (via an action), identity might be null.
-    // Webhook actions should have their own auth (e.g. checking a secret header).
 
     const patchData: {
       processingStatus?: string
       playbackUrl?: string
       thumbnailUrl?: string
       duration?: number
-    } = {} // Define type for patchData
+      replykeEntityId?: string // Add to patchData type
+      replykeEntityShortId?: string // Add to patchData type
+      replykeForeignId?: string // Add to patchData type
+    } = {}
 
     if (args.status) patchData.processingStatus = args.status
     if (args.playbackUrl) patchData.playbackUrl = args.playbackUrl
     if (args.thumbnailUrl) patchData.thumbnailUrl = args.thumbnailUrl
     if (args.duration !== undefined) patchData.duration = args.duration
+    // --- Patch Replyke Data ---
+    if (args.replykeEntityId) patchData.replykeEntityId = args.replykeEntityId
+    if (args.replykeEntityShortId) patchData.replykeEntityShortId = args.replykeEntityShortId
+    if (args.replykeForeignId) patchData.replykeForeignId = args.replykeForeignId
+    // --- End Patch Replyke Data ---
 
     if (Object.keys(patchData).length > 0) {
       await ctx.db.patch(args.convexVideoId, patchData as Partial<typeof videoToUpdate>)

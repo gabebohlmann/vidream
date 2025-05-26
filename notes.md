@@ -23,8 +23,8 @@
 1. Fix @/convex import error on nextjs
 1. Add sign in placeholders for unavailable actions when Unauthenticated like upload, your library etc.
 1. Remove all console.logs
-1.
-1.
+1. Make web bottom bar always on top, not working on upload page in mobile view
+1. Figure out why you can't use translucent status bar with expo 52, why white top bar?
 1.
 1.
 1.
