@@ -2965,8 +2965,8 @@ __metadata:
   linkType: hard
 
 "@floating-ui/react@npm:^0.27.4":
-  version: 0.27.8
-  resolution: "@floating-ui/react@npm:0.27.8"
+  version: 0.27.9
+  resolution: "@floating-ui/react@npm:0.27.9"
   dependencies:
     "@floating-ui/react-dom": "npm:^2.1.2"
     "@floating-ui/utils": "npm:^0.2.9"
@@ -2974,7 +2974,7 @@ __metadata:
   peerDependencies:
     react: ">=17.0.0"
     react-dom: ">=17.0.0"
-  checksum: 10/9423e3b7d6298918cb14ad3cfa36ba7b88ef86f18c4c47f7870b367716e918757dc0cf9842ef4995ee784b68aebe725c28c2ae143ecfe16380d3ccfd05cacb43
+  checksum: 10/0f5cab7a20fd882845fb7aec0aabb4bcb0f380149e99bc7623033c810f24274d80645d8494beb1fd5e7b5068a1a2cfa645be1a92f5439855edfdfcb737bbc8b7
   languageName: node
   linkType: hard
 
@@ -4281,38 +4281,38 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@replyke/core@npm:5.0.4":
-  version: 5.0.4
-  resolution: "@replyke/core@npm:5.0.4"
+"@replyke/core@npm:5.0.5":
+  version: 5.0.5
+  resolution: "@replyke/core@npm:5.0.5"
   dependencies:
     axios: "npm:^1.4.0"
     js-cookie: "npm:^3.0.5"
     lodash: "npm:^4.17.21"
   peerDependencies:
     react: ^18.0.0 || ^19.0.0
-  checksum: 10/40e03326f133f45fbefe441ca4d053bddd64ce8c73a90f94137723555ca9325bacb939bfb494d89440dfa66ef2bd1a1162ed55dac2ae751054bae29ac36ecc1d
+  checksum: 10/9c4de04a63d26af25284d740d5178c0be96645df551c7da1fed2df725c1b76dfe0c0fb339f18861a288c6d64dfd9602c3382a0775562a24e3bf58c60d9d445ee
   languageName: node
   linkType: hard
 
 "@replyke/expo@npm:^5.0.4":
-  version: 5.0.4
-  resolution: "@replyke/expo@npm:5.0.4"
+  version: 5.0.5
+  resolution: "@replyke/expo@npm:5.0.5"
   dependencies:
-    "@replyke/core": "npm:5.0.4"
+    "@replyke/core": "npm:5.0.5"
   peerDependencies:
     expo-secure-store: ^14
-  checksum: 10/5e22148a1255dae56651263b25f85817598c155b581f5f4272ad2341d73d9d327c90f4d0b0ace150fcace61c32be43fd45edeb1890e00fb938b92e0ec11c796c
+  checksum: 10/1fb6dcefab881fe609f9ed9a5075bd83f0261b49e8c07c800454eaccf8dc823ace6e19b6cbbfbf38330a6525b14c1697c1c2781303e94de9e8cc7145e43d289a
   languageName: node
   linkType: hard
 
 "@replyke/react-js@npm:^5.0.4":
-  version: 5.0.4
-  resolution: "@replyke/react-js@npm:5.0.4"
+  version: 5.0.5
+  resolution: "@replyke/react-js@npm:5.0.5"
   dependencies:
-    "@replyke/core": "npm:5.0.4"
+    "@replyke/core": "npm:5.0.5"
   peerDependencies:
     react: ^18.0.0 || ^19.0.0
-  checksum: 10/f66c171a73f37ae1331850080ccee9d23d3849e31d648728bfd745683d57c785403f41dd69f155a7b507ea922f858b0bf4ca53bdbc43648800bb0826d52726d1
+  checksum: 10/53a59e840433d0c91ada5a27ed5e17db2de4537d5cb712b2e6d585469485469f14eb21f0a46bf0c1b07994e7ee2556352c107897807617836e25d37786238d53
   languageName: node
   linkType: hard
 
